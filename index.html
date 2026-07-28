@@ -386,7 +386,7 @@ td .badge { display: inline-block; padding: 4px 12px; border-radius: 20px; font-
 .history-schedule-item .h-content { flex: 1; }
 .history-schedule-item .h-title { font-size: 0.9rem; font-weight: 600; }
 .history-schedule-item .h-desc { font-size: 0.82rem; color: var(--muted); margin-top: 2px; }
-.history-schedule-item.done { opacity: 0.65; }
+.history-schedule-item.done { opacity: 0.65; pointer-events: none; cursor: default; }
 .history-schedule-item.done .h-date { color: var(--accent); }
 .history-schedule-item.done .h-title { text-decoration: line-through; color: var(--muted); }
 .history-schedule-item.current { background: var(--accent-light); border-radius: var(--radius-sm); padding: 12px; border: 1px solid rgba(93,190,157,0.2); }
@@ -447,11 +447,27 @@ td .badge { display: inline-block; padding: 4px 12px; border-radius: 20px; font-
 .chart-figure figcaption { font-size: 0.95rem; font-weight: 600; color: var(--accent-dark); margin-bottom: 0.75rem; }
 
 /* ====== BMI Gauge ====== */
-.bmi-gauge { text-align: center; padding: 16px; }
-.bmi-value { font-size: 2.5rem; font-weight: 700; color: var(--accent-dark); }
-.bmi-status { font-size: 0.9rem; font-weight: 600; margin-top: 4px; }
-.bmi-svg-wrap { width: 100%; max-width: 240px; margin: 12px auto 0; }
-.bmi-svg-wrap svg { width: 100%; height: auto; display: block; }
+.bmi-gauge { padding: 16px; }
+.bmi-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+.bmi-header .bmi-big { text-align: left; }
+.bmi-header .bmi-big .bmi-value { font-size: 2.5rem; font-weight: 700; color: var(--accent-dark); line-height: 1; }
+.bmi-header .bmi-big .bmi-label { font-size: 0.8rem; color: var(--muted); margin-top: 4px; }
+.bmi-header .bmi-rating { text-align: right; }
+.bmi-header .bmi-rating .bmi-status { font-size: 1.2rem; font-weight: 700; color: var(--accent-dark); }
+.bmi-header .bmi-rating .bmi-label { font-size: 0.8rem; color: var(--muted); margin-top: 4px; }
+.bmi-bar-wrap { position: relative; margin: 12px 0 4px; }
+.bmi-bar { display: flex; height: 14px; border-radius: 7px; overflow: hidden; }
+.bmi-bar-seg { flex: 1; }
+.bmi-bar-seg.low { background: #4a7ec7; }
+.bmi-bar-seg.normal { background: var(--accent); }
+.bmi-bar-seg.high { background: #f0c040; }
+.bmi-bar-seg.obese { background: #e06450; }
+.bmi-bar-labels { position: relative; height: 18px; margin-top: 2px; }
+.bmi-bar-labels span { position: absolute; transform: translateX(-50%); font-size: 0.72rem; color: var(--muted); }
+.bmi-marker { position: absolute; top: -5px; width: 0; height: 0; border-left: 6px solid transparent; border-right: 6px solid transparent; border-top: 8px solid #333; transform: translateX(-50%); transition: left 0.3s; display: none; }
+.bmi-legend { display: flex; justify-content: center; gap: 16px; margin-top: 14px; flex-wrap: wrap; }
+.bmi-legend-item { display: flex; align-items: center; gap: 6px; font-size: 0.78rem; color: var(--muted); }
+.bmi-legend-dot { width: 10px; height: 10px; border-radius: 3px; }
 
 /* ====== Stage Management ====== */
 .stage-card { background: var(--bg2); backdrop-filter: blur(16px); border: 1px solid rgba(255,255,255,0.6); border-radius: var(--radius); padding: 18px 20px; margin-bottom: 14px; box-shadow: 0 4px 16px var(--shadow); transition: all 0.25s; }
@@ -534,6 +550,18 @@ td .badge { display: inline-block; padding: 4px 12px; border-radius: 20px; font-
 .news-card .news-link { color: var(--accent-dark); text-decoration: none; font-weight: 600; font-size: 0.78rem; }
 .news-card .news-link:hover { text-decoration: underline; }
 .news-card .news-tags { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 6px; }
+
+/* ====== Psychology Card ====== */
+.psychology-card { cursor: pointer; transition: all 0.2s; }
+.psychology-card:hover { box-shadow: 0 8px 28px rgba(93,190,157,0.15); transform: translateY(-1px); }
+.psychology-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+.psychology-header h4 { margin: 0; }
+.psychology-tag { font-size: 0.7rem; padding: 3px 10px; border-radius: 10px; background: var(--accent-light); color: var(--accent-dark); font-weight: 600; }
+.psychology-content { font-size: 0.9rem; color: var(--ink); line-height: 1.6; }
+.psychology-content .psy-term { font-size: 1.05rem; font-weight: 700; color: var(--accent-dark); margin-bottom: 6px; }
+.psychology-content .psy-brief { color: var(--muted); font-size: 0.85rem; }
+.psychology-detail { display: none; margin-top: 12px; padding-top: 12px; border-top: 1px dashed var(--rule); font-size: 0.85rem; color: var(--ink); line-height: 1.7; }
+.psychology-detail.show { display: block; animation: fadeIn 0.3s; }
 .news-card .news-tag { font-size: 0.7rem; padding: 2px 8px; border-radius: 8px; background: var(--accent-light); color: var(--accent-dark); }
 @media (max-width: 900px) { .quick-stats { grid-template-columns: repeat(2, 1fr); } .home-grid { grid-template-columns: 1fr; } }
 
@@ -637,6 +665,16 @@ td .badge { display: inline-block; padding: 4px 12px; border-radius: 20px; font-
     <!-- ====== HOME SECTION ====== -->
     <section id="home" class="section active">
       <div class="quick-stats" id="quick-stats"></div>
+      <div class="home-grid full">
+        <div class="summary-block psychology-card" id="psychology-block" onclick="togglePsychologyDetail()">
+          <div class="psychology-header">
+            <h4>🧠 每日心理学</h4>
+            <span class="psychology-tag">点击展开详情</span>
+          </div>
+          <div class="psychology-content" id="psychology-content"></div>
+          <div class="psychology-detail" id="psychology-detail"></div>
+        </div>
+      </div>
       <div class="home-grid">
         <div class="summary-block">
           <h4>本周工作计划</h4>
@@ -800,17 +838,35 @@ td .badge { display: inline-block; padding: 4px 12px; border-radius: 20px; font-
         <div class="glass-card">
           <h4 class="mb-2">BMI 指数</h4>
           <div class="bmi-gauge">
-            <div class="bmi-value" id="bmi-val">--</div>
-            <div class="bmi-status" id="bmi-status">请输入身高体重</div>
-            <div class="bmi-svg-wrap">
-              <svg viewBox="0 0 240 120">
-                <path d="M 20 100 A 100 100 0 0 1 220 100" fill="none" stroke="var(--rule)" stroke-width="16" stroke-linecap="round"/>
-                <path id="bmi-arc" d="M 20 100 A 100 100 0 0 1 20 100" fill="none" stroke="url(#bmiGrad)" stroke-width="16" stroke-linecap="round"/>
-                <defs><linearGradient id="bmiGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-                  <stop offset="0%" style="stop-color:#4a7ec7"/><stop offset="50%" style="stop-color:var(--accent)"/><stop offset="100%" style="stop-color:var(--accent2)"/>
-                </linearGradient></defs>
-                <text x="120" y="115" text-anchor="middle" font-size="10" fill="var(--muted)">偏瘦  正常  偏重  肥胖</text>
-              </svg>
+            <div class="bmi-header">
+              <div class="bmi-big">
+                <div class="bmi-value" id="bmi-val">--</div>
+                <div class="bmi-label">BMI</div>
+              </div>
+              <div class="bmi-rating">
+                <div class="bmi-status" id="bmi-status">请输入身高体重</div>
+                <div class="bmi-label">评级</div>
+              </div>
+            </div>
+            <div class="bmi-bar-wrap">
+              <div class="bmi-bar">
+                <div class="bmi-bar-seg low" style="flex:3.5"></div>
+                <div class="bmi-bar-seg normal" style="flex:5.5"></div>
+                <div class="bmi-bar-seg high" style="flex:4"></div>
+                <div class="bmi-bar-seg obese" style="flex:7"></div>
+              </div>
+              <div class="bmi-bar-labels">
+                <span style="left:calc(3.5/20*100%)">18.5</span>
+                <span style="left:calc(9/20*100%)">24.0</span>
+                <span style="left:calc(13/20*100%)">28.0</span>
+              </div>
+              <div class="bmi-marker" id="bmi-marker"></div>
+            </div>
+            <div class="bmi-legend">
+              <div class="bmi-legend-item"><div class="bmi-legend-dot" style="background:#4a7ec7"></div>偏低</div>
+              <div class="bmi-legend-item"><div class="bmi-legend-dot" style="background:var(--accent)"></div>标准</div>
+              <div class="bmi-legend-item"><div class="bmi-legend-dot" style="background:#f0c040"></div>偏高</div>
+              <div class="bmi-legend-item"><div class="bmi-legend-dot" style="background:#e06450"></div>过高</div>
             </div>
           </div>
         </div>
@@ -1316,6 +1372,41 @@ var RECOMMEND_BOOKS = [
   { title:'《唐宋词十七讲》', author:'叶嘉莹', type:'文学', reason:'叶嘉莹先生精讲唐宋词，与诗人学习深度结合。' },
   { title:'《老人与海》', author:'海明威', type:'小说', reason:'硬汉精神与辛弃疾壮志未酬形成对照。' }
 ];
+
+/* ========================== DAILY PSYCHOLOGY ========================== */
+var PSYCHOLOGY_TIPS = [
+  { term:'锚定效应', brief:'第一印象会像锚一样固定你的判断。', detail:'人们在做出决策时，会过度依赖最先接收到的信息（即"锚"）。比如商品标价原价999、现价299，会让你觉得299很便宜。谈判时先报价的一方往往占据优势，因为对方会被这个初始数字锚定。应对方法：在做重大决策前，主动收集多个参考点，不要只依赖第一个信息。' },
+  { term:'峰终定律', brief:'人们对一段体验的记忆，只取决于高峰和结束时的感受。', detail:'心理学家丹尼尔·卡尼曼发现，人们对一段体验的评价，几乎完全由体验中的高峰（正向或负向）和结束时的感受决定，而不是整个体验的平均值。比如一次旅行中，最精彩的那一刻和离开前的那一刻决定了你对这次旅行的整体印象。应用：设计服务流程时，要刻意打造高峰体验和美好的收尾。' },
+  { term:'损失厌恶', brief:'失去的痛苦大约是获得快乐的2倍。', detail:'人们对损失的敏感度远高于对同等收益的喜悦。丢失100元的痛苦，需要获得200元才能抵消。这解释了为什么人们更害怕亏损而不是追求盈利，也解释了为什么"限时折扣""错过不再有"等营销话术如此有效。理性应对：做决策时，把自己抽离出来，假设这是朋友的问题，你会给什么建议。' },
+  { term:'从众效应', brief:'个体容易受到群体行为的影响而改变自己。', detail:'所罗门·阿希的线段实验证明，即使答案显而易见，当群体给出错误答案时，约75%的人至少会跟随一次。从众源于两种动机：信息性影响（认为群体更正确）和规范性影响（希望被接纳）。在社交媒体上，点赞数和评论方向会强烈影响你的观点。保持独立思考的关键：先形成自己的判断，再看他人的观点。' },
+  { term:'自我效能感', brief:'相信自己能做到，是做成事的前提。', detail:'班杜拉提出的核心概念：个体对自己能否成功完成某一行为的主观判断。高自我效能感的人更可能设定高目标、坚持更久、面对困难时不轻易放弃。提升方法：①积累成功体验（从小事开始）；②观察榜样的成功；③接受他人的积极鼓励；④调节生理和情绪状态。' },
+  { term:'皮格马利翁效应', brief:'期望会变成现实，相信什么就会发生什么。', detail:'也叫"罗森塔尔效应"。1968年，心理学家在小学进行实验，随机选出一批学生告诉老师他们"智力超群"，一年后这些学生的IQ真的显著提高。原因是老师的期望改变了对待方式（更多关注、鼓励、提问）。这同样适用于你对自己的期望：如果你相信自己能成功，你的行为模式会不自觉地朝着成功方向调整。' },
+  { term:'登门槛效应', brief:'先提小要求，再提大要求，成功率更高。', detail:'心理学实验显示，先让居民在窗户上贴"小心驾驶"小标语，两周后再请求在院子里立大型广告牌，接受率从17%提升到55%。这是因为人们为了保持自我形象的一致性，一旦答应了小要求，就更容易接受后续的相关大要求。应用：养成习惯时，从最小的行动开始，比如"只读一页书""只做一个俯卧撑"。' },
+  { term:'破窗效应', brief:'小问题不及时解决，会演变成大问题。', detail:'心理学家威尔逊和凯林提出：如果一栋建筑的窗户破了没人修，很快会有更多窗户被打破，甚至引发更严重的犯罪。核心逻辑是：环境中的无序信号会传递"这里没人管"的信息，降低人们的行为底线。应用：①生活环境保持整洁；②小坏习惯及时纠正；③团队中，对轻微违规行为也要及时制止。' },
+  { term:'蔡格尼克效应', brief:'未完成的任务比已完成的记得更牢。', detail:'1927年，蔡格尼克发现：服务员能记住未结账的点单，一旦结账就忘得一干二净。人们对未竟之事有强烈的记忆倾向。这也是为什么电视剧总是在精彩处插入广告——利用你的"完成欲"。应用：①学习时故意在精彩处暂停，利用这个效应驱动你下次继续；②把大任务拆成小任务，每完成一个就划掉，增加成就感。' },
+  { term:'马斯洛需求层次', brief:'人的需求从低到高分五层，低层满足后才追求高层。', detail:'亚伯拉罕·马斯洛将人的需求分为：生理需求（吃、住）→安全需求（稳定、保障）→社交需求（归属、爱）→尊重需求（成就、认可）→自我实现需求（发挥潜能）。虽然后续研究对这个严格层级有所修正，但核心洞察依然有效：如果你连基本生存都成问题，很难追求艺术创作。管理中的应用：了解团队成员当前处于哪个需求层次，给予对应的激励。' },
+  { term:'认知失调', brief:'当行为与信念冲突时，人会改变信念来合理化行为。', detail:'费斯廷格提出：当一个人的态度和行为不一致时，会产生心理不适感（失调），从而倾向于改变态度来匹配行为。经典实验：让参与者做无聊的任务，付1美元的参与者比付20美元的更喜欢这个任务——因为1美元不足以"买"到合理化，他们只能通过改变态度（"其实挺有趣"）来消除失调。这说明："强迫"自己先做，态度会自然跟随改变。' },
+  { term:'幸存者偏差', brief:'只看到成功案例，会高估成功概率。', detail:'二战时，军方想给战斗机中弹最多的部位加装甲。统计学家亚伯拉罕·瓦尔德指出：中弹多的飞机都飞回来了，真正该保护的是那些中弹后没能飞回来的部位。我们只看到"活下来"的案例，忽略"阵亡"的案例，导致判断偏差。创业圈、投资圈常见：只看到成功案例就盲目跟风，没看到大量失败的沉默数据。' },
+  { term:'邓巴数字', brief:'一个人能维持的稳定社交关系上限约150人。', detail:'牛津大学人类学家罗宾·邓巴研究发现，人类社交圈有层级结构：最亲密5人（核心圈）、15人（好友圈）、50人（频繁互动圈）、150人（熟人圈）。超过150人，大脑无法有效维护稳定关系。这解释了为什么很多公司的最佳规模在150人左右。应用：不要追求人脉数量，经营好核心圈层的质量。' },
+  { term:'内卷化效应', brief:'无意义的内部竞争，导致整体效率下降。', detail:'原指农业中投入更多劳动但边际产出递减的现象。延伸到社会心理学：当竞争目标单一且资源有限时，参与者被迫不断加大投入（时间、精力），但整体收益并没有增加，反而造成焦虑和疲惫。破局方法：①重新定义游戏规则，开辟新的竞争维度；②从"零和博弈"转向"正和博弈"，寻找合作共赢的空间。' },
+  { term:'情绪ABC理论', brief:'不是事件本身，而是你对事件的看法决定了情绪。', detail:'阿尔伯特·埃利斯提出：A（Activating event，诱发事件）→B（Belief，信念/看法）→C（Consequence，情绪后果）。真正决定你情绪的不是事件A，而是你的信念B。同样是下雨，农民高兴，游客沮丧。应用：当产生负面情绪时，先问自己"我对这件事的想法是什么？"，然后尝试用更理性的信念替代非理性信念。' },
+  { term:'聚光灯效应', brief:'你以为别人很关注你，其实没有。', brief:'你以为别人很关注你，其实没有。', detail:'康奈尔大学实验：让学生穿尴尬T恤走进教室，事后让他们估计注意到的人的比例，实际只有一半人注意到。我们总觉得自己是舞台中央的主角，一举一动都被别人审视。实际上每个人都在关注自己。应用：不必过度在意别人的眼光，大胆尝试、犯错、表达真实的自己。' },
+  { term:'德西效应', brief:'外在奖励可能削弱内在动机。', detail:'心理学家德西发现：给本来就有兴趣做某事的人额外金钱奖励，反而会降低他们的兴趣和持久性。内在动机（热爱、好奇、成就感）比外在动机（奖金、表扬、惩罚）更能驱动长期行为。但注意：对于本身没有兴趣的任务，适当的外在奖励可以激发行动。应用：培养习惯时，尽量找到内在乐趣；教育孩子时，表扬过程而非结果。' },
+  { term:'巴纳姆效应', brief:'人们容易相信模糊、普遍的性格描述是在说自己。', detail:'1949年，心理学家福勒给学生做性格测试，每个人都拿到了相同的"个性化分析报告"，内容都是非常模糊且适用于大多数人的描述（如"你有时外向、有时内向"），但平均评分高达4.26分（满分5分）。这解释了为什么星座、占卜、性格测试让人觉得"好准"。保持理性：看到模糊描述时，提醒自己它可能适用于任何人。' },
+  { term:'习得性无助', brief:'反复失败后，人会放弃尝试，即使机会来了也不争取。', detail:'塞利格曼的经典实验：把狗关在笼子里电击，起初狗会逃跑；但多次尝试无果后，即使笼门打开，狗也不再逃跑，只是被动承受电击。"经历过多次失败后，即使环境已经改变，人也会认为自己无能为力。"破局方法：①把失败归因于策略而非能力；②从小成功开始重建掌控感；③寻求社会支持，不要独自面对。' },
+  { term:'延迟满足', brief:'能抵制即时诱惑的人，长期成就更高。', detail:'斯坦福大学"棉花糖实验"：给4岁儿童一颗棉花糖，告诉他们如果15分钟内不吃，就能得到第二颗。追踪发现，能等待的孩子在学业、事业、健康等各方面表现更好。延迟满足能力是可培养的：①设立清晰的长期目标；②把诱惑物放在视线之外；③用"如果-那么"计划预演应对策略（"如果看到零食，那么我就喝水"）。' },
+  { term:'晕轮效应', brief:'一个优点会扩散为整体好感，反之亦然。', detail:'心理学家桑代克发现，当评价者对一个人的某个特质（如外貌）有好感时，会倾向于给这个人的所有特质都打高分。"爱屋及乌"就是晕轮效应。反之，一个负面印象也会污染整体评价。应用：①面试、评价他人时，对各个维度分别打分，避免被单一特质影响；②注意自己的第一印象偏差。' },
+  { term:'复利思维', brief:'每天进步1%，一年后你会强大37倍。', detail:'1.01的365次方约等于37.78。复利不仅适用于理财，更适用于知识、习惯、人际关系。初期增长缓慢，但积累到一定阈值后会出现指数级爆发。关键是：①找到可以持续积累的方向；②保持每天微小的进步；③耐心，不要在"慢增长期"放弃。巴菲特99%的财富是在50岁后获得的，这就是复利的威力。' },
+  { term:'舒适区理论', brief:'成长发生在舒适区边缘，不是最舒适也不是最痛苦的地方。', detail:'心理学将人分为三个区域：舒适区（熟悉、安全、无挑战）、学习区（有挑战但可应对）、恐慌区（超出能力太多、引发焦虑）。最有效的成长发生在"学习区"——也就是舒适区的边缘。长期待在舒适区会退化，长期待在恐慌区会 burnout。策略：每次只把边界向外推一点点，让自己始终处于"有点难但能做到"的状态。' },
+  { term:'墨菲定律', brief:'如果事情有变坏的可能，不管可能性多小，它总会发生。', detail:'看似悲观，实则提醒我们：①不要忽视小概率风险（飞机安检、备份数据）；②过度自信是最危险的；③预案思维：重要事项务必准备Plan B。但也不要过度焦虑，墨菲定律的真正价值是促使我们做好充分准备，而不是杞人忧天。' },
+  { term:'心流状态', brief:'全神贯注做一件事时，时间仿佛静止了。', detail:'契克森米哈伊提出：当挑战难度与个人技能相匹配时，人会进入"心流"状态——完全沉浸、忘记时间、高度专注、内心愉悦。心流的条件：①有明确的目标；②即时反馈；③挑战与技能匹配（太简单会无聊，太难会焦虑）。应用：设计工作环境时，确保任务难度适中；学习时选择刚好比自己当前水平高一点的内容。' }
+];
+
+function getTodayPsychology() {
+  var d = new Date();
+  var idx = (d.getFullYear() * 366 + (d.getMonth() + 1) * 31 + d.getDate()) % PSYCHOLOGY_TIPS.length;
+  return PSYCHOLOGY_TIPS[idx];
+}
 
 /* ========================== UI HELPERS ========================== */
 function $(id) { return document.getElementById(id); }
@@ -1839,8 +1930,9 @@ function renderHistoryToday() {
     if (i < currentIdx) { cls = 'done'; status = '<span style="color:var(--accent);">已完成</span>'; }
     else if (i === currentIdx && !isAllDone) { cls = 'current'; status = '<span style="color:var(--accent-dark);">进行中</span>'; }
     else { cls = 'locked'; status = '<span style="color:var(--muted);">未解锁</span>'; }
+    const clickAttr = cls === 'current' ? ` onclick="toggleHistoryDetail(${i})" style="cursor:pointer;"` : '';
     return `
-      <div class="history-schedule-item ${cls}">
+      <div class="history-schedule-item ${cls}"${clickAttr}>
         <div class="h-date">第${i+1}天</div>
         <div class="h-content">
           <div class="h-title">${h.title}</div>
@@ -1850,6 +1942,19 @@ function renderHistoryToday() {
       </div>
     `;
   }).join('');
+}
+function toggleHistoryDetail(idx) {
+  const items = document.querySelectorAll('.history-schedule-item');
+  const el = items[idx];
+  if(!el) return;
+  const existing = el.querySelector('.h-detail');
+  if(existing) { existing.remove(); return; }
+  const h = HISTORY_SCHEDULE[idx];
+  const div = document.createElement('div');
+  div.className = 'h-detail';
+  div.style.cssText = 'margin-top:10px;padding:12px;background:rgba(255,255,255,0.5);border-radius:var(--radius-sm);border:1px solid var(--rule);font-size:0.88rem;line-height:1.8;';
+  div.innerHTML = h.details + '<div class="history-video-row" style="margin-top:10px;">' + h.videos.map(v => `<a class="video-link" href="${v.url}" target="_blank" rel="noopener noreferrer" onclick="return openVideo('${v.url}')"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>${v.title}</a>`).join('') + '</div>';
+  el.querySelector('.h-content').appendChild(div);
 }
 function confirmHistoryLearned() {
   historyProgress++;
@@ -1948,12 +2053,28 @@ function updateBMI() {
   if(w&&h) {
     const bmi=calcBMI(w,h);
     $('bmi-val').textContent=bmi; $('bmi-status').textContent=bmiStatus(bmi); $('bmi-status').style.color=bmiColor(bmi);
-    const pct=Math.min(Math.max((parseFloat(bmi)-15)/20,0),1), angle=pct*Math.PI;
-    const x=120-100*Math.cos(angle), y=100-100*Math.sin(angle), large=angle>Math.PI/2?1:0;
-    $('bmi-arc').setAttribute('d',`M 20 100 A 100 100 0 ${large} 1 ${x} ${y}`);
+    const b=parseFloat(bmi);
+    let pct=((b-15)/20)*100;
+    pct=Math.max(0,Math.min(100,pct));
+    $('bmi-marker').style.left=pct+'%'; $('bmi-marker').style.display='block';
   } else {
     $('bmi-val').textContent='--'; $('bmi-status').textContent='请输入身高体重'; $('bmi-status').style.color='var(--muted)';
-    $('bmi-arc').setAttribute('d','M 20 100 A 100 100 0 0 1 20 100');
+    $('bmi-marker').style.display='none';
+  }
+}
+function initBMI() {
+  const sorted=[...weights].sort((a,b)=>b.date.localeCompare(a.date));
+  const latest=sorted[0];
+  if(latest && userHeight) {
+    const wv=getWeightVal(latest);
+    if(wv>0) {
+      const bmi=calcBMI(wv,userHeight);
+      $('bmi-val').textContent=bmi; $('bmi-status').textContent=bmiStatus(bmi); $('bmi-status').style.color=bmiColor(bmi);
+      const b=parseFloat(bmi);
+      let pct=((b-15)/20)*100;
+      pct=Math.max(0,Math.min(100,pct));
+      $('bmi-marker').style.left=pct+'%'; $('bmi-marker').style.display='block';
+    }
   }
 }
 $('w-morning').addEventListener('input', updateBMI);
@@ -2325,7 +2446,6 @@ function renderHomeStats() {
 
   $('quick-stats').innerHTML = `
     <div class="quick-stat"><div class="qs-icon">🏥</div><div class="qs-value">${monthVisits}</div><div class="qs-label">本月拜访客户</div></div>
-    <div class="quick-stat"><div class="qs-icon">📚</div><div class="qs-value">${historyIdx}/${historyTotal}</div><div class="qs-label">通史学习进度</div></div>
     <div class="quick-stat"><div class="qs-icon">💪</div><div class="qs-value">${exerciseThisMonth}</div><div class="qs-label">本月运动天数</div></div>
     <div class="quick-stat"><div class="qs-icon">📖</div><div class="qs-value">${booksRead}</div><div class="qs-label">已读完书籍</div></div>
     <div class="quick-stat" style="${weightLoss==='--'?'opacity:0.5':''}"><div class="qs-icon">⚖️</div><div class="qs-value ${weightLossClass}">${weightLoss}kg</div><div class="qs-label">累计体重变化</div></div>
@@ -2388,6 +2508,21 @@ function renderHomeStats() {
       </div>
     </div>
   `).join('');
+
+  // Psychology card
+  renderPsychology();
+}
+
+function renderPsychology() {
+  var tip = getTodayPsychology();
+  if(!tip) return;
+  $('psychology-content').innerHTML = '<div class="psy-term">' + tip.term + '</div><div class="psy-brief">' + tip.brief + '</div>';
+  $('psychology-detail').innerHTML = tip.detail;
+  $('psychology-detail').classList.remove('show');
+}
+function togglePsychologyDetail() {
+  var detail = $('psychology-detail');
+  detail.classList.toggle('show');
 }
 
 /* ========================== SUPABASE SYNC ========================== */
@@ -2418,16 +2553,17 @@ async function doLogin() {
   currentAccessCode = input;
   localStorage.setItem('wb_access_code', currentAccessCode);
   $('login-error').style.display = 'none';
-  $('login-btn').textContent = '登录中...';
 
-  initSupabase();
-  /* 首次登录时从云端拉取；后续刷新直接使用本地数据，避免覆盖本地修改 */
-  if (isFirstLogin) {
-    try { await syncFromCloud(); } catch (e) { console.log('Cloud sync skipped'); }
-  }
-
+  /* 先隐藏登录界面并初始化应用，确保用户不会卡在登录页 */
   $('login-overlay').style.display = 'none';
+  initSupabase();
   initApp();
+
+  /* 首次登录时在后台从云端拉取数据，不阻塞界面 */
+  if (isFirstLogin) {
+    try { await Promise.race([syncFromCloud(), new Promise(r=>setTimeout(r,8000))]); } catch (e) { console.log('Cloud sync skipped'); }
+    if (typeof renderHomeStats === 'function') { renderHomeStats(); renderClients(); renderBooks(); renderWeights(); }
+  }
 }
 
 async function syncFromCloud() {
@@ -2544,7 +2680,7 @@ function initApp() {
   renderClients(); renderChains(); renderWeeklyReminder();
   renderPoetsByDynasty(); renderHistoryToday();
   renderMedicalTracks(); renderBooks();
-  renderWeights(); renderStages(); renderCalendar(); updateCompareSelects();
+  renderWeights(); initBMI(); renderStages(); renderCalendar(); updateCompareSelects();
   if (initSupabase()) showSyncButtons();
 }
 
@@ -2556,6 +2692,16 @@ if (currentAccessCode) {
 } else {
   initSupabase();
 }
+
+/* 安全兜底：5秒后如果登录界面仍在，强制隐藏并初始化 */
+setTimeout(function() {
+  var overlay = $('login-overlay');
+  if (overlay && overlay.style.display !== 'none') {
+    overlay.style.display = 'none';
+    initSupabase();
+    initApp();
+  }
+}, 5000);
 </script>
 </body>
 </html>
