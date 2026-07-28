@@ -370,39 +370,23 @@ td .badge { display: inline-block; padding: 4px 12px; border-radius: 20px; font-
 .week-plan { background: var(--accent-light); border-radius: var(--radius-sm); padding: 14px 18px; margin: 12px 0; font-size: 0.85rem; line-height: 1.7; }
 .week-plan .plan-title { font-weight: 700; color: var(--accent-dark); margin-bottom: 6px; }
 
-/* ====== History Today ====== */
-.history-today {
-  background: linear-gradient(135deg, rgba(93,190,157,0.12), rgba(168,230,207,0.08));
-  border: 1px solid rgba(93,190,157,0.2); border-radius: var(--radius);
-  padding: 24px; margin-bottom: 20px;
-}
-.history-today .today-label { font-size: 0.8rem; color: var(--accent-dark); font-weight: 600; margin-bottom: 6px; }
-.history-today .today-title { font-size: 1.3rem; font-weight: 700; color: var(--ink); margin-bottom: 10px; }
-.history-today .today-desc { font-size: 0.9rem; color: var(--muted); line-height: 1.7; }
-.history-schedule { margin-top: 20px; }
-.history-schedule-item { display: flex; gap: 12px; padding: 12px 0; border-bottom: 1px dashed var(--rule); }
-.history-schedule-item:last-child { border-bottom: none; }
-.history-schedule-item .h-date { min-width: 90px; font-weight: 600; color: var(--accent-dark); font-size: 0.85rem; }
-.history-schedule-item .h-content { flex: 1; }
-.history-schedule-item .h-title { font-size: 0.9rem; font-weight: 600; }
-.history-schedule-item .h-desc { font-size: 0.82rem; color: var(--muted); margin-top: 2px; }
-.history-schedule-item.done { opacity: 0.65; pointer-events: none; cursor: default; }
-.history-schedule-item.done .h-date { color: var(--accent); }
-.history-schedule-item.done .h-title { text-decoration: line-through; color: var(--muted); }
-.history-schedule-item.current { background: var(--accent-light); border-radius: var(--radius-sm); padding: 12px; border: 1px solid rgba(93,190,157,0.2); }
-.history-schedule-item.current .h-date { color: var(--accent-dark); font-size: 0.95rem; }
-.history-schedule-item.current .h-title { color: var(--accent-dark); font-size: 1rem; }
-.history-schedule-item.locked { opacity: 0.45; }
-.history-schedule-item.locked .h-date { color: var(--muted); }
-.history-schedule-item .h-status { min-width: 60px; text-align: right; font-size: 0.75rem; font-weight: 600; }
-.history-today .confirm-bar { margin-top: 14px; display: flex; align-items: center; gap: 12px; }
-.history-today .confirm-bar .progress-text { font-size: 0.85rem; color: var(--muted); }
-.history-progress-bar { height: 6px; background: var(--rule); border-radius: 3px; overflow: hidden; flex: 1; max-width: 200px; }
-.history-progress-bar > div { height: 100%; background: linear-gradient(90deg, var(--accent), var(--accent-dark)); border-radius: 3px; transition: width 0.3s; }
-.history-detail-box { margin-top: 18px; padding: 18px; background: rgba(255,255,255,0.5); border: 1px solid var(--rule); border-radius: var(--radius-sm); }
+/* ====== History Cards ====== */
+.history-card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; }
+.history-card { background: var(--card); border: 1px solid var(--rule); border-radius: var(--radius); padding: 18px; cursor: pointer; transition: box-shadow 0.2s, border-color 0.2s; }
+.history-card:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.06); border-color: rgba(93,190,157,0.35); }
+.history-card-header { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+.history-card-num { min-width: 52px; text-align: center; font-size: 0.75rem; font-weight: 700; color: var(--accent-dark); background: var(--accent-light); padding: 4px 8px; border-radius: var(--radius-sm); }
+.history-card-title { font-size: 1.05rem; font-weight: 700; color: var(--ink); margin: 0; flex: 1; }
+.history-card-desc { font-size: 0.88rem; color: var(--muted); line-height: 1.6; margin: 0 0 12px; }
+.history-card-tags { display: flex; gap: 6px; flex-wrap: wrap; }
+.history-card-detail { display: none; margin-top: 14px; padding-top: 14px; border-top: 1px dashed var(--rule); }
+.history-card-detail.show { display: block; }
 .history-detail-content { font-size: 0.88rem; line-height: 1.9; color: var(--ink); }
 .history-detail-content strong { color: var(--accent-dark); }
-.history-video-row { display: flex; gap: 10px; flex-wrap: wrap; margin-top: 10px; }
+.history-video-row { display: flex; flex-wrap: wrap; gap: 8px; }
+.history-article-row { display: flex; flex-wrap: wrap; gap: 8px; }
+.article-link { display: inline-flex; align-items: center; gap: 4px; font-size: 0.82rem; color: var(--accent-dark); background: rgba(93,190,157,0.08); padding: 6px 10px; border-radius: var(--radius-sm); text-decoration: none; border: 1px solid rgba(93,190,157,0.15); transition: background 0.2s; }
+.article-link:hover { background: rgba(93,190,157,0.15); }
 
 /* ====== Learning Track ====== */
 .track-card {
@@ -775,11 +759,11 @@ td .badge { display: inline-block; padding: 4px 12px; border-radius: 20px; font-
 
       <!-- History Sub-tab -->
       <div class="sub-content" id="sub-history">
-        <div class="history-today" id="history-today"></div>
-        <div class="glass-card">
-          <h3 style="margin-bottom:16px;">通史学习进度</h3>
-          <div id="history-schedule"></div>
+        <div style="margin-bottom:16px;">
+          <h3 style="margin-bottom:6px;">中国通史</h3>
+          <p style="color:var(--muted);font-size:0.85rem;margin:0;">8个章节可自由学习，点击卡片展开详情</p>
         </div>
+        <div id="history-schedule"></div>
       </div>
     </section>
 
@@ -1238,28 +1222,36 @@ const POETS_BY_DYNASTY = [
 var HISTORY_SCHEDULE = [
   { week:1, title:'中华文明的起源', desc:'从远古到夏商周三代，了解中华文明的曙光。', topics:['旧石器时代','新石器时代','夏朝','商朝','西周'],
     details:'<strong>核心知识点：</strong><br>• 北京人（约70万年前）与山顶洞人——早期人类用火与工具制造<br>• 仰韶文化（彩陶）与龙山文化（黑陶）——农业定居生活的开端<br>• 夏朝（约前2070-前1600）——中国史书记载的第一个世袭制王朝，大禹治水<br>• 商朝（前1600-前1046）——甲骨文出现，青铜铸造达到高峰，殷墟考古<br>• 西周（前1046-前771）——周公制礼作乐，分封制与宗法制确立，奠定中华文明伦理基础',
-    videos:[{title:'中国通史 第1集 中华道路',url:'https://search.bilibili.com/all?keyword=中国通史+中华道路'},{title:'夏商周考古纪录片',url:'https://search.bilibili.com/all?keyword=夏商周+考古+纪录片'},{title:'甲骨文的故事',url:'https://search.bilibili.com/all?keyword=甲骨文+纪录片'}] },
+    videos:[{title:'中国通史 第1集 中华道路',url:'https://search.bilibili.com/all?keyword=中国通史+中华道路'},{title:'夏商周考古纪录片',url:'https://search.bilibili.com/all?keyword=夏商周+考古+纪录片'},{title:'甲骨文的故事',url:'https://search.bilibili.com/all?keyword=甲骨文+纪录片'}],
+    articles:[{title:'中华文明探源工程成果',source:'学习强国',url:'https://www.xuexi.cn/search?searchword=中华文明探源工程'},{title:'仰韶文化发现与中国现代考古学',source:'新华网',url:'https://www.xinhuanet.com/search.htm?q=仰韶文化'},{title:'殷墟考古与甲骨文研究',source:'人民网',url:'https://search.people.com.cn/cnpeople/search.do?pageNum=1&keyword=殷墟甲骨文&siteName=news'}] },
   { week:2, title:'春秋战国与百家争鸣', desc:'春秋五霸、战国七雄，思想家辈出，是中国思想史上最辉煌的时代。', topics:['春秋五霸','战国七雄','儒家','道家','法家'],
     details:'<strong>核心知识点：</strong><br>• 春秋五霸（齐桓、晋文、楚庄、秦穆、宋襄）——周王室衰微，诸侯争霸<br>• 孔子（前551-前479）——儒家创始人，主张"仁""礼"，编订六经，开创私学<br>• 老子与《道德经》——道家思想源头，主张无为而治、道法自然<br>• 墨子与墨家——主张兼爱非攻，代表平民阶层利益<br>• 韩非与法家——主张法治、术治、势治结合，为秦朝统一提供理论基础',
-    videos:[{title:'中国通史 春秋战国',url:'https://search.bilibili.com/all?keyword=中国通史+春秋战国'},{title:'百家讲坛 孔子',url:'https://search.bilibili.com/all?keyword=百家讲坛+孔子'},{title:'老子与道德经',url:'https://search.bilibili.com/all?keyword=老子+道德经+纪录片'}] },
+    videos:[{title:'中国通史 春秋战国',url:'https://search.bilibili.com/all?keyword=中国通史+春秋战国'},{title:'百家讲坛 孔子',url:'https://search.bilibili.com/all?keyword=百家讲坛+孔子'},{title:'老子与道德经',url:'https://search.bilibili.com/all?keyword=老子+道德经+纪录片'}],
+    articles:[{title:'孔子与儒家思想',source:'学习强国',url:'https://www.xuexi.cn/search?searchword=孔子儒家思想'},{title:'道德经与中国哲学',source:'新华网',url:'https://www.xinhuanet.com/search.htm?q=道德经'},{title:'百家争鸣与诸子百家',source:'人民网',url:'https://search.people.com.cn/cnpeople/search.do?pageNum=1&keyword=百家争鸣&siteName=news'}] },
   { week:3, title:'秦汉大一统', desc:'秦始皇统一六国，建立中央集权制度。汉朝确立儒家正统地位。', topics:['秦朝统一','楚汉之争','汉武帝','丝绸之路','王莽改制'],
     details:'<strong>核心知识点：</strong><br>• 秦始皇（前221年统一）——废分封行郡县，统一文字、货币、度量衡，修长城、驰道<br>• 陈胜吴广起义——中国历史上第一次大规模农民起义<br>• 刘邦建立西汉——吸取秦亡教训，休养生息，文景之治<br>• 汉武帝刘彻——罢黜百家独尊儒术，北击匈奴，张骞通西域开辟丝绸之路<br>• 王莽改制与东汉建立——刘秀（光武帝）中兴，东汉末年黄巾起义与军阀割据',
-    videos:[{title:'中国通史 秦始皇',url:'https://search.bilibili.com/all?keyword=中国通史+秦始皇'},{title:'汉武大帝纪录片',url:'https://search.bilibili.com/all?keyword=汉武大帝+纪录片'},{title:'丝绸之路',url:'https://search.bilibili.com/all?keyword=丝绸之路+纪录片'}] },
+    videos:[{title:'中国通史 秦始皇',url:'https://search.bilibili.com/all?keyword=中国通史+秦始皇'},{title:'汉武大帝纪录片',url:'https://search.bilibili.com/all?keyword=汉武大帝+纪录片'},{title:'丝绸之路',url:'https://search.bilibili.com/all?keyword=丝绸之路+纪录片'}],
+    articles:[{title:'秦始皇与中央集权制度',source:'央视网',url:'https://search.cctv.com/search.php?qtext=秦始皇'},{title:'汉武帝与丝绸之路',source:'学习强国',url:'https://www.xuexi.cn/search?searchword=汉武帝丝绸之路'},{title:'秦汉文明的历史贡献',source:'新华网',url:'https://www.xinhuanet.com/search.htm?q=秦汉文明'}] },
   { week:4, title:'魏晋南北朝', desc:'三国鼎立、五胡乱华、南北朝对峙。玄学兴起，佛教传入。', topics:['三国鼎立','西晋统一','五胡十六国','北魏孝文帝改革','南朝文化'],
     details:'<strong>核心知识点：</strong><br>• 三国鼎立——魏（曹丕）、蜀（刘备）、吴（孙权），赤壁之战奠定三分格局<br>• 西晋短暂统一（280年）——八王之乱导致国力空虚，匈奴刘氏建立汉赵<br>• 五胡十六国——匈奴、鲜卑、羯、氐、羌等北方民族先后建立政权，民族大融合开始<br>• 北魏孝文帝改革（471-499）——迁都洛阳，推行汉化政策，促进民族融合<br>• 南朝文化——宋齐梁陈四朝更替，玄学、佛教兴盛，王羲之书法、顾恺之绘画',
-    videos:[{title:'中国通史 三国两晋',url:'https://search.bilibili.com/all?keyword=中国通史+三国+两晋'},{title:'百家讲坛 易中天品三国',url:'https://search.bilibili.com/all?keyword=易中天品三国'},{title:'北魏孝文帝改革',url:'https://search.bilibili.com/all?keyword=北魏孝文帝+纪录片'}] },
+    videos:[{title:'中国通史 三国两晋',url:'https://search.bilibili.com/all?keyword=中国通史+三国+两晋'},{title:'百家讲坛 易中天品三国',url:'https://search.bilibili.com/all?keyword=易中天品三国'},{title:'北魏孝文帝改革',url:'https://search.bilibili.com/all?keyword=北魏孝文帝+纪录片'}],
+    articles:[{title:'三国历史与文化',source:'人民网',url:'https://search.people.com.cn/cnpeople/search.do?pageNum=1&keyword=三国历史&siteName=news'},{title:'北魏孝文帝改革与民族融合',source:'学习强国',url:'https://www.xuexi.cn/search?searchword=北魏孝文帝改革'},{title:'魏晋南北朝书法艺术',source:'新华网',url:'https://www.xinhuanet.com/search.htm?q=王羲之书法'}] },
   { week:5, title:'隋唐盛世', desc:'隋朝统一，唐朝开创了中国历史上最辉煌的盛世。', topics:['隋朝统一','贞观之治','开元盛世','安史之乱','唐朝文化'],
     details:'<strong>核心知识点：</strong><br>• 隋朝（581-618）——隋文帝杨坚结束南北朝分裂，开皇之治；隋炀帝开凿大运河<br>• 贞观之治（627-649）——唐太宗李世民，虚心纳谏，轻徭薄赋，国力迅速恢复<br>• 开元盛世（713-741）——唐玄宗李隆基前期，唐朝国力达到顶峰，长安成为国际大都会<br>• 安史之乱（755-763）——节度使安禄山、史思明叛乱，唐朝由盛转衰，藩镇割据开始<br>• 唐朝文化——科举制完善，三省六部制成熟，唐诗繁荣，玄奘西行，鉴真东渡',
-    videos:[{title:'中国通史 隋唐',url:'https://search.bilibili.com/all?keyword=中国通史+隋唐'},{title:'贞观之治纪录片',url:'https://search.bilibili.com/all?keyword=贞观之治+纪录片'},{title:'安史之乱',url:'https://search.bilibili.com/all?keyword=安史之乱+纪录片'}] },
+    videos:[{title:'中国通史 隋唐',url:'https://search.bilibili.com/all?keyword=中国通史+隋唐'},{title:'贞观之治纪录片',url:'https://search.bilibili.com/all?keyword=贞观之治+纪录片'},{title:'安史之乱',url:'https://search.bilibili.com/all?keyword=安史之乱+纪录片'}],
+    articles:[{title:'贞观之治与唐太宗',source:'央视网',url:'https://search.cctv.com/search.php?qtext=贞观之治'},{title:'大运河的历史意义',source:'新华网',url:'https://www.xinhuanet.com/search.htm?q=隋唐大运河'},{title:'唐诗与唐朝文化',source:'学习强国',url:'https://www.xuexi.cn/search?searchword=唐诗文化'}] },
   { week:6, title:'宋元变革', desc:'宋朝经济文化高度发达但军事弱势。元朝统一中国。', topics:['北宋建立','王安石变法','南宋偏安','蒙古崛起','元朝统一'],
     details:'<strong>核心知识点：</strong><br>• 北宋建立（960）——赵匡胤陈桥兵变，杯酒释兵权，重文轻武国策<br>• 王安石变法（1069-1085）——青苗法、募役法、方田均税法，旨在富国强兵但阻力重重<br>• 南宋偏安（1127-1279）——靖康之变后迁都临安，岳飞抗金，最终为元所灭<br>• 成吉思汗与蒙古崛起——统一蒙古各部，建立横跨欧亚的蒙古帝国<br>• 元朝（1271-1368）——忽必烈定国号为元，行省制度确立，马可波罗来华',
-    videos:[{title:'中国通史 宋元',url:'https://search.bilibili.com/all?keyword=中国通史+宋元'},{title:'王安石变法',url:'https://search.bilibili.com/all?keyword=王安石变法+纪录片'},{title:'成吉思汗纪录片',url:'https://search.bilibili.com/all?keyword=成吉思汗+纪录片'}] },
+    videos:[{title:'中国通史 宋元',url:'https://search.bilibili.com/all?keyword=中国通史+宋元'},{title:'王安石变法',url:'https://search.bilibili.com/all?keyword=王安石变法+纪录片'},{title:'成吉思汗纪录片',url:'https://search.bilibili.com/all?keyword=成吉思汗+纪录片'}],
+    articles:[{title:'王安石变法的历史启示',source:'人民网',url:'https://search.people.com.cn/cnpeople/search.do?pageNum=1&keyword=王安石变法&siteName=news'},{title:'岳飞与精忠报国',source:'学习强国',url:'https://www.xuexi.cn/search?searchword=岳飞精忠报国'},{title:'元朝行省制度与统一多民族国家',source:'新华网',url:'https://www.xinhuanet.com/search.htm?q=元朝行省制度'}] },
   { week:7, title:'明清专制', desc:'明朝恢复汉族政权，清朝达到专制皇权顶峰。', topics:['明朝建立','郑和下西洋','清军入关','康乾盛世','闭关锁国'],
     details:'<strong>核心知识点：</strong><br>• 明朝建立（1368）——朱元璋推翻元朝，废丞相设内阁，锦衣卫、东厂等特务机构<br>• 郑和下西洋（1405-1433）——朱棣派郑和七下西洋，宣扬国威，开拓海上丝绸之路<br>• 清军入关（1644）——吴三桂引清兵入关，顺治帝迁都北京，逐步统一全国<br>• 康乾盛世（1662-1796）——康熙、雍正、乾隆三朝，疆域辽阔，人口增长，四库全书<br>• 闭关锁国——限制对外贸易，广州十三行成为唯一通商口岸，错失工业革命机遇',
-    videos:[{title:'中国通史 明清',url:'https://search.bilibili.com/all?keyword=中国通史+明清'},{title:'郑和下西洋纪录片',url:'https://search.bilibili.com/all?keyword=郑和下西洋+纪录片'},{title:'康熙王朝',url:'https://search.bilibili.com/all?keyword=康熙+纪录片'}] },
+    videos:[{title:'中国通史 明清',url:'https://search.bilibili.com/all?keyword=中国通史+明清'},{title:'郑和下西洋纪录片',url:'https://search.bilibili.com/all?keyword=郑和下西洋+纪录片'},{title:'康熙王朝',url:'https://search.bilibili.com/all?keyword=康熙+纪录片'}],
+    articles:[{title:'郑和下西洋与海上丝绸之路',source:'央视网',url:'https://search.cctv.com/search.php?qtext=郑和下西洋'},{title:'康熙皇帝与康乾盛世',source:'学习强国',url:'https://www.xuexi.cn/search?searchword=康熙康乾盛世'},{title:'故宫博物院与明清文化',source:'新华网',url:'https://www.xinhuanet.com/search.htm?q=故宫博物院'}] },
   { week:8, title:'近代变革', desc:'鸦片战争后中国逐步沦为半殖民地半封建社会。', topics:['鸦片战争','太平天国','洋务运动','戊戌变法','辛亥革命'],
     details:'<strong>核心知识点：</strong><br>• 鸦片战争（1840-1842）——英国向中国倾销鸦片，清政府战败签订《南京条约》，中国开始沦为半殖民地<br>• 太平天国（1851-1864）——洪秀全领导的农民起义，建立太平天国，颁布《天朝田亩制度》<br>• 洋务运动（1861-1895）——曾国藩、李鸿章等主张"师夷长技以制夷"，创办江南制造总局等近代工业<br>• 戊戌变法（1898）——康有为、梁启超推动光绪帝变法，百日维新失败，六君子就义<br>• 辛亥革命（1911）——孙中山领导的资产阶级民主革命，推翻清朝，建立中华民国',
-    videos:[{title:'中国通史 近代',url:'https://search.bilibili.com/all?keyword=中国通史+近代'},{title:'鸦片战争纪录片',url:'https://search.bilibili.com/all?keyword=鸦片战争+纪录片'},{title:'辛亥革命',url:'https://search.bilibili.com/all?keyword=辛亥革命+纪录片'}] }
+    videos:[{title:'中国通史 近代',url:'https://search.bilibili.com/all?keyword=中国通史+近代'},{title:'鸦片战争纪录片',url:'https://search.bilibili.com/all?keyword=鸦片战争+纪录片'},{title:'辛亥革命',url:'https://search.bilibili.com/all?keyword=辛亥革命+纪录片'}],
+    articles:[{title:'鸦片战争与中国近代史开端',source:'人民网',url:'https://search.people.com.cn/cnpeople/search.do?pageNum=1&keyword=鸦片战争&siteName=news'},{title:'洋务运动与近代工业起步',source:'学习强国',url:'https://www.xuexi.cn/search?searchword=洋务运动'},{title:'辛亥革命与孙中山',source:'新华网',url:'https://www.xinhuanet.com/search.htm?q=辛亥革命'}] }
 ];
 
 /* ========================== MEDICAL TRACKS ========================== */
@@ -1874,92 +1866,34 @@ function openVideo(url) {
 
 /* ========================== HISTORY MODULE ========================== */
 function renderHistoryToday() {
-  const currentIdx = historyProgress + 1; // 当前应学的索引
-  const total = HISTORY_SCHEDULE.length;
-  const isAllDone = currentIdx >= total;
-  const item = isAllDone ? null : HISTORY_SCHEDULE[currentIdx];
-  const progressPct = Math.round((historyProgress+1)/total*100);
-
-  if (isAllDone) {
-    const last = HISTORY_SCHEDULE[total-1];
-    $('history-today').innerHTML = `
-      <div class="today-label">通史学习完成</div>
-      <div class="today-title">全部内容已学完</div>
-      <div class="today-desc">恭喜你完成了全部 ${total} 节的中国通史学习计划！可以选择复习或回顾之前的内容。</div>
-      <div style="margin-top:16px;">
-        <div class="history-progress-bar" style="max-width:100%;"><div style="width:100%"></div></div>
+  $('history-schedule').innerHTML = '<div class="history-card-grid">' + HISTORY_SCHEDULE.map((h, i) => `
+    <div class="history-card" onclick="toggleHistoryDetail(${i})">
+      <div class="history-card-header">
+        <div class="history-card-num">第${h.week}章</div>
+        <h4 class="history-card-title">${h.title}</h4>
       </div>
-      <div class="history-detail-box">
-        <h4 style="margin-bottom:10px;color:var(--accent-dark);">最后一节回顾：${last.title}</h4>
-        <div class="history-detail-content">${last.details}</div>
+      <p class="history-card-desc">${h.desc}</p>
+      <div class="history-card-tags">
+        ${h.topics.map(t => `<span class="badge badge-info">${t}</span>`).join('')}
+      </div>
+      <div class="history-card-detail" id="history-detail-${i}">
+        <div class="history-detail-content">${h.details}</div>
+        <h5 style="margin:14px 0 10px;color:var(--accent-dark);">推荐视频</h5>
         <div class="history-video-row">
-          ${last.videos.map(v => `<a class="video-link" href="${v.url}" target="_blank" rel="noopener noreferrer" onclick="return openVideo('${v.url}')"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>${v.title}</a>`).join('')}
+          ${h.videos.map(v => `<a class="video-link" href="${v.url}" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation();return openVideo('${v.url}')"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>${v.title}</a>`).join('')}
+        </div>
+        <h5 style="margin:14px 0 10px;color:var(--accent-dark);">官方文章推荐</h5>
+        <div class="history-article-row">
+          ${h.articles.map(a => `<a class="article-link" href="${a.url}" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation();return openVideo('${a.url}')"><svg viewBox="0 0 24 24" style="width:14px;height:14px;fill:currentColor;vertical-align:middle;margin-right:4px;"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg>${a.title} · ${a.source}</a>`).join('')}
         </div>
       </div>
-    `;
-  } else {
-    const dayNum = currentIdx + 1;
-    $('history-today').innerHTML = `
-      <div class="today-label">今日通史学习 · 第${dayNum}天</div>
-      <div class="today-title">${item.title}</div>
-      <div class="today-desc">${item.desc}</div>
-      <div style="margin-top:12px;display:flex;gap:8px;flex-wrap:wrap;">
-        ${item.topics.map(t => `<span class="badge badge-info">${t}</span>`).join('')}
-      </div>
-      <div class="history-detail-box">
-        <h4 style="margin-bottom:10px;color:var(--accent-dark);">详细知识</h4>
-        <div class="history-detail-content">${item.details}</div>
-        <h4 style="margin:14px 0 10px;color:var(--accent-dark);">推荐视频</h4>
-        <div class="history-video-row">
-          ${item.videos.map(v => `<a class="video-link" href="${v.url}" target="_blank" rel="noopener noreferrer" onclick="return openVideo('${v.url}')"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>${v.title}</a>`).join('')}
-        </div>
-      </div>
-      <div class="confirm-bar" style="justify-content:space-between;">
-        <button class="btn btn-primary" onclick="confirmHistoryLearned()">
-          <svg viewBox="0 0 24 24" style="width:16px;height:16px;fill:currentColor;vertical-align:middle;margin-right:4px;"><path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/></svg>
-          确认已学，进入下一节
-        </button>
-        <div class="history-progress-bar"><div style="width:${progressPct}%"></div></div>
-      </div>
-    `;
-  }
-
-  $('history-schedule').innerHTML = HISTORY_SCHEDULE.map((h, i) => {
-    let cls = '';
-    let status = '';
-    if (i < currentIdx) { cls = 'done'; status = '<span style="color:var(--accent);">已完成</span>'; }
-    else if (i === currentIdx && !isAllDone) { cls = 'current'; status = '<span style="color:var(--accent-dark);">进行中</span>'; }
-    else { cls = 'locked'; status = '<span style="color:var(--muted);">未解锁</span>'; }
-    const clickAttr = cls === 'current' ? ` onclick="toggleHistoryDetail(${i})" style="cursor:pointer;"` : '';
-    return `
-      <div class="history-schedule-item ${cls}"${clickAttr}>
-        <div class="h-date">第${i+1}天</div>
-        <div class="h-content">
-          <div class="h-title">${h.title}</div>
-          <div class="h-desc">${h.desc.slice(0,60)}...</div>
-        </div>
-        <div class="h-status">${status}</div>
-      </div>
-    `;
-  }).join('');
+    </div>
+  `).join('') + '</div>';
 }
 function toggleHistoryDetail(idx) {
-  const items = document.querySelectorAll('.history-schedule-item');
-  const el = items[idx];
-  if(!el) return;
-  const existing = el.querySelector('.h-detail');
-  if(existing) { existing.remove(); return; }
-  const h = HISTORY_SCHEDULE[idx];
-  const div = document.createElement('div');
-  div.className = 'h-detail';
-  div.style.cssText = 'margin-top:10px;padding:12px;background:rgba(255,255,255,0.5);border-radius:var(--radius-sm);border:1px solid var(--rule);font-size:0.88rem;line-height:1.8;';
-  div.innerHTML = h.details + '<div class="history-video-row" style="margin-top:10px;">' + h.videos.map(v => `<a class="video-link" href="${v.url}" target="_blank" rel="noopener noreferrer" onclick="return openVideo('${v.url}')"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>${v.title}</a>`).join('') + '</div>';
-  el.querySelector('.h-content').appendChild(div);
-}
-function confirmHistoryLearned() {
-  historyProgress++;
-  saveData(STORE_KEYS.history, historyProgress);
-  renderHistoryToday();
+  const detail = $('history-detail-' + idx);
+  if(!detail) return;
+  detail.classList.toggle('show');
 }
 
 /* ========================== MEDICAL TRACKS ========================== */
@@ -2425,8 +2359,6 @@ function renderHomeStats() {
   const monthVisits = clients.filter(c => c.visits.some(v => v.date.startsWith(monthStr))).length;
   const aClients = clients.filter(c => c.category === 'A').length;
   const activeChains = chains.filter(c => c.stage !== '已合作').length;
-  const historyIdx = historyProgress + 1;
-  const historyTotal = HISTORY_SCHEDULE.length;
   const booksRead = books.filter(b => b.current >= b.total).length;
   const totalWeightRecords = weights.length;
   const exerciseThisMonth = Object.keys(exerciseDays).filter(d => d.startsWith(monthStr)).length;
@@ -2479,14 +2411,13 @@ function renderHomeStats() {
   const signedChains = chains.filter(c => c.stage === '已合作').length;
   const recentWeights = weights.filter(w => w.date.startsWith(monthStr));
   const latestW = recentWeights.length ? recentWeights.sort((a,b)=>b.date.localeCompare(a.date))[0] : null;
-  const historyDone = historyProgress >= 0 ? historyProgress + 1 : 0;
   const totalBooks = books.length;
   const booksInProgress = books.filter(b => b.current > 0 && b.current < b.total).length;
 
   $('monthly-summary').innerHTML = `
     <div class="summary-item"><span class="si-label">客户总数</span><span class="si-val">${totalClients} 个（A类${aClients}个）</span></div>
     <div class="summary-item"><span class="si-label">连锁开发</span><span class="si-val">${totalChains} 个进行中，${signedChains} 个已签约</span></div>
-    <div class="summary-item"><span class="si-label">通史学习</span><span class="si-val">已完成 ${historyDone} / ${historyTotal} 节</span></div>
+    <div class="summary-item"><span class="si-label">通史章节</span><span class="si-val">${HISTORY_SCHEDULE.length}个章节可自由学习</span></div>
     <div class="summary-item"><span class="si-label">阅读进度</span><span class="si-val">${totalBooks} 本书，${booksInProgress} 本在读，${booksRead} 本读完</span></div>
     <div class="summary-item"><span class="si-label">本月体重记录</span><span class="si-val">${recentWeights.length} 次${latestW ? '，最新 '+getWeightVal(latestW)+'kg' : ''}</span></div>
     <div class="summary-item"><span class="si-label">本月运动</span><span class="si-val">${exerciseThisMonth} 天</span></div>
