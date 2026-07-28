@@ -388,6 +388,36 @@ td .badge { display: inline-block; padding: 4px 12px; border-radius: 20px; font-
 .article-link { display: inline-flex; align-items: center; gap: 4px; font-size: 0.82rem; color: var(--accent-dark); background: rgba(93,190,157,0.08); padding: 6px 10px; border-radius: var(--radius-sm); text-decoration: none; border: 1px solid rgba(93,190,157,0.15); transition: background 0.2s; }
 .article-link:hover { background: rgba(93,190,157,0.15); }
 
+/* ====== History Mode Switch ====== */
+.history-mode-switch { display: inline-flex; gap: 0; border: 1px solid var(--rule); border-radius: var(--radius-sm); overflow: hidden; }
+.history-mode-btn { padding: 8px 18px; font-size: 0.85rem; font-weight: 600; border: none; background: transparent; color: var(--muted); cursor: pointer; transition: all 0.2s; }
+.history-mode-btn.active { background: var(--accent); color: #fff; }
+.history-mode-btn:hover:not(.active) { background: var(--accent-light); color: var(--accent-dark); }
+
+/* Deep History Cards */
+.deep-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 16px; }
+.deep-card { background: var(--card); border: 1px solid var(--rule); border-radius: var(--radius); padding: 20px; cursor: pointer; transition: box-shadow 0.2s, border-color 0.2s; }
+.deep-card:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.06); border-color: rgba(93,190,157,0.35); }
+.deep-card-header { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+.deep-card-era { min-width: 60px; text-align: center; font-size: 0.75rem; font-weight: 700; color: #fff; background: var(--accent-dark); padding: 4px 8px; border-radius: var(--radius-sm); }
+.deep-card-title { font-size: 1.05rem; font-weight: 700; color: var(--ink); margin: 0; flex: 1; }
+.deep-card-desc { font-size: 0.88rem; color: var(--muted); line-height: 1.6; margin: 0 0 12px; }
+.deep-card-tags { display: flex; gap: 6px; flex-wrap: wrap; }
+.deep-card-detail { display: none; margin-top: 14px; padding-top: 14px; border-top: 1px dashed var(--rule); }
+.deep-card-detail.show { display: block; }
+.deep-section-title { font-size: 0.82rem; font-weight: 700; color: var(--accent-dark); margin: 12px 0 8px; }
+.deep-people-list { font-size: 0.85rem; line-height: 1.8; color: var(--ink); }
+.deep-people-list .person { display: inline-block; margin: 2px 4px; padding: 2px 10px; border-radius: 10px; background: rgba(93,190,157,0.08); color: var(--accent-dark); font-size: 0.8rem; }
+.deep-event-list { font-size: 0.85rem; line-height: 1.9; color: var(--ink); }
+.deep-event-list .event { padding: 4px 0; border-bottom: 1px dashed var(--rule); }
+.deep-event-list .event:last-child { border: none; }
+.deep-event-list .event-year { font-weight: 700; color: var(--accent-dark); margin-right: 6px; }
+.deep-culture-list { font-size: 0.85rem; line-height: 1.8; color: var(--ink); }
+.deep-book-list { font-size: 0.82rem; line-height: 1.8; }
+.deep-book-list .book-item { padding: 6px 10px; margin: 4px 0; background: rgba(255,255,255,0.5); border-radius: var(--radius-sm); border: 1px solid var(--rule); }
+.deep-book-list .book-title { font-weight: 600; color: var(--accent-dark); }
+.deep-book-list .book-author { color: var(--muted); font-size: 0.78rem; }
+
 /* ====== Learning Track ====== */
 .track-card {
   background: var(--bg2); backdrop-filter: blur(16px);
@@ -759,11 +789,18 @@ td .badge { display: inline-block; padding: 4px 12px; border-radius: 20px; font-
 
       <!-- History Sub-tab -->
       <div class="sub-content" id="sub-history">
-        <div style="margin-bottom:16px;">
-          <h3 style="margin-bottom:6px;">中国通史</h3>
-          <p style="color:var(--muted);font-size:0.85rem;margin:0;">8个章节可自由学习，点击卡片展开详情</p>
+        <div style="margin-bottom:16px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;">
+          <div>
+            <h3 style="margin-bottom:6px;">中国通史</h3>
+            <p style="color:var(--muted);font-size:0.85rem;margin:0;" id="history-mode-desc">8个章节可自由学习，点击卡片展开详情</p>
+          </div>
+          <div class="history-mode-switch">
+            <button class="history-mode-btn active" id="history-mode-basic" onclick="switchHistoryMode('basic')">基础学习</button>
+            <button class="history-mode-btn" id="history-mode-deep" onclick="switchHistoryMode('deep')">深入学习</button>
+          </div>
         </div>
         <div id="history-schedule"></div>
+        <div id="history-deep" style="display:none;"></div>
       </div>
     </section>
 
@@ -1252,6 +1289,361 @@ var HISTORY_SCHEDULE = [
     details:'<strong>核心知识点：</strong><br>• 鸦片战争（1840-1842）——英国向中国倾销鸦片，清政府战败签订《南京条约》，中国开始沦为半殖民地<br>• 太平天国（1851-1864）——洪秀全领导的农民起义，建立太平天国，颁布《天朝田亩制度》<br>• 洋务运动（1861-1895）——曾国藩、李鸿章等主张"师夷长技以制夷"，创办江南制造总局等近代工业<br>• 戊戌变法（1898）——康有为、梁启超推动光绪帝变法，百日维新失败，六君子就义<br>• 辛亥革命（1911）——孙中山领导的资产阶级民主革命，推翻清朝，建立中华民国',
     videos:[{title:'中国通史 近代',url:'https://search.bilibili.com/all?keyword=中国通史+近代'},{title:'鸦片战争纪录片',url:'https://search.bilibili.com/all?keyword=鸦片战争+纪录片'},{title:'辛亥革命',url:'https://search.bilibili.com/all?keyword=辛亥革命+纪录片'}],
     articles:[{title:'鸦片战争与中国近代史开端',source:'人民网',url:'https://search.people.com.cn/cnpeople/search.do?pageNum=1&keyword=鸦片战争&siteName=news'},{title:'洋务运动与近代工业起步',source:'学习强国',url:'https://www.xuexi.cn/search?searchword=洋务运动'},{title:'辛亥革命与孙中山',source:'新华网',url:'https://www.xinhuanet.com/search.htm?q=辛亥革命'}] }
+];
+
+/* ========================== HISTORY DEEP ========================== */
+var HISTORY_DEEP = [
+  {
+    era:'先秦', title:'先秦时期：中华文明的奠基', desc:'从远古文明到春秋战国，涵盖原始社会、夏商西周、春秋战国三个阶段，是中华文明的孕育与成型期。诸子百家思想在此期间诞生，奠定了中国两千多年传统文化的根基。',
+    tags:['青铜文明','甲骨文','分封制','百家争鸣','礼乐制度'],
+    keyPeople:[
+      {name:'黄帝',role:'人文初祖'},
+      {name:'大禹',role:'治水英雄、夏朝奠基者'},
+      {name:'周公旦',role:'西周政治家，制礼作乐'},
+      {name:'孔子',role:'儒家创始人，教育家'},
+      {name:'老子',role:'道家创始人'},
+      {name:'孟子',role:'儒家亚圣，主张仁政'},
+      {name:'庄子',role:'道家代表，逍遥哲学'},
+      {name:'商鞅',role:'法家代表，秦国变法'}
+    ],
+    keyEvents:[
+      {year:'约前2070年',desc:'大禹建立夏朝，中国第一个世袭制王朝'},
+      {year:'约前1600年',desc:'商汤灭夏，建立商朝，甲骨文出现'},
+      {year:'前1046年',desc:'武王伐纣，西周建立，分封制推行'},
+      {year:'前770年',desc:'平王东迁洛邑，东周开始，春秋时代开启'},
+      {year:'前551-前479年',desc:'孔子在世，创立儒家学说，编订六经'},
+      {year:'前475年',desc:'战国时代开始，七雄争霸'},
+      {year:'前356年',desc:'商鞅在秦国变法，秦国崛起'},
+      {year:'前221年',desc:'秦王嬴政统一六国，建立秦朝'}
+    ],
+    culture:['甲骨文——中国最早的成熟文字体系','青铜器——后母戊鼎等代表商周铸造工艺巅峰','礼乐制度——周公制定，成为中国古代社会秩序基石','诸子百家——儒道法墨等学派奠定中国传统思想基础','《诗经》——中国最早的诗歌总集','编钟——曾侯乙编钟展现先秦音乐成就'],
+    books:[
+      {title:'《中国通史》',author:'吕思勉'},
+      {title:'《先秦诸子概论》',author:'刘耘'},
+      {title:'《竹书纪年》',author:'不著撰人（战国魏国史官）'},
+      {title:'《春秋左传注》',author:'杨伯峻'},
+      {title:'《史记》（先秦部分）',author:'司马迁'}
+    ],
+    videos:[
+      {title:'中国通史 先秦篇',url:'https://search.bilibili.com/all?keyword=中国通史+先秦'},
+      {title:'甲骨文纪录片',url:'https://search.bilibili.com/all?keyword=甲骨文+纪录片'},
+      {title:'百家争鸣',url:'https://search.bilibili.com/all?keyword=百家争鸣+纪录片'},
+      {title:'夏商周断代工程',url:'https://search.bilibili.com/all?keyword=夏商周+断代工程'}
+    ],
+    articles:[
+      {title:'中华文明探源工程主要成果',source:'学习强国',url:'https://www.xuexi.cn/search?searchword=中华文明探源工程'},
+      {title:'甲骨文的发现与研究',source:'新华网',url:'https://www.xinhuanet.com/search.htm?q=甲骨文'},
+      {title:'殷墟考古新发现',source:'央视网',url:'https://search.cctv.com/search.php?qtext=殷墟考古'},
+      {title:'诸子百家思想精华',source:'人民网',url:'https://search.people.com.cn/cnpeople/search.do?pageNum=1&keyword=诸子百家&siteName=news'}
+    ]
+  },
+  {
+    era:'秦汉', title:'秦汉时期：大一统帝国的建立', desc:'秦始皇统一六国建立中央集权体制，汉朝巩固并完善了这一制度，开辟丝绸之路，独尊儒术，奠定了中国两千年帝制的基本格局。',
+    tags:['中央集权','郡县制','丝绸之路','独尊儒术','造纸术'],
+    keyPeople:[
+      {name:'秦始皇嬴政',role:'中国第一个皇帝'},
+      {name:'刘邦',role:'汉高祖，西汉开国皇帝'},
+      {name:'汉武帝刘彻',role:'西汉最鼎盛时期的皇帝'},
+      {name:'张骞',role:'丝绸之路开拓者'},
+      {name:'司马迁',role:'史学家，《史记》作者'},
+      {name:'董仲舒',role:'儒学大师，提出罢黜百家'},
+      {name:'蔡伦',role:'改进造纸术'},
+      {name:'光武帝刘秀',role:'东汉开国皇帝'}
+    ],
+    keyEvents:[
+      {year:'前221年',desc:'秦王嬴政统一六国，称始皇帝'},
+      {year:'前214年',desc:'修筑万里长城，北击匈奴'},
+      {year:'前209年',desc:'陈胜吴广大泽乡起义'},
+      {year:'前202年',desc:'刘邦建立西汉'},
+      {year:'前138年',desc:'张骞出使西域，丝绸之路开辟'},
+      {year:'前134年',desc:'汉武帝采纳董仲舒"罢黜百家，独尊儒术"'},
+      {year:'前104年',desc:'司马迁开始撰写《史记》'},
+      {year:'105年',desc:'蔡伦改进造纸术'}
+    ],
+    culture:['万里长城——世界建筑奇迹','秦始皇陵兵马俑——世界第八大奇迹','丝绸之路——东西方文明交流大通道','《史记》——中国第一部纪传体通史','造纸术——四大发明之一，推动人类文明进步','汉赋——司马相如《子虚赋》等代表文学高峰'],
+    books:[
+      {title:'《秦汉史》',author:'林剑鸣'},
+      {title:'《史记》',author:'司马迁'},
+      {title:'《剑桥中国秦汉史》',author:'崔瑞德、鲁惟一'},
+      {title:'《秦汉帝国》',author:'日比野丈夫'},
+      {title:'《汉代政治与<春秋>学》',author:'陈苏镇'}
+    ],
+    videos:[
+      {title:'中国通史 秦汉篇',url:'https://search.bilibili.com/all?keyword=中国通史+秦汉'},
+      {title:'秦始皇兵马俑',url:'https://search.bilibili.com/all?keyword=兵马俑+纪录片'},
+      {title:'丝绸之路纪录片',url:'https://search.bilibili.com/all?keyword=丝绸之路+纪录片'},
+      {title:'史记纪录片',url:'https://search.bilibili.com/all?keyword=司马迁+史记+纪录片'}
+    ],
+    articles:[
+      {title:'秦始皇与中央集权制度',source:'央视网',url:'https://search.cctv.com/search.php?qtext=秦始皇'},
+      {title:'汉武帝与丝绸之路',source:'学习强国',url:'https://www.xuexi.cn/search?searchword=汉武帝丝绸之路'},
+      {title:'秦汉文明的历史贡献',source:'新华网',url:'https://www.xinhuanet.com/search.htm?q=秦汉文明'},
+      {title:'兵马俑考古新发现',source:'人民网',url:'https://search.people.com.cn/cnpeople/search.do?pageNum=1&keyword=兵马俑&siteName=news'}
+    ]
+  },
+  {
+    era:'魏晋', title:'魏晋南北朝：分裂与融合', desc:'三国鼎立、西晋短暂统一、五胡十六国、南北朝对峙。这一时期虽政治分裂，但民族融合加速，玄学兴盛，佛教广泛传播，文化艺术取得突出成就。',
+    tags:['三国鼎立','民族融合','玄学','佛教传入','北魏改革'],
+    keyPeople:[
+      {name:'曹操',role:'魏国奠基者，杰出政治家军事家'},
+      {name:'诸葛亮',role:'蜀汉丞相，忠臣与智者典范'},
+      {name:'王羲之',role:'书圣，《兰亭集序》作者'},
+      {name:'陶渊明',role:'田园诗鼻祖'},
+      {name:'北魏孝文帝',role:'推行汉化改革的皇帝'},
+      {name:'谢安',role:'东晋名相，指挥淝水之战'},
+      {name:'顾恺之',role:'东晋画家，《洛神赋图》'},
+      {name:'祖冲之',role:'数学家，精确计算圆周率'}
+    ],
+    keyEvents:[
+      {year:'200年',desc:'官渡之战，曹操统一北方'},
+      {year:'208年',desc:'赤壁之战，奠定三国鼎立格局'},
+      {year:'220年',desc:'曹丕称帝，建立魏国'},
+      {year:'280年',desc:'西晋统一三国'},
+      {year:'317年',desc:'东晋建立，南北朝对峙开始'},
+      {year:'383年',desc:'淝水之战，东晋击退前秦'},
+      {year:'471-499年',desc:'北魏孝文帝推行汉化改革'},
+      {year:'5世纪',desc:'祖冲之将圆周率精确到小数点后七位'}
+    ],
+    culture:['建安文学——曹操父子与建安七子','魏晋玄学——何晏、王弼开创的哲学思潮','书法艺术——王羲之《兰亭集序》被称为天下第一行书','田园诗歌——陶渊明开创田园诗派','石窟艺术——云冈石窟、龙门石窟','佛教传播——鸠摩罗什译经，佛教本土化加速'],
+    books:[
+      {title:'《三国志》',author:'陈寿'},
+      {title:'《魏晋南北朝史》',author:'王仲荦'},
+      {title:'《世说新语》',author:'刘义庆'},
+      {title:'《洛阳伽蓝记》',author:'杨衒之'},
+      {title:'《金明馆丛稿初编》',author:'陈寅恪'}
+    ],
+    videos:[
+      {title:'中国通史 魏晋南北朝',url:'https://search.bilibili.com/all?keyword=中国通史+魏晋南北朝'},
+      {title:'易中天品三国',url:'https://search.bilibili.com/all?keyword=易中天品三国'},
+      {title:'北魏孝文帝改革',url:'https://search.bilibili.com/all?keyword=北魏孝文帝+纪录片'},
+      {title:'王羲之书法',url:'https://search.bilibili.com/all?keyword=王羲之+纪录片'}
+    ],
+    articles:[
+      {title:'三国历史与文化',source:'人民网',url:'https://search.people.com.cn/cnpeople/search.do?pageNum=1&keyword=三国历史&siteName=news'},
+      {title:'北魏孝文帝改革与民族融合',source:'学习强国',url:'https://www.xuexi.cn/search?searchword=北魏孝文帝改革'},
+      {title:'魏晋南北朝书法艺术',source:'新华网',url:'https://www.xinhuanet.com/search.htm?q=王羲之书法'},
+      {title:'龙门石窟保护与研究',source:'央视网',url:'https://search.cctv.com/search.php?qtext=龙门石窟'}
+    ]
+  },
+  {
+    era:'隋唐', title:'隋唐时期：盛世辉煌', desc:'隋朝结束近四百年分裂，唐朝开创中国历史上最辉煌的时代。贞观之治、开元盛世，长安成为世界性大都会，唐诗达到中国古典诗歌的巅峰。',
+    tags:['大运河','贞观之治','开元盛世','科举制','唐诗'],
+    keyPeople:[
+      {name:'隋文帝杨坚',role:'结束南北朝分裂，开皇之治'},
+      {name:'唐太宗李世民',role:'贞观之治，一代明君'},
+      {name:'武则天',role:'中国唯一的女皇帝'},
+      {name:'唐玄宗李隆基',role:'开元盛世缔造者'},
+      {name:'李白',role:'诗仙，浪漫主义诗歌代表'},
+      {name:'杜甫',role:'诗圣，现实主义诗歌代表'},
+      {name:'玄奘',role:'西行取经，翻译佛经'},
+      {name:'魏征',role:'直言敢谏的名臣'}
+    ],
+    keyEvents:[
+      {year:'581年',desc:'杨坚建立隋朝，结束南北分裂'},
+      {year:'605-609年',desc:'隋炀帝开凿大运河，贯通南北水运'},
+      {year:'618年',desc:'李渊建唐，唐朝开始'},
+      {year:'627-649年',desc:'唐太宗贞观之治，政治清明'},
+      {year:'630年',desc:'玄奘从天竺取经归来，翻译佛经75部'},
+      {year:'690年',desc:'武则天称帝，改国号为周'},
+      {year:'713-741年',desc:'开元盛世，唐朝国力达到顶峰'},
+      {year:'755年',desc:'安史之乱爆发，唐朝由盛转衰'}
+    ],
+    culture:['唐诗巅峰——李白、杜甫、王维等群星璀璨','大运河——世界最长的人工运河','长安城——当时世界上最大的城市','佛教发展——玄奘取经，鉴真东渡','科举完善——打破门阀垄断，选拔人才','敦煌莫高窟——世界艺术宝库，壁画雕塑杰作'],
+    books:[
+      {title:'《隋唐史》',author:'岑仲勉'},
+      {title:'《唐代政治史述论稿》',author:'陈寅恪'},
+      {title:'《剑桥中国隋唐史》',author:'崔瑞德'},
+      {title:'《李太白全集》',author:'李白'},
+      {title:'《杜甫全集》',author:'杜甫'}
+    ],
+    videos:[
+      {title:'中国通史 隋唐',url:'https://search.bilibili.com/all?keyword=中国通史+隋唐'},
+      {title:'贞观之治纪录片',url:'https://search.bilibili.com/all?keyword=贞观之治+纪录片'},
+      {title:'安史之乱',url:'https://search.bilibili.com/all?keyword=安史之乱+纪录片'},
+      {title:'唐诗纪录片',url:'https://search.bilibili.com/all?keyword=唐诗+纪录片'}
+    ],
+    articles:[
+      {title:'贞观之治的历史经验',source:'央视网',url:'https://search.cctv.com/search.php?qtext=贞观之治'},
+      {title:'大运河的历史意义',source:'新华网',url:'https://www.xinhuanet.com/search.htm?q=隋唐大运河'},
+      {title:'唐诗与唐朝文化',source:'学习强国',url:'https://www.xuexi.cn/search?searchword=唐诗文化'},
+      {title:'敦煌莫高窟文化遗产',source:'人民网',url:'https://search.people.com.cn/cnpeople/search.do?pageNum=1&keyword=敦煌莫高窟&siteName=news'}
+    ]
+  },
+  {
+    era:'宋元', title:'宋元时期：变革与交融', desc:'宋朝经济文化高度繁荣，但军事上积弱。元朝蒙古骑兵横扫欧亚，建立疆域空前辽阔的大一统帝国，促进东西方文化交流。',
+    tags:['理学','指南针','火药','活字印刷','行省制度'],
+    keyPeople:[
+      {name:'赵匡胤',role:'宋太祖，陈桥兵变建宋'},
+      {name:'王安石',role:'北宋政治家，推行变法'},
+      {name:'苏轼',role:'北宋文豪，诗词书画全才'},
+      {name:'朱熹',role:'理学集大成者'},
+      {name:'岳飞',role:'南宋抗金名将'},
+      {name:'成吉思汗',role:'蒙古帝国奠基者'},
+      {name:'忽必烈',role:'元朝建立者'},
+      {name:'马可·波罗',role:'来华意大利旅行家'}
+    ],
+    keyEvents:[
+      {year:'960年',desc:'赵匡胤陈桥兵变，建立北宋'},
+      {year:'1069年',desc:'王安石开始变法，推行青苗法等新政'},
+      {year:'1127年',desc:'靖康之变，北宋灭亡，南宋建立'},
+      {year:'1140年',desc:'岳飞北伐，郾城大捷'},
+      {year:'1206年',desc:'成吉思汗统一蒙古各部'},
+      {year:'1271年',desc:'忽必烈改国号为元'},
+      {year:'1279年',desc:'元灭南宋，统一全国'},
+      {year:'13世纪',desc:'指南针、火药、活字印刷术广泛传播'}
+    ],
+    culture:['宋词——苏轼、李清照、辛弃疾等代表人物','理学——程颢、程颐、朱熹建立完整哲学体系','三大发明——指南针、火药、活字印刷术深刻影响世界','宋画——张择端《清明上河图》展现市井繁华','元曲——关汉卿《窦娥冤》等代表戏剧高峰','青花瓷——元青花成为中国瓷器代表'],
+    books:[
+      {title:'《宋史》',author:'脱脱等'},
+      {title:'《宋朝那些事儿》',author:'当年明月'},{title:'《朱子语类》',author:'朱熹'},
+      {title:'《元代社会阶级制度》',author:'蒙思明'},
+      {title:'《蒙元入侵时的中国》',author:'李约瑟'}
+    ],
+    videos:[
+      {title:'中国通史 宋元',url:'https://search.bilibili.com/all?keyword=中国通史+宋元'},
+      {title:'清明上河图',url:'https://search.bilibili.com/all?keyword=清明上河图+纪录片'},
+      {title:'成吉思汗纪录片',url:'https://search.bilibili.com/all?keyword=成吉思汗+纪录片'},
+      {title:'岳飞精忠报国',url:'https://search.bilibili.com/all?keyword=岳飞+纪录片'}
+    ],
+    articles:[
+      {title:'王安石变法的历史启示',source:'人民网',url:'https://search.people.com.cn/cnpeople/search.do?pageNum=1&keyword=王安石变法&siteName=news'},
+      {title:'岳飞与精忠报国',source:'学习强国',url:'https://www.xuexi.cn/search?searchword=岳飞精忠报国'},
+      {title:'元朝行省制度',source:'新华网',url:'https://www.xinhuanet.com/search.htm?q=元朝行省制度'},
+      {title:'宋元海上丝绸之路',source:'央视网',url:'https://search.cctv.com/search.php?qtext=海上丝绸之路'}
+    ]
+  },
+  {
+    era:'明清', title:'明清时期：专制与余晖', desc:'明朝恢复汉人统治，清朝达到封建社会顶峰。郑和下西洋展示国力，但闭关锁国导致中国逐步落后于世界潮流。康乾盛世后衰落，鸦片战争拉开近代序幕。',
+    tags:['郑和下西洋','闭关锁国','康乾盛世','八股取士','文字狱'],
+    keyPeople:[
+      {name:'朱元璋',role:'明太祖，推翻元朝建立明朝'},
+      {name:'郑和',role:'七下西洋的航海家'},
+      {name:'明成祖朱棣',role:'迁都北京，永乐大典'},
+      {name:'康熙帝',role:'清朝最杰出皇帝之一'},
+      {name:'乾隆帝',role:'康乾盛世集大成者'},
+      {name:'曹雪芹',role:'《红楼梦》作者'},
+      {name:'王阳明',role:'心学集大成者'},
+      {name:'黄宗羲',role:'明清之际思想家'}
+    ],
+    keyEvents:[
+      {year:'1368年',desc:'朱元璋建立明朝，定都南京'},
+      {year:'1405-1433年',desc:'郑和七次下西洋'},
+      {year:'1421年',desc:'明成祖迁都北京'},
+      {year:'1449年',desc:'土木堡之变，明朝由盛转衰'},
+      {year:'1644年',desc:'李自成攻入北京，清军入关'},
+      {year:'1662-1796年',desc:'康熙、雍正、乾隆三朝盛世'},
+      {year:'1793年',desc:'马戛尔尼访华，中英外交冲突'},
+      {year:'1840年',desc:'鸦片战争爆发，中国近代开端'}
+    ],
+    culture:['《永乐大典》——世界最大类书','《红楼梦》——中国古典小说巅峰','明式家具——简约优雅的艺术典范','景德镇瓷器——青花、粉彩达到极高水准','阳明心学——知行合一，影响东亚','京剧——融合徽汉二腔，国粹诞生'],
+    books:[
+      {title:'《明史》',author:'张廷玉等'},
+      {title:'《清代学术概论》',author:'梁启超'},
+      {title:'《万历十五年》',author:'黄仁宇'},
+      {title:'《红楼梦》',author:'曹雪芹'},
+      {title:'《传习录》',author:'王阳明'}
+    ],
+    videos:[
+      {title:'中国通史 明清',url:'https://search.bilibili.com/all?keyword=中国通史+明清'},
+      {title:'郑和下西洋纪录片',url:'https://search.bilibili.com/all?keyword=郑和下西洋+纪录片'},
+      {title:'康熙王朝',url:'https://search.bilibili.com/all?keyword=康熙+纪录片'},
+      {title:'红楼梦纪录片',url:'https://search.bilibili.com/all?keyword=红楼梦+纪录片'}
+    ],
+    articles:[
+      {title:'郑和下西洋与海上丝绸之路',source:'央视网',url:'https://search.cctv.com/search.php?qtext=郑和下西洋'},
+      {title:'康乾盛世的成就与局限',source:'学习强国',url:'https://www.xuexi.cn/search?searchword=康乾盛世'},
+      {title:'故宫与明清文化',source:'新华网',url:'https://www.xinhuanet.com/search.htm?q=故宫博物院'},
+      {title:'红楼梦的文化价值',source:'人民网',url:'https://search.people.com.cn/cnpeople/search.do?pageNum=1&keyword=红楼梦&siteName=news'}
+    ]
+  },
+  {
+    era:'近代', title:'近代中国：屈辱与抗争（1840-1949）', desc:'从鸦片战争到新中国成立，中国经历了半殖民地半封建社会的屈辱，也经历了从洋务运动到辛亥革命、从新文化运动到抗日战争的艰难探索与抗争。',
+    tags:['鸦片战争','洋务运动','辛亥革命','五四运动','抗日战争'],
+    keyPeople:[
+      {name:'林则徐',role:'虎门销烟，近代开眼看世界第一人'},
+      {name:'曾国藩',role:'洋务运动先驱，湘军创立者'},
+      {name:'李鸿章',role:'洋务运动主要推动者'},
+      {name:'孙中山',role:'辛亥革命领导人，中华民国国父'},
+      {name:'鲁迅',role:'新文化运动主将，文学家思想家'},
+      {name:'陈独秀',role:'新文化运动发起人，中共主要创始人'},
+      {name:'毛泽东',role:'中共领导人，领导中国革命胜利'},
+      {name:'蔡元培',role:'教育家，北京大学校长'}
+    ],
+    keyEvents:[
+      {year:'1840-1842年',desc:'第一次鸦片战争，《南京条约》签订'},
+      {year:'1851-1864年',desc:'太平天国运动'},
+      {year:'1861-1895年',desc:'洋务运动，"师夷长技以制夷"'},
+      {year:'1898年',desc:'戊戌变法，百日维新'},
+      {year:'1911年',desc:'辛亥革命，推翻清朝，建立中华民国'},
+      {year:'1919年',desc:'五四运动，新民主主义革命开端'},
+      {year:'1937-1945年',desc:'全面抗日战争'},
+      {year:'1949年',desc:'中华人民共和国成立'}
+    ],
+    culture:['洋务运动——引进西方科学技术，创办近代工业','新文化运动——倡导民主与科学，白话文运动','五四精神——爱国、进步、民主、科学','近代教育——废除科举，建立现代学校制度','近代出版业——商务印书馆等推动文化传播','近代建筑——中西合璧的建筑风格'],
+    books:[
+      {title:'《中国近代史》',author:'蒋廷黻'},
+      {title:'《近代中国社会的新陈代谢》',author:'陈旭麓'},
+      {title:'《天朝的崩溃》',author:'茅海建'},
+      {title:'《中国近现代史纲要》',author:'高等教育出版社'},
+      {title:'《辛亥革命史》',author:'金冲及'}
+    ],
+    videos:[
+      {title:'中国通史 近代篇',url:'https://search.bilibili.com/all?keyword=中国通史+近代'},
+      {title:'鸦片战争纪录片',url:'https://search.bilibili.com/all?keyword=鸦片战争+纪录片'},
+      {title:'辛亥革命纪录片',url:'https://search.bilibili.com/all?keyword=辛亥革命+纪录片'},
+      {title:'抗日战争纪录片',url:'https://search.bilibili.com/all?keyword=抗日战争+纪录片'}
+    ],
+    articles:[
+      {title:'鸦片战争与中国近代史开端',source:'人民网',url:'https://search.people.com.cn/cnpeople/search.do?pageNum=1&keyword=鸦片战争&siteName=news'},
+      {title:'洋务运动与近代工业',source:'学习强国',url:'https://www.xuexi.cn/search?searchword=洋务运动'},
+      {title:'五四运动的历史意义',source:'新华网',url:'https://www.xinhuanet.com/search.htm?q=五四运动'},
+      {title:'抗日战争纪念馆',source:'央视网',url:'https://search.cctv.com/search.php?qtext=抗日战争'}
+    ]
+  },
+  {
+    era:'现代', title:'现代中国：崛起与复兴（1949至今）', desc:'新中国成立以来，中国经历了社会主义建设、改革开放、全面崛起的伟大历程，从站起来、富起来到强起来，正在实现中华民族的伟大复兴。',
+    tags:['新中国成立','改革开放','一国两制','一带一路','科技创新'],
+    keyPeople:[
+      {name:'毛泽东',role:'中华人民共和国主要缔造者'},
+      {name:'周恩来',role:'开国总理，外交家'},
+      {name:'邓小平',role:'改革开放总设计师'},
+      {name:'钱学森',role:'中国航天之父'},
+      {name:'袁隆平',role:'杂交水稻之父'},
+      {name:'屠呦呦',role:'诺贝尔奖得主，青蒿素发现者'},
+      {name:'于敏',role:'中国氢弹之父'},
+      {name:'习近平',role:'新时代领导人，推动民族复兴'}
+    ],
+    keyEvents:[
+      {year:'1949年',desc:'中华人民共和国成立，开国大典'},
+      {year:'1964年',desc:'第一颗原子弹爆炸成功'},
+      {year:'1970年',desc:'东方红一号卫星发射成功'},
+      {year:'1978年',desc:'十一届三中全会，改革开放开始'},
+      {year:'1997年',desc:'香港回归祖国'},
+      {year:'2001年',desc:'中国加入世界贸易组织'},
+      {year:'2008年',desc:'北京奥运会举办'},
+      {year:'2020年',desc:'全面建成小康社会，脱贫攻坚取得全面胜利'}
+    ],
+    culture:['两弹一星——自力更生的科技丰碑','改革开放——中国经济腾飞的起点','载人航天——神舟系列飞船成功','高铁网络——世界最大高铁运营里程','5G与人工智能——引领科技前沿','文化自信——中华优秀传统文化创造性转化'],
+    books:[
+      {title:'《中国现代史》',author:'王桧林'},
+      {title:'《邓小平时代》',author:'傅高义'},
+      {title:'《大国崛起》',author:'中央电视台'},
+      {title:'《中国震撼》',author:'张维为'},
+      {title:'《改革开放40年》',author:'人民出版社'}
+    ],
+    videos:[
+      {title:'新中国成立纪录片',url:'https://search.bilibili.com/all?keyword=新中国成立+纪录片'},
+      {title:'改革开放纪录片',url:'https://search.bilibili.com/all?keyword=改革开放+纪录片'},
+      {title:'大国崛起',url:'https://search.bilibili.com/all?keyword=大国崛起+纪录片'},
+      {title:'脱贫攻坚纪录片',url:'https://search.bilibili.com/all?keyword=脱贫攻坚+纪录片'}
+    ],
+    articles:[
+      {title:'新中国成立70周年成就',source:'新华网',url:'https://www.xinhuanet.com/search.htm?q=新中国成立'},
+      {title:'改革开放的历史贡献',source:'学习强国',url:'https://www.xuexi.cn/search?searchword=改革开放'},
+      {title:'全面建成小康社会',source:'人民网',url:'https://search.people.com.cn/cnpeople/search.do?pageNum=1&keyword=小康社会&siteName=news'},
+      {title:'一带一路倡议',source:'央视网',url:'https://search.cctv.com/search.php?qtext=一带一路'}
+    ]
+  }
 ];
 
 /* ========================== MEDICAL TRACKS ========================== */
@@ -1892,6 +2284,69 @@ function renderHistoryToday() {
 }
 function toggleHistoryDetail(idx) {
   const detail = $('history-detail-' + idx);
+  if(!detail) return;
+  detail.classList.toggle('show');
+}
+
+var currentHistoryMode = 'basic';
+
+function switchHistoryMode(mode) {
+  currentHistoryMode = mode;
+  var basicBtn = $('history-mode-basic');
+  var deepBtn = $('history-mode-deep');
+  var basicView = $('history-schedule');
+  var deepView = $('history-deep');
+  var desc = $('history-mode-desc');
+  
+  if(mode === 'deep') {
+    basicBtn.classList.add('active');
+    deepBtn.classList.remove('active');
+    deepBtn.classList.add('active');
+    basicBtn.classList.remove('active');
+    basicView.style.display = 'none';
+    deepView.style.display = 'block';
+    desc.textContent = '按朝代深入学习，展开查看关键人物、重大事件、文化成就与学术书目';
+    renderHistoryDeep();
+  } else {
+    basicBtn.classList.add('active');
+    deepBtn.classList.remove('active');
+    basicView.style.display = 'block';
+    deepView.style.display = 'none';
+    desc.textContent = '8个章节可自由学习，点击卡片展开详情';
+  }
+}
+
+function renderHistoryDeep() {
+  $('history-deep').innerHTML = '<div class="deep-grid">' + HISTORY_DEEP.map(function(h, i) {
+    return '<div class="deep-card" onclick="toggleDeepDetail(' + i + ')">' +
+      '<div class="deep-card-header">' +
+        '<div class="deep-card-era">' + h.era + '</div>' +
+        '<h4 class="deep-card-title">' + h.title + '</h4>' +
+      '</div>' +
+      '<p class="deep-card-desc">' + h.desc + '</p>' +
+      '<div class="deep-card-tags">' +
+        h.tags.map(function(t) { return '<span class="badge badge-info">' + t + '</span>'; }).join('') +
+      '</div>' +
+      '<div class="deep-card-detail" id="deep-detail-' + i + '">' +
+        '<div class="deep-section-title">关键人物</div>' +
+        '<div class="deep-people-list">' + h.keyPeople.map(function(p) { return '<span class="person">' + p.name + '（' + p.role + '）</span>'; }).join('') + '</div>' +
+        '<div class="deep-section-title">重大事件</div>' +
+        '<div class="deep-event-list">' + h.keyEvents.map(function(e) { return '<div class="event"><span class="event-year">' + e.year + '</span>' + e.desc + '</div>'; }).join('') + '</div>' +
+        '<div class="deep-section-title">文化成就</div>' +
+        '<div class="deep-culture-list">' + h.culture.map(function(c) { return '<div>\u2022 ' + c + '</div>'; }).join('') + '</div>' +
+        '<div class="deep-section-title">学术书目推荐</div>' +
+        '<div class="deep-book-list">' + h.books.map(function(b) { return '<div class="book-item"><span class="book-title">' + b.title + '</span> <span class="book-author">\u2014 ' + b.author + '</span></div>'; }).join('') + '</div>' +
+        '<div class="deep-section-title">推荐视频</div>' +
+        '<div class="history-video-row">' + h.videos.map(function(v) { return '<a class="video-link" href="' + v.url + '" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation();return openVideo(\'' + v.url + '\')"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>' + v.title + '</a>'; }).join('') + '</div>' +
+        '<div class="deep-section-title">官方文章推荐</div>' +
+        '<div class="history-article-row">' + h.articles.map(function(a) { return '<a class="article-link" href="' + a.url + '" target="_blank" rel="noopener noreferrer" onclick="event.stopPropagation();return openVideo(\'' + a.url + '\')"><svg viewBox="0 0 24 24" style="width:14px;height:14px;fill:currentColor;vertical-align:middle;margin-right:4px;"><path d="M14 2H6c-1.1 0-1.99.9-1.99 2L4 20c0 1.1.89 2 1.99 2H18c1.1 0 2-.9 2-2V8l-6-6zm2 16H8v-2h8v2zm0-4H8v-2h8v2zm-3-5V3.5L18.5 9H13z"/></svg>' + a.title + ' \u00B7 ' + a.source + '</a>'; }).join('') + '</div>' +
+      '</div>' +
+    '</div>';
+  }).join('') + '</div>';
+}
+
+function toggleDeepDetail(idx) {
+  var detail = $('deep-detail-' + idx);
   if(!detail) return;
   detail.classList.toggle('show');
 }
