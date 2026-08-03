@@ -1341,7 +1341,13 @@ const DEFAULT_RENO_CATEGORIES = [
   { id: 'rc-misc', name: '杂项', icon: '📦', items: [
     { id: 1, name: '刀片+铲墙面刀', type: 'material', amount: 15, note: '' },
     { id: 2, name: '隔音棉+扎带+阻尼片', type: 'material', amount: 74, note: '' },
-    { id: 3, name: '建渣清运', type: 'labor', amount: 450, note: '' }
+    { id: 3, name: '建渣清运', type: 'labor', amount: 450, note: '' },
+    { id: 4, name: '建渣清运袋30个', type: 'material', amount: 27, note: '' },
+    { id: 5, name: '建渣清运袋50条', type: 'material', amount: 20, note: '' }
+  ]},
+  { id: 'rc-build', name: '搭建', icon: '🛠️', items: [
+    { id: 1, name: '搭建', type: 'labor', amount: 14900, note: '' },
+    { id: 2, name: '返工', type: 'labor', amount: 200, note: '' }
   ]}
 ];
 const DEFAULT_RENO_INCOMES = [
@@ -1349,7 +1355,7 @@ const DEFAULT_RENO_INCOMES = [
   { id: 2, name: '卖厕所门', amount: 100, note: '' },
   { id: 3, name: '卖剩余钢和塑料', amount: 130, note: '' }
 ];
-const RENO_SEED_VERSION = 'v2';
+const RENO_SEED_VERSION = 'v3';
 let renoCategories = loadData(STORE_KEYS.reno_categories, DEFAULT_RENO_CATEGORIES);
 let renoIncomes = loadData(STORE_KEYS.reno_incomes, DEFAULT_RENO_INCOMES);
 if(localStorage.getItem('wb_reno_seed') !== RENO_SEED_VERSION) {
@@ -1363,6 +1369,25 @@ if(localStorage.getItem('wb_reno_seed') !== RENO_SEED_VERSION) {
     var miscCat = renoCategories.find(function(c){return c.id==='rc-misc';});
     if(miscCat && !miscCat.items.find(function(i){return i.name.indexOf('建渣清运')>=0;})) {
       miscCat.items.push({ id: Date.now(), name: '建渣清运', type: 'labor', amount: 450, note: '' });
+    }
+    saveData(STORE_KEYS.reno_categories, renoCategories);
+  }
+  /* v2→v3 migration: add 建渣清运袋 + 搭建/返工 */
+  if(localStorage.getItem('wb_reno_seed') === 'v2') {
+    var miscCat2 = renoCategories.find(function(c){return c.id==='rc-misc';});
+    if(miscCat2) {
+      if(!miscCat2.items.find(function(i){return i.name.indexOf('清运袋30')>=0;})) {
+        miscCat2.items.push({ id: Date.now(), name: '建渣清运袋30个', type: 'material', amount: 27, note: '' });
+      }
+      if(!miscCat2.items.find(function(i){return i.name.indexOf('清运袋50')>=0;})) {
+        miscCat2.items.push({ id: Date.now()+1, name: '建渣清运袋50条', type: 'material', amount: 20, note: '' });
+      }
+    }
+    if(!renoCategories.find(function(c){return c.id==='rc-build';})) {
+      renoCategories.push({ id: 'rc-build', name: '搭建', icon: '🛠️', items: [
+        { id: Date.now()+2, name: '搭建', type: 'labor', amount: 14900, note: '' },
+        { id: Date.now()+3, name: '返工', type: 'labor', amount: 200, note: '' }
+      ]});
     }
     saveData(STORE_KEYS.reno_categories, renoCategories);
   }
