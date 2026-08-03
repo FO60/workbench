@@ -576,6 +576,18 @@ td .badge { display: inline-block; padding: 4px 12px; border-radius: 20px; font-
 .psychology-content .psy-brief { color: var(--muted); font-size: 0.85rem; }
 .psychology-detail { display: none; margin-top: 12px; padding-top: 12px; border-top: 1px dashed var(--rule); font-size: 0.85rem; color: var(--ink); line-height: 1.7; }
 .psychology-detail.show { display: block; animation: fadeIn 0.3s; }
+/* ====== Inspiration Cards ====== */
+.inspire-card { background: var(--bg2); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,255,0.6); border-radius: var(--radius); padding: 16px 20px; margin-bottom: 14px; box-shadow: 0 4px 16px var(--shadow); transition: all 0.2s; }
+.inspire-card:hover { box-shadow: 0 8px 28px rgba(93,190,157,0.15); transform: translateY(-1px); }
+.inspire-card .inspire-meta { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; font-size: 0.78rem; color: var(--muted); }
+.inspire-card .inspire-tag { padding: 2px 10px; border-radius: 10px; font-size: 0.72rem; font-weight: 600; }
+.inspire-card .inspire-tag.essay { background: rgba(93,190,157,0.12); color: var(--accent-dark); }
+.inspire-card .inspire-tag.reading { background: rgba(74,126,199,0.12); color: #4a7ec7; }
+.inspire-card .inspire-tag.fragment { background: rgba(240,160,80,0.12); color: var(--accent2); }
+.inspire-card .inspire-title { font-size: 1rem; font-weight: 600; color: var(--ink); margin-bottom: 8px; }
+.inspire-card .inspire-content { font-size: 0.88rem; color: var(--ink); line-height: 1.8; white-space: pre-wrap; }
+.inspire-card .inspire-book { font-size: 0.8rem; color: var(--accent-dark); margin-top: 8px; font-weight: 600; }
+.inspire-card .inspire-actions { margin-top: 10px; display: flex; gap: 8px; }
 .news-card .news-tag { font-size: 0.7rem; padding: 2px 8px; border-radius: 8px; background: var(--accent-light); color: var(--accent-dark); }
 @media (max-width: 900px) { .quick-stats { grid-template-columns: repeat(2, 1fr); } .home-grid { grid-template-columns: 1fr; } }
 
@@ -628,9 +640,9 @@ td .badge { display: inline-block; padding: 4px 12px; border-radius: 20px; font-
       <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
       首页
     </div>
-    <div class="nav-item" data-tab="work">
-      <svg viewBox="0 0 24 24"><path d="M20 7h-4V4c0-1.1-.9-2-2-2h-4c-1.1 0-2 .9-2 2v3H4c-1.1 0-2 .9-2 2v11c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V9c0-1.1-.9-2-2-2zM10 4h4v3h-4V4zm10 16H4V9h16v11z"/></svg>
-      OTC
+    <div class="nav-item" data-tab="inspire">
+      <svg viewBox="0 0 24 24"><path d="M9 21c0 .55.45 1 1 1h4c.55 0 1-.45 1-1v-1H9v1zm3-19C8.14 2 5 5.14 5 9c0 2.38 1.19 4.47 3 5.74V17c0 .55.45 1 1 1h6c.55 0 1-.45 1-1v-2.26c1.81-1.27 3-3.36 3-5.74 0-3.86-3.14-7-7-7z"/></svg>
+      灵感
     </div>
     <div class="nav-item" data-tab="knowledge">
       <svg viewBox="0 0 24 24"><path d="M18 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 4h5v8l-2.5-1.5L6 12V4z"/></svg>
@@ -644,6 +656,10 @@ td .badge { display: inline-block; padding: 4px 12px; border-radius: 20px; font-
       <svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
       身材管理
     </div>
+    <div class="nav-item" data-tab="media">
+      <svg viewBox="0 0 24 24"><path d="M20 5h-3.17L15 3H9L7.17 5H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z"/></svg>
+      新媒体
+    </div>
   </aside>
 
   <!-- Mobile Bottom Nav -->
@@ -652,9 +668,9 @@ td .badge { display: inline-block; padding: 4px 12px; border-radius: 20px; font-
       <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
       首页
     </div>
-    <div class="nav-item-mobile" data-tab="work">
-      <svg viewBox="0 0 24 24"><path d="M20 7h-4V4c0-1.1-.9-2-2-2h-4c-1.1 0-2 .9-2 2v3H4c-1.1 0-2 .9-2 2v11c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V9c0-1.1-.9-2-2-2zM10 4h4v3h-4V4zm10 16H4V9h16v11z"/></svg>
-      OTC
+    <div class="nav-item-mobile" data-tab="inspire">
+      <svg viewBox="0 0 24 24"><path d="M9 21c0 .55.45 1 1 1h4c.55 0 1-.45 1-1v-1H9v1zm3-19C8.14 2 5 5.14 5 9c0 2.38 1.19 4.47 3 5.74V17c0 .55.45 1 1 1h6c.55 0 1-.45 1-1v-2.26c1.81-1.27 3-3.36 3-5.74 0-3.86-3.14-7-7-7z"/></svg>
+      灵感
     </div>
     <div class="nav-item-mobile" data-tab="knowledge">
       <svg viewBox="0 0 24 24"><path d="M18 2H6c-1.1 0-2 .9-2 2v16c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zM6 4h5v8l-2.5-1.5L6 12V4z"/></svg>
@@ -667,6 +683,10 @@ td .badge { display: inline-block; padding: 4px 12px; border-radius: 20px; font-
     <div class="nav-item-mobile" data-tab="health">
       <svg viewBox="0 0 24 24"><path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/></svg>
       健康
+    </div>
+    <div class="nav-item-mobile" data-tab="media">
+      <svg viewBox="0 0 24 24"><path d="M20 5h-3.17L15 3H9L7.17 5H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z"/></svg>
+      新媒体
     </div>
   </nav>
 
@@ -701,56 +721,46 @@ td .badge { display: inline-block; padding: 4px 12px; border-radius: 20px; font-
       </div>
       <div class="home-grid full">
         <div class="summary-block">
-          <h4>医药OTC最新资讯</h4>
-          <p style="font-size:0.78rem;color:var(--muted);margin-bottom:14px;">内容覆盖中央及地方权威信源，按相关度和重要性排序，保留原文链接</p>
+          <h4>每日热点</h4>
+          <p style="font-size:0.78rem;color:var(--muted);margin-bottom:14px;">权威媒体发布，按类别展示热门资讯，保留出处链接</p>
           <div id="news-cards"></div>
         </div>
       </div>
     </section>
 
-    <!-- ====== OTC SECTION ====== -->
-    <section id="work" class="section">
-      <div class="reminder-card" id="weekly-reminder">
-        <h4>本周拜访提醒</h4>
-        <div id="reminder-list"></div>
+    <!-- ====== DAILY INSPIRATION SECTION ====== -->
+    <section id="inspire" class="section">
+      <div class="sub-tabs">
+        <div class="sub-tab active" data-subtab="essay">随笔</div>
+        <div class="sub-tab" data-subtab="reading">读书笔记</div>
+        <div class="sub-tab" data-subtab="fragments">知识碎片</div>
       </div>
-      <div class="grid-3 mb-3">
-        <div class="stat-card"><div class="stat-value" id="stat-visits">0</div><div class="stat-label">本月拜访</div></div>
-        <div class="stat-card"><div class="stat-value" id="stat-a">0</div><div class="stat-label">A类客户</div></div>
-        <div class="stat-card"><div class="stat-value" id="stat-chains">0</div><div class="stat-label">连锁开发中</div></div>
-      </div>
-      <div class="glass-card mb-3">
+
+      <!-- Essay Sub-tab -->
+      <div class="sub-content active" id="sub-essay">
         <div class="flex-between mb-2">
-          <h3>客户拜访记录</h3>
-          <button class="btn btn-primary btn-sm" onclick="openModal('client')">+ 添加客户</button>
+          <h3>我的随笔</h3>
+          <button class="btn btn-primary btn-sm" onclick="openInspireModal('essay')">+ 写随笔</button>
         </div>
-        <!-- Category View -->
-        <div id="client-category-view">
-          <div class="client-search-box">
-            <svg viewBox="0 0 24 24" style="width:18px;height:18px;fill:var(--muted);flex-shrink:0;"><path d="M15.5 14h-.79l-.28-.27C15.41 12.59 16 11.11 16 9.5 16 5.91 13.09 3 9.5 3S3 5.91 3 9.5 5.91 16 9.5 16c1.61 0 3.09-.59 4.23-1.57l.27.28v.79l5 4.99L20.49 19l-4.99-5zm-6 0C7.01 14 5 11.99 5 9.5S7.01 5 9.5 5 14 7.01 14 9.5 11.99 14 9.5 14z"/></svg>
-            <input type="text" id="client-search" placeholder="搜索客户名称..." oninput="filterClientSearch()">
-            <button id="client-search-clear" class="btn btn-sm" style="padding:4px 8px;background:transparent;border:none;color:var(--muted);display:none;" onclick="showClientCategoryView()">✕</button>
-          </div>
-          <div class="client-cat-grid" id="client-cat-grid"></div>
-        </div>
-        <!-- List View (by category) -->
-        <div id="client-list-view" class="hidden">
-          <button class="btn btn-secondary btn-sm mb-2 mobile-back-btn" onclick="showClientCategoryView()" style="min-height:40px;">← 返回分类</button>
-          <div id="client-list-header" style="margin-bottom:12px;font-weight:600;color:var(--accent-dark);"></div>
-          <div id="client-list"></div>
-        </div>
-        <!-- Detail View -->
-        <div id="client-detail-view" class="hidden">
-          <button class="btn btn-secondary btn-sm mb-2 mobile-back-btn" onclick="showClientListView()" style="min-height:40px;">← 返回列表</button>
-          <div id="client-detail-content"></div>
-        </div>
+        <div id="essay-list"></div>
       </div>
-      <div class="glass-card mb-3">
+
+      <!-- Reading Notes Sub-tab -->
+      <div class="sub-content" id="sub-reading">
         <div class="flex-between mb-2">
-          <h3>小连锁开发</h3>
-          <button class="btn btn-primary btn-sm" onclick="openModal('chain')">+ 添加连锁</button>
+          <h3>读书笔记</h3>
+          <button class="btn btn-primary btn-sm" onclick="openInspireModal('reading')">+ 添加笔记</button>
         </div>
-        <div id="chain-cards"></div>
+        <div id="reading-list"></div>
+      </div>
+
+      <!-- Knowledge Fragments Sub-tab -->
+      <div class="sub-content" id="sub-fragments">
+        <div class="flex-between mb-2">
+          <h3>知识碎片</h3>
+          <button class="btn btn-primary btn-sm" onclick="openInspireModal('fragment')">+ 记录碎片</button>
+        </div>
+        <div id="fragment-list"></div>
       </div>
     </section>
 
@@ -809,6 +819,7 @@ td .badge { display: inline-block; padding: 4px 12px; border-radius: 20px; font-
       <div class="sub-tabs">
         <div class="sub-tab active" data-subtab="medical">医药</div>
         <div class="sub-tab" data-subtab="books">书本</div>
+        <div class="sub-tab" data-subtab="aitips">AI技巧</div>
       </div>
 
       <!-- Medical Sub-tab -->
@@ -829,6 +840,17 @@ td .badge { display: inline-block; padding: 4px 12px; border-radius: 20px; font-
           <p style="font-size:0.82rem;color:var(--muted);margin-bottom:14px;">以下书目与诗人学习、个人成长相互串联，建议穿插阅读。</p>
           <div id="recommend-books"></div>
         </div>
+      </div>
+
+      <!-- AI Tips Sub-tab -->
+      <div class="sub-content" id="sub-aitips">
+        <div style="margin-bottom:16px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;">
+          <div>
+            <h3 style="margin-bottom:6px;">AI技巧库</h3>
+            <p style="color:var(--muted);font-size:0.85rem;margin:0;">每日推荐AI实用技巧，从入门到进阶，点击卡片展开查看详情</p>
+          </div>
+        </div>
+        <div id="aitips-list"></div>
       </div>
     </section>
 
@@ -939,6 +961,41 @@ td .badge { display: inline-block; padding: 4px 12px; border-radius: 20px; font-
         </div>
       </div>
     </section>
+
+    <!-- ====== NEW MEDIA SECTION ====== -->
+    <section id="media" class="section">
+      <div class="sub-tabs">
+        <div class="sub-tab active" data-subtab="inspiration">灵感库</div>
+        <div class="sub-tab" data-subtab="account">账号管理</div>
+        <div class="sub-tab" data-subtab="tools">创作工具</div>
+      </div>
+
+      <!-- Inspiration Library Sub-tab -->
+      <div class="sub-content active" id="sub-inspiration">
+        <div class="flex-between mb-2">
+          <h3>家具装修灵感库</h3>
+          <button class="btn btn-primary btn-sm" onclick="openMediaModal('inspire')">+ 添加灵感</button>
+        </div>
+        <p style="color:var(--muted);font-size:0.85rem;margin-bottom:16px;">收集热门笔记、爆款标题、拍摄灵感，为内容创作积累素材</p>
+        <div id="media-inspire-list"></div>
+      </div>
+
+      <!-- Account Management Sub-tab -->
+      <div class="sub-content" id="sub-account">
+        <div class="flex-between mb-2">
+          <h3>账号管理</h3>
+          <button class="btn btn-primary btn-sm" onclick="openMediaModal('account')">+ 记录数据</button>
+        </div>
+        <p style="color:var(--muted);font-size:0.85rem;margin-bottom:16px;">记录各平台账号数据变化，追踪运营效果</p>
+        <div id="media-account-list"></div>
+      </div>
+
+      <!-- Creative Tools Sub-tab -->
+      <div class="sub-content" id="sub-tools">
+        <h3 style="margin-bottom:16px;">创作工具箱</h3>
+        <div class="history-card-grid" id="media-tools-list"></div>
+      </div>
+    </section>
   </main>
 </div>
 
@@ -1000,7 +1057,7 @@ Resources:`;for(let t of c){if(!t||typeof t!=`string`)throw Error(`@supabase/aut
 </script>
 <script>
 /* ========================== DATA STORE ========================== */
-const STORE_KEYS = { clients:'wb_clients_v3', chains:'wb_chains_v3', books:'wb_books_v2', weights:'wb_weights_v2', height:'wb_height', exercise:'wb_exercise', history:'wb_history_progress', stages:'wb_stages' };
+const STORE_KEYS = { clients:'wb_clients_v3', chains:'wb_chains_v3', books:'wb_books_v2', weights:'wb_weights_v2', height:'wb_height', exercise:'wb_exercise', history:'wb_history_progress', stages:'wb_stages', inspire_essays:'wb_essays', inspire_readings:'wb_readings', inspire_fragments:'wb_fragments', media_inspires:'wb_media_inspires', media_accounts:'wb_media_accounts' };
 function loadData(k, f) { try { return JSON.parse(localStorage.getItem(k)) || f; } catch { return f; } }
 let _isLoadingFromCloud = false;
 let _syncTimer = null;
@@ -1030,6 +1087,11 @@ let userHeight = loadData(STORE_KEYS.height, 0);
 let exerciseDays = loadData(STORE_KEYS.exercise, {});
 let historyProgress = loadData(STORE_KEYS.history, -1);
 let stages = loadData(STORE_KEYS.stages, DEFAULT_STAGES);
+let essays = loadData(STORE_KEYS.inspire_essays, []);
+let readings = loadData(STORE_KEYS.inspire_readings, []);
+let fragments = loadData(STORE_KEYS.inspire_fragments, []);
+let mediaInspires = loadData(STORE_KEYS.media_inspires, []);
+let mediaAccounts = loadData(STORE_KEYS.media_accounts, []);
 /* 清除旧版本测试数据 */
 ['wb_clients_v2','wb_chains_v2','wb_books','wb_weights'].forEach(k => { try { localStorage.removeItem(k); } catch(e){} });
 if(!localStorage.getItem(STORE_KEYS.stages)) saveData(STORE_KEYS.stages, stages);
@@ -1806,9 +1868,12 @@ function switchTab(tab) {
   document.querySelectorAll('.nav-item-mobile[data-tab="' + tab + '"]').forEach(n => n.classList.add('active'));
   document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
   $(tab).classList.add('active');
-  const titles = { home:'首页', work:'OTC', knowledge:'传统知识', skills:'能力提升', health:'身材管理' };
+  const titles = { home:'首页', inspire:'每日灵感', knowledge:'传统知识', skills:'能力提升', health:'身材管理', media:'新媒体运营' };
   $('page-title').textContent = titles[tab];
   if(tab === 'home') { setTimeout(renderHomeStats, 50); }
+  if(tab === 'inspire') { renderEssays(); renderReadings(); renderFragments(); }
+  if(tab === 'skills') { renderMedicalTracks(); renderBooks(); renderAITips(); }
+  if(tab === 'media') { renderMediaInspires(); renderMediaAccounts(); renderMediaTools(); }
   if(tab === 'health') { setTimeout(initWeightChart, 50); renderStages(); renderCalendar(); updateCompareSelects(); }
 }
 document.querySelectorAll('.nav-item').forEach(item => {
@@ -2254,6 +2319,279 @@ function openVideo(url) {
   const w = window.open(url, '_blank');
   if(!w) { window.location.href = url; }
   return false;
+}
+
+/* ========================== INSPIRATION MODULE ========================== */
+function renderEssays() {
+  var sorted = essays.slice().sort(function(a,b) { return b.date.localeCompare(a.date); });
+  $('essay-list').innerHTML = sorted.length ? sorted.map(function(e) {
+    return '<div class="inspire-card">' +
+      '<div class="inspire-meta"><span class="inspire-tag essay">随笔</span><span>' + e.date + '</span></div>' +
+      (e.title ? '<div class="inspire-title">' + e.title + '</div>' : '') +
+      '<div class="inspire-content">' + e.content + '</div>' +
+      '<div class="inspire-actions"><button class="btn btn-secondary btn-sm" onclick="editInspireItem(\'essay\',' + e.id + ')">编辑</button><button class="btn btn-danger btn-sm" onclick="deleteInspireItem(\'essay\',' + e.id + ')">删除</button></div>' +
+    '</div>';
+  }).join('') : '<p style="color:var(--muted);text-align:center;padding:20px;">还没有写过随笔，点击右上角开始记录吧</p>';
+}
+
+function renderReadings() {
+  var sorted = readings.slice().sort(function(a,b) { return b.date.localeCompare(a.date); });
+  $('reading-list').innerHTML = sorted.length ? sorted.map(function(e) {
+    return '<div class="inspire-card">' +
+      '<div class="inspire-meta"><span class="inspire-tag reading">读书笔记</span><span>' + e.date + '</span></div>' +
+      (e.book ? '<div class="inspire-book">📖 出自《' + e.book + '》</div>' : '') +
+      (e.title ? '<div class="inspire-title">' + e.title + '</div>' : '') +
+      '<div class="inspire-content">' + e.content + '</div>' +
+      '<div class="inspire-actions"><button class="btn btn-secondary btn-sm" onclick="editInspireItem(\'reading\',' + e.id + ')">编辑</button><button class="btn btn-danger btn-sm" onclick="deleteInspireItem(\'reading\',' + e.id + ')">删除</button></div>' +
+    '</div>';
+  }).join('') : '<p style="color:var(--muted);text-align:center;padding:20px;">还没有读书笔记，点击右上角开始记录吧</p>';
+}
+
+function renderFragments() {
+  var sorted = fragments.slice().sort(function(a,b) { return b.date.localeCompare(a.date); });
+  $('fragment-list').innerHTML = sorted.length ? sorted.map(function(e) {
+    return '<div class="inspire-card">' +
+      '<div class="inspire-meta"><span class="inspire-tag fragment">知识碎片</span><span>' + e.date + '</span></div>' +
+      (e.title ? '<div class="inspire-title">' + e.title + '</div>' : '') +
+      '<div class="inspire-content">' + e.content + '</div>' +
+      '<div class="inspire-actions"><button class="btn btn-secondary btn-sm" onclick="editInspireItem(\'fragment\',' + e.id + ')">编辑</button><button class="btn btn-danger btn-sm" onclick="deleteInspireItem(\'fragment\',' + e.id + ')">删除</button></div>' +
+    '</div>';
+  }).join('') : '<p style="color:var(--muted);text-align:center;padding:20px;">还没有知识碎片，点击右上角开始记录吧</p>';
+}
+
+function openInspireModal(type) {
+  var titles = { essay:'写随笔', reading:'添加读书笔记', fragment:'记录知识碎片' };
+  $('modal-title').textContent = titles[type];
+  var bookField = type === 'reading' ? '<div class="form-group"><label>出自哪本书</label><input type="text" id="m-inspire-book" placeholder="书名（选填）"></div>' : '';
+  $('modal-body').innerHTML =
+    '<div class="form-group"><label>标题</label><input type="text" id="m-inspire-title" placeholder="标题（选填）"></div>' +
+    bookField +
+    '<div class="form-group"><label>内容</label><textarea id="m-inspire-content" rows="8" style="width:100%;padding:12px;border:1px solid var(--rule);border-radius:var(--radius-sm);font-size:0.9rem;resize:vertical;" placeholder="写下你的想法..."></textarea></div>' +
+    '<div class="form-group"><label>日期</label><input type="date" id="m-inspire-date" value="' + todayStr() + '"></div>';
+  $('modal-confirm').onclick = function() {
+    var title = $('m-inspire-title').value.trim();
+    var content = $('m-inspire-content').value.trim();
+    if(!content) { alert('请填写内容'); return; }
+    var date = $('m-inspire-date').value || todayStr();
+    var item = { id: Date.now(), title: title, content: content, date: date };
+    if(type === 'reading') { item.book = $('m-inspire-book') ? $('m-inspire-book').value.trim() : ''; readings.push(item); saveData(STORE_KEYS.inspire_readings, readings); renderReadings(); }
+    else if(type === 'essay') { essays.push(item); saveData(STORE_KEYS.inspire_essays, essays); renderEssays(); }
+    else { fragments.push(item); saveData(STORE_KEYS.inspire_fragments, fragments); renderFragments(); }
+    closeModal();
+  };
+  $('modal-overlay').classList.add('show');
+}
+
+function editInspireItem(type, id) {
+  var arr, storeKey, renderFn;
+  if(type === 'essay') { arr = essays; storeKey = STORE_KEYS.inspire_essays; renderFn = renderEssays; }
+  else if(type === 'reading') { arr = readings; storeKey = STORE_KEYS.inspire_readings; renderFn = renderReadings; }
+  else { arr = fragments; storeKey = STORE_KEYS.inspire_fragments; renderFn = renderFragments; }
+  var item = arr.find(function(x) { return x.id === id; });
+  if(!item) return;
+  var titles = { essay:'编辑随笔', reading:'编辑读书笔记', fragment:'编辑知识碎片' };
+  $('modal-title').textContent = titles[type];
+  var bookField = type === 'reading' ? '<div class="form-group"><label>出自哪本书</label><input type="text" id="m-inspire-book" value="' + (item.book||'') + '" placeholder="书名（选填）"></div>' : '';
+  $('modal-body').innerHTML =
+    '<div class="form-group"><label>标题</label><input type="text" id="m-inspire-title" value="' + (item.title||'') + '"></div>' +
+    bookField +
+    '<div class="form-group"><label>内容</label><textarea id="m-inspire-content" rows="8" style="width:100%;padding:12px;border:1px solid var(--rule);border-radius:var(--radius-sm);font-size:0.9rem;resize:vertical;">' + (item.content||'') + '</textarea></div>' +
+    '<div class="form-group"><label>日期</label><input type="date" id="m-inspire-date" value="' + (item.date||todayStr()) + '"></div>';
+  $('modal-confirm').onclick = function() {
+    item.title = $('m-inspire-title').value.trim();
+    item.content = $('m-inspire-content').value.trim();
+    if(!item.content) { alert('请填写内容'); return; }
+    item.date = $('m-inspire-date').value || todayStr();
+    if(type === 'reading' && $('m-inspire-book')) { item.book = $('m-inspire-book').value.trim(); }
+    saveData(storeKey, arr); renderFn(); closeModal();
+  };
+  $('modal-overlay').classList.add('show');
+}
+
+function deleteInspireItem(type, id) {
+  if(!confirm('确定删除吗？')) return;
+  if(type === 'essay') { essays = essays.filter(function(x) { return x.id !== id; }); saveData(STORE_KEYS.inspire_essays, essays); renderEssays(); }
+  else if(type === 'reading') { readings = readings.filter(function(x) { return x.id !== id; }); saveData(STORE_KEYS.inspire_readings, readings); renderReadings(); }
+  else { fragments = fragments.filter(function(x) { return x.id !== id; }); saveData(STORE_KEYS.inspire_fragments, fragments); renderFragments(); }
+}
+
+/* ========================== NEW MEDIA MODULE ========================== */
+var MEDIA_PLATFORMS = ['小红书','抖音','视频号','快手','B站','其他'];
+var MEDIA_CATEGORIES = ['标题灵感','拍摄脚本','剪辑技巧','运营策略','爆款拆解','色彩搭配','空间设计','软装搭配','施工工艺','其他'];
+
+var MEDIA_TOOLS = [
+  { title:'剪映专业版', desc:'免费视频剪辑工具，支持关键帧、画中画、AI字幕、智能配音', url:'https://www.capcut.cn/', tag:'剪辑' },
+  { title:'稿定设计', desc:'在线设计工具，海量模板，适合做封面图、海报、社交媒体配图', url:'https://www.gaoding.com/', tag:'设计' },
+  { title:'小红书创作服务平台', desc:'官方数据分析工具，查看笔记数据表现、粉丝画像、热门话题', url:'https://creator.xiaohongshu.com/', tag:'数据' },
+  { title:'蝉妈妈', desc:'抖音电商数据分析平台，选品、达人分析、热门内容追踪', url:'https://www.chanmama.com/', tag:'数据' },
+  { title:'句芒AI', desc:'AI生成文案工具，输入关键词自动生成小红书风格文案', url:'https://www.jumao.ai/', tag:'AI' },
+  { title:'新榜', desc:'新媒体数据平台，查看各平台热门内容、排行榜、趋势分析', url:'https://www.newrank.cn/', tag:'数据' },
+  { title:'Canva可画', desc:'在线设计工具，大量社交媒体模板，拖拽式操作', url:'https://www.canva.cn/', tag:'设计' },
+  { title:'飞书妙记', desc:'语音转文字工具，拍摄现场记录灵感，自动生成文字稿', url:'https://www.feishu.cn/product/minutes', tag:'效率' },
+  { title:'拆解爆款标题库', desc:'收集分析同赛道爆款笔记标题，总结标题模板和关键词', url:'https://www.xiaohongshu.com/search_result?keyword=家具装修', tag:'灵感' },
+  { title:'巨量算数', desc:'抖音官方趋势分析工具，查看关键词热度、用户画像、内容趋势', url:'https://trendinsight.oceanengine.com/', tag:'数据' }
+];
+
+function renderMediaInspires() {
+  var sorted = mediaInspires.slice().sort(function(a,b) { return (b.date||'').localeCompare(a.date||''); });
+  $('media-inspire-list').innerHTML = sorted.length ? sorted.map(function(e) {
+    return '<div class="inspire-card">' +
+      '<div class="inspire-meta"><span class="inspire-tag reading">' + (e.category||'其他') + '</span><span>' + (e.platform||'') + ' · ' + (e.date||'') + '</span></div>' +
+      (e.title ? '<div class="inspire-title">' + e.title + '</div>' : '') +
+      '<div class="inspire-content">' + (e.content||'') + '</div>' +
+      (e.link ? '<div style="margin-top:8px;"><a href="' + e.link + '" target="_blank" rel="noopener noreferrer" style="color:var(--accent-dark);font-size:0.8rem;font-weight:600;">查看原文 →</a></div>' : '') +
+      '<div class="inspire-actions"><button class="btn btn-secondary btn-sm" onclick="editMediaItem(\'inspire\',' + e.id + ')">编辑</button><button class="btn btn-danger btn-sm" onclick="deleteMediaItem(\'inspire\',' + e.id + ')">删除</button></div>' +
+    '</div>';
+  }).join('') : '<p style="color:var(--muted);text-align:center;padding:20px;">还没有灵感记录，点击右上角开始收集吧</p>';
+}
+
+function renderMediaAccounts() {
+  var sorted = mediaAccounts.slice().sort(function(a,b) { return (b.date||'').localeCompare(a.date||''); });
+  $('media-account-list').innerHTML = sorted.length ? sorted.map(function(e) {
+    return '<div class="inspire-card">' +
+      '<div class="inspire-meta"><span class="inspire-tag essay">' + (e.platform||'') + '</span><span>' + (e.date||'') + '</span></div>' +
+      '<div class="inspire-title">' + (e.note||'账号数据记录') + '</div>' +
+      '<div class="inspire-content">' +
+        (e.followers ? '粉丝：' + e.followers + '　' : '') +
+        (e.likes ? '获赞：' + e.likes + '　' : '') +
+        (e.views ? '播放：' + e.views : '') +
+      '</div>' +
+      (e.remark ? '<div style="margin-top:8px;font-size:0.82rem;color:var(--muted);">' + e.remark + '</div>' : '') +
+      '<div class="inspire-actions"><button class="btn btn-secondary btn-sm" onclick="editMediaItem(\'account\',' + e.id + ')">编辑</button><button class="btn btn-danger btn-sm" onclick="deleteMediaItem(\'account\',' + e.id + ')">删除</button></div>' +
+    '</div>';
+  }).join('') : '<p style="color:var(--muted);text-align:center;padding:20px;">还没有数据记录，开始追踪你的账号成长吧</p>';
+}
+
+function renderMediaTools() {
+  $('media-tools-list').innerHTML = MEDIA_TOOLS.map(function(t) {
+    return '<div class="history-card" style="cursor:pointer;" onclick="window.open(\'' + t.url + '\', \'_blank\')">' +
+      '<div class="history-card-header">' +
+        '<div class="history-card-num">' + t.tag + '</div>' +
+        '<h4 class="history-card-title">' + t.title + '</h4>' +
+      '</div>' +
+      '<p class="history-card-desc">' + t.desc + '</p>' +
+      '<div class="history-card-tags"><span class="badge badge-info">点击访问 →</span></div>' +
+    '</div>';
+  }).join('');
+}
+
+function openMediaModal(type) {
+  if(type === 'inspire') {
+    $('modal-title').textContent = '添加灵感';
+    var catOptions = MEDIA_CATEGORIES.map(function(c) { return '<option value="' + c + '">' + c + '</option>'; }).join('');
+    var platOptions = MEDIA_PLATFORMS.map(function(p) { return '<option value="' + p + '">' + p + '</option>'; }).join('');
+    $('modal-body').innerHTML =
+      '<div class="form-group"><label>标题</label><input type="text" id="m-media-title" placeholder="笔记标题或灵感标题"></div>' +
+      '<div class="form-row"><div class="form-group"><label>分类</label><select id="m-media-cat" style="width:100%;padding:10px;border:1px solid var(--rule);border-radius:var(--radius-sm);">' + catOptions + '</select></div>' +
+      '<div class="form-group"><label>平台</label><select id="m-media-platform" style="width:100%;padding:10px;border:1px solid var(--rule);border-radius:var(--radius-sm);">' + platOptions + '</select></div></div>' +
+      '<div class="form-group"><label>内容</label><textarea id="m-media-content" rows="6" style="width:100%;padding:12px;border:1px solid var(--rule);border-radius:var(--radius-sm);font-size:0.9rem;resize:vertical;" placeholder="记录灵感内容、爆款拆解、拍摄思路..."></textarea></div>' +
+      '<div class="form-group"><label>原文链接</label><input type="text" id="m-media-link" placeholder="选填，粘贴原文链接"></div>' +
+      '<div class="form-group"><label>日期</label><input type="date" id="m-media-date" value="' + todayStr() + '"></div>';
+    $('modal-confirm').onclick = function() {
+      var item = {
+        id: Date.now(),
+        title: $('m-media-title').value.trim(),
+        category: $('m-media-cat').value,
+        platform: $('m-media-platform').value,
+        content: $('m-media-content').value.trim(),
+        link: $('m-media-link').value.trim(),
+        date: $('m-media-date').value || todayStr()
+      };
+      if(!item.content) { alert('请填写内容'); return; }
+      mediaInspires.push(item);
+      saveData(STORE_KEYS.media_inspires, mediaInspires);
+      renderMediaInspires();
+      closeModal();
+    };
+  } else if(type === 'account') {
+    $('modal-title').textContent = '记录账号数据';
+    var platOptions2 = MEDIA_PLATFORMS.map(function(p) { return '<option value="' + p + '">' + p + '</option>'; }).join('');
+    $('modal-body').innerHTML =
+      '<div class="form-row"><div class="form-group"><label>平台</label><select id="m-media-platform" style="width:100%;padding:10px;border:1px solid var(--rule);border-radius:var(--radius-sm);">' + platOptions2 + '</select></div>' +
+      '<div class="form-group"><label>日期</label><input type="date" id="m-media-date" value="' + todayStr() + '"></div></div>' +
+      '<div class="form-row"><div class="form-group"><label>粉丝数</label><input type="number" id="m-media-followers" placeholder="选填"></div>' +
+      '<div class="form-group"><label>获赞数</label><input type="number" id="m-media-likes" placeholder="选填"></div></div>' +
+      '<div class="form-row"><div class="form-group"><label>播放量</label><input type="number" id="m-media-views" placeholder="选填"></div>' +
+      '<div class="form-group"><label>笔记/描述</label><input type="text" id="m-media-note" placeholder="如：本周发了3条"></div></div>' +
+      '<div class="form-group"><label>备注</label><textarea id="m-media-remark" rows="3" style="width:100%;padding:12px;border:1px solid var(--rule);border-radius:var(--radius-sm);font-size:0.9rem;resize:vertical;" placeholder="选填，记录运营动作或异常情况"></textarea></div>';
+    $('modal-confirm').onclick = function() {
+      var item = {
+        id: Date.now(),
+        platform: $('m-media-platform').value,
+        date: $('m-media-date').value || todayStr(),
+        followers: $('m-media-followers').value,
+        likes: $('m-media-likes').value,
+        views: $('m-media-views').value,
+        note: $('m-media-note').value.trim(),
+        remark: $('m-media-remark').value.trim()
+      };
+      mediaAccounts.push(item);
+      saveData(STORE_KEYS.media_accounts, mediaAccounts);
+      renderMediaAccounts();
+      closeModal();
+    };
+  }
+  $('modal-overlay').classList.add('show');
+}
+
+function editMediaItem(type, id) {
+  if(type === 'inspire') {
+    var item = mediaInspires.find(function(x) { return x.id === id; });
+    if(!item) return;
+    var catOptions = MEDIA_CATEGORIES.map(function(c) { return '<option value="' + c + '"' + (item.category===c?' selected':'') + '>' + c + '</option>'; }).join('');
+    var platOptions = MEDIA_PLATFORMS.map(function(p) { return '<option value="' + p + '"' + (item.platform===p?' selected':'') + '>' + p + '</option>'; }).join('');
+    $('modal-title').textContent = '编辑灵感';
+    $('modal-body').innerHTML =
+      '<div class="form-group"><label>标题</label><input type="text" id="m-media-title" value="' + (item.title||'') + '"></div>' +
+      '<div class="form-row"><div class="form-group"><label>分类</label><select id="m-media-cat" style="width:100%;padding:10px;border:1px solid var(--rule);border-radius:var(--radius-sm);">' + catOptions + '</select></div>' +
+      '<div class="form-group"><label>平台</label><select id="m-media-platform" style="width:100%;padding:10px;border:1px solid var(--rule);border-radius:var(--radius-sm);">' + platOptions + '</select></div></div>' +
+      '<div class="form-group"><label>内容</label><textarea id="m-media-content" rows="6" style="width:100%;padding:12px;border:1px solid var(--rule);border-radius:var(--radius-sm);font-size:0.9rem;resize:vertical;">' + (item.content||'') + '</textarea></div>' +
+      '<div class="form-group"><label>原文链接</label><input type="text" id="m-media-link" value="' + (item.link||'') + '"></div>' +
+      '<div class="form-group"><label>日期</label><input type="date" id="m-media-date" value="' + (item.date||todayStr()) + '"></div>';
+    $('modal-confirm').onclick = function() {
+      item.title = $('m-media-title').value.trim();
+      item.category = $('m-media-cat').value;
+      item.platform = $('m-media-platform').value;
+      item.content = $('m-media-content').value.trim();
+      item.link = $('m-media-link').value.trim();
+      item.date = $('m-media-date').value || todayStr();
+      saveData(STORE_KEYS.media_inspires, mediaInspires);
+      renderMediaInspires();
+      closeModal();
+    };
+  } else if(type === 'account') {
+    var acc = mediaAccounts.find(function(x) { return x.id === id; });
+    if(!acc) return;
+    var platOptions3 = MEDIA_PLATFORMS.map(function(p) { return '<option value="' + p + '"' + (acc.platform===p?' selected':'') + '>' + p + '</option>'; }).join('');
+    $('modal-title').textContent = '编辑账号数据';
+    $('modal-body').innerHTML =
+      '<div class="form-row"><div class="form-group"><label>平台</label><select id="m-media-platform" style="width:100%;padding:10px;border:1px solid var(--rule);border-radius:var(--radius-sm);">' + platOptions3 + '</select></div>' +
+      '<div class="form-group"><label>日期</label><input type="date" id="m-media-date" value="' + (acc.date||todayStr()) + '"></div></div>' +
+      '<div class="form-row"><div class="form-group"><label>粉丝数</label><input type="number" id="m-media-followers" value="' + (acc.followers||'') + '"></div>' +
+      '<div class="form-group"><label>获赞数</label><input type="number" id="m-media-likes" value="' + (acc.likes||'') + '"></div></div>' +
+      '<div class="form-row"><div class="form-group"><label>播放量</label><input type="number" id="m-media-views" value="' + (acc.views||'') + '"></div>' +
+      '<div class="form-group"><label>笔记/描述</label><input type="text" id="m-media-note" value="' + (acc.note||'') + '"></div></div>' +
+      '<div class="form-group"><label>备注</label><textarea id="m-media-remark" rows="3" style="width:100%;padding:12px;border:1px solid var(--rule);border-radius:var(--radius-sm);font-size:0.9rem;resize:vertical;">' + (acc.remark||'') + '</textarea></div>';
+    $('modal-confirm').onclick = function() {
+      acc.platform = $('m-media-platform').value;
+      acc.date = $('m-media-date').value || todayStr();
+      acc.followers = $('m-media-followers').value;
+      acc.likes = $('m-media-likes').value;
+      acc.views = $('m-media-views').value;
+      acc.note = $('m-media-note').value.trim();
+      acc.remark = $('m-media-remark').value.trim();
+      saveData(STORE_KEYS.media_accounts, mediaAccounts);
+      renderMediaAccounts();
+      closeModal();
+    };
+  }
+  $('modal-overlay').classList.add('show');
+}
+
+function deleteMediaItem(type, id) {
+  if(!confirm('确定删除吗？')) return;
+  if(type === 'inspire') { mediaInspires = mediaInspires.filter(function(x) { return x.id !== id; }); saveData(STORE_KEYS.media_inspires, mediaInspires); renderMediaInspires(); }
+  else { mediaAccounts = mediaAccounts.filter(function(x) { return x.id !== id; }); saveData(STORE_KEYS.media_accounts, mediaAccounts); renderMediaAccounts(); }
 }
 
 /* ========================== HISTORY MODULE ========================== */
@@ -2748,64 +3086,92 @@ function deleteItem(storeKey, id) {
 }
 
 /* ========================== HOMEPAGE ========================== */
-const OTC_NEWS = [
-  {
-    priority:'high', title:'国家药监局：9个品种转换为非处方药（2026年第67号）',
-    desc:'杏仁止咳颗粒、九味芩香含漱液等9个品种由处方药转为非处方药。品种包括显齿蛇葡萄总黄酮含片、山香圆含片、参芪五味子胶囊、清咳平喘颗粒等，涵盖呼吸、消化、皮肤等多个领域，扩大OTC品种池。',
-    source:'国家药品监督管理局', date:'2026-07-20',
-    url:'https://www.nmpa.gov.cn/xxgk/ggtg/ypggtg/ypqtggtg/20260720155648193.html',
-    tags:['OTC转换','政策法规','NMPA']
-  },
-  {
-    priority:'high', title:'7月1日起药品追溯码医保强制扫码结算全面实施',
-    desc:'所有赋码药品在零售药店销售时必须扫码方可进行医保基金结算，不扫码的药品医保基金将拒付。未按规定上传追溯码的定点医药机构，可被处1-5万元罚款。',
-    source:'国家医疗保障局', date:'2026-07-01',
-    url:'https://www.nhsa.gov.cn/art/2026/4/11/art_14_20174.html',
-    tags:['追溯码','医保结算','合规']
-  },
-  {
-    priority:'high', title:'商务部等9部门联合发布《关于促进药品零售行业高质量发展的意见》',
-    desc:'2026年1月15日发布，共5方面18项举措。核心要点：支持零售药店兼并重组、鼓励批零一体化、优化门诊统筹服务、推动处方流转、鼓励创新药进药店、强化线上线下统一监管。',
-    source:'国务院/商务部', date:'2026-01-15',
-    url:'https://www.gov.cn/zhengce/zhengceku/202601/content_7055835.htm',
-    tags:['行业政策','连锁整合','门诊统筹','九部门']
-  },
-  {
-    priority:'high', title:'4月1日起药店购药门诊统筹新规：医院药店合并累计起付线',
-    desc:'医院门诊费用+定点药店购药费用合并累计，全年只设一次起付线。在职职工报销70%-85%，退休人员在此基础上再上浮5%-10%。OTC医保目录内药品可直接享受门诊统筹结算。',
-    source:'国家医疗保障局', date:'2026-04-01',
-    url:'https://www.nhsa.gov.cn/art/2026/5/19/art_53_20546.html',
-    tags:['门诊统筹','医保报销','OTC']
-  },
-  {
-    priority:'high', title:'国家医保局：职工医保个人账户支付白名单9月底前出台',
-    desc:'各省级医保部门原则上于2026年9月底前出台全省统一的定点零售药店职工医保个人账户支付白名单。白名单内的，个人账户可以支付；白名单外的，不予支付。',
-    source:'国家医疗保障局', date:'2026-05-19',
-    url:'https://www.nhsa.gov.cn/art/2026/5/19/art_53_20546.html',
-    tags:['医保个账','白名单','政策']
-  },
-  {
-    priority:'medium', title:'广东省药店全面上线"粤药盾"系统，药品零售终端追溯闭环管理',
-    desc:'广东实现药品零售终端追溯信息采集、上传、留存闭环管理，以电子化实名登记替代传统纸质台账，从严管控含特殊药品复方制剂销售。',
-    source:'广东省药品监督管理局', date:'2026-07-09',
-    url:'http://mpa.gd.gov.cn/gkmlpt/content/4/4924/post_4924109.html',
-    tags:['追溯系统','广东','地方实践']
-  },
-  {
-    priority:'medium', title:'医药零售行业集中度快速提升，连锁化成为主流趋势',
-    desc:'《意见》明确支持零售药店兼并重组和批零一体化发展。大参林宣布2026年建成573家标准化"健康驿站"，重点布局社区与县域。行业连锁化率持续提升，龙头药店加速扩张。',
-    source:'综合报道', date:'2026-06-30',
-    url:'https://caifuhao.eastmoney.com/news/20260630115655566911950',
-    tags:['行业趋势','连锁化','市场格局']
-  },
-  {
-    priority:'medium', title:'2026年6月起多重新规影响药店经营',
-    desc:'6月1日起，药品追溯码管理、药品经营许可证管理等新规陆续落地，涵盖药品采购、销售、品类管理、风险防控等多个方面，对药店日常经营产生重大影响。',
-    source:'中国药店', date:'2026-06-01',
-    url:'http://www.ydzz.com/news.php?col=67&file=68669',
-    tags:['新规','药店经营','合规']
-  }
+var DAILY_NEWS = [
+  // 综合
+  { category:'综合', priority:'high', title:'证监会推出10项政策举措支持香港资本市场发展', desc:'中国证监会主席吴清宣布10项政策举措，包括支持境内企业赴港上市、支持港股上市公司境内上市等，深化双向务实合作。', source:'人民网', date:'2026-08-03', url:'http://www.people.com.cn/', tags:['证监会','香港','资本市场'] },
+  { category:'综合', priority:'high', title:'央行明确下半年八项重点工作', desc:'中国人民银行部署下半年重点任务，涉及货币政策、金融风险防范、人民币国际化等关键领域。', source:'中国商报', date:'2026-08-03', url:'https://www.cnstock.com/', tags:['央行','货币政策','下半年'] },
+  { category:'综合', priority:'medium', title:'轻工业经济运行稳中有进 上半年出口较快增长', desc:'中国轻工业联合会数据显示，上半年轻工业生产总体平稳，国内消费市场提质扩容，商品出口较快增长，结构持续优化。', source:'央视新闻', date:'2026-08-02', url:'https://news.cctv.com/', tags:['轻工业','出口','消费'] },
+  // 科技
+  { category:'科技', priority:'high', title:'人工智能等新兴产业快速发展 催生大量新需求', desc:'AI等新兴产业催生全新市场需求，一批基础制造领域工业企业加快转型升级，为新兴领域供应关键材料。', source:'央视新闻', date:'2026-08-02', url:'https://news.cctv.com/', tags:['人工智能','产业升级','新材料'] },
+  { category:'科技', priority:'high', title:'中微公司计划五年内覆盖60%半导体高端设备', desc:'国内半导体设备龙头企业中微公司公布战略规划，目标在五年内覆盖60%的半导体高端设备市场。', source:'21世纪经济报道', date:'2026-08-02', url:'https://www.21jingji.com/', tags:['半导体','中微公司','国产替代'] },
+  { category:'科技', priority:'medium', title:'三大运营商规范互联网渠道售卡 第三方不再办理', desc:'中国电信、移动、联通联合公告，8月1日起互联网渠道号卡订购仅限官方App和网站，第三方渠道不再提供办理服务。', source:'21世纪经济报道', date:'2026-08-01', url:'https://www.21jingji.com/', tags:['运营商','号卡管理','数据安全'] },
+  // 社会
+  { category:'社会', priority:'high', title:'深化扫黑除恶专项斗争 中央政法委答记者问', desc:'中央政法委负责同志就开展深化扫黑除恶专项斗争有关问题回答提问，部署下一阶段重点工作。', source:'人民网', date:'2026-08-03', url:'http://www.people.com.cn/', tags:['扫黑除恶','政法','社会治安'] },
+  { category:'社会', priority:'medium', title:'房地产市场进入存量时代 新模式加速探索', desc:'多地出台房地产新政，从增量开发向存量运营转型，租赁市场、城市更新成为新方向。', source:'中国商报', date:'2026-08-03', url:'https://www.cnstock.com/', tags:['房地产','存量时代','城市更新'] },
+  { category:'社会', priority:'medium', title:'多地高温预警持续 防暑降温需注意', desc:'中央气象台持续发布高温预警，多地气温突破历史极值，提醒市民做好防暑降温措施。', source:'央视新闻', date:'2026-08-02', url:'https://news.cctv.com/', tags:['高温','气象','防暑'] },
+  // 财经
+  { category:'财经', priority:'high', title:'证监会10项政策举措释放重磅利好', desc:'包括继续支持境内企业赴港上市融资、支持符合条件的港股上市公司境内上市等，提振市场信心。', source:'中国商报', date:'2026-08-03', url:'https://www.cnstock.com/', tags:['证监会','利好','港股'] },
+  { category:'财经', priority:'medium', title:'小米多款手机调价 消费电子市场竞争加剧', desc:'小米宣布多款手机价格调整，反映消费电子市场竞争白热化，品牌策略加速调整。', source:'21世纪经济报道', date:'2026-08-02', url:'https://www.21jingji.com/', tags:['小米','手机','消费电子'] },
+  { category:'财经', priority:'medium', title:'传统工业品适配新需求 老产业跑出转型加速度', desc:'传统制造企业通过为AI等新兴产业供应关键材料实现新发展，产业转型成效显著。', source:'央视新闻', date:'2026-08-02', url:'https://news.cctv.com/', tags:['传统制造','转型','新需求'] }
 ];
+
+var AI_TIPS = [
+  { level:'入门', title:'角色设定法', brief:'给AI设定一个专业角色，回答质量立刻提升。', detail:'在提示词开头告诉AI"你是一位XX领域的专家"，会激活模型中相关的专业知识库。例如"你是一位有10年经验的营养师"比直接问"怎么吃健康"效果好得多。角色越具体，回答越专业。', prompt:'你是一位有10年经验的营养师，请为久坐办公的白领设计一周午餐方案，要求：营养均衡、制作简单、成本低廉。' },
+  { level:'入门', title:'明确输出格式', brief:'告诉AI用什么格式输出，省去二次整理的时间。', detail:'AI默认输出是大段文字。如果你需要表格、列表、JSON等格式，在提示词中明确说明。例如"请用Markdown表格输出"、"请输出为JSON格式"。格式约束越具体，AI越不会自由发挥。', prompt:'请将以下信息整理为Markdown表格，列名为：产品名、价格、优点、缺点。\n\n信息：[粘贴产品信息]' },
+  { level:'入门', title:'分步骤引导', brief:'大任务拆成小步骤，每步都能检查方向。', detail:'不要一次性给AI一个大任务，而是拆成多个小步骤。先让AI列大纲，你确认后再让它写正文，最后让它润色。每一步你都能纠正方向，避免最终产出完全跑偏。', prompt:'第一步：请先列出这篇关于"远程办公效率"的文章大纲，不要写正文。\n（确认大纲后）\n第二步：请根据大纲展开第一部分的内容，约300字。' },
+  { level:'入门', title:'给AI一个范例', brief:'一个好范例胜过1000字的描述。', detail:'与其费力描述你想要的风格，不如直接给AI一个范例。AI会自动分析范例的语气、结构、长度，然后高度还原。这叫"少样本提示"(Few-shot)，是OpenAI官方推荐的最佳实践。', prompt:'请模仿以下文案风格，为"降噪耳机"写3条产品文案：\n\n范例："一杯咖啡的时间，搞定一周的会议纪要。"' },
+  { level:'入门', title:'限制字数和范围', brief:'加一句"不超过XX字"，AI就不会写废话。', detail:'AI倾向于写很长的回答。在提示词中加入字数限制、要点数量限制，可以让输出更精炼。例如"用3个要点总结，每个不超过50字"。', prompt:'请用3个要点总结《被讨厌的勇气》的核心观点，每个要点不超过50字。' },
+  { level:'入门', title:'让AI先问你', brief:'不确定怎么描述需求？让AI来问你。', detail:'当你不确定该怎么描述需求时，反过来让AI先问你问题。AI会根据它的知识库问出最关键的问题，比你瞎描述有用得多。', prompt:'我想让你帮我制定个人理财计划。但你先别急着给建议，先问我5个关键问题，了解我的具体情况之后再给出方案。' },
+  { level:'入门', title:'明确说"不要什么"', brief:'告诉AI不要做什么，比告诉它要做什么更有效。', detail:'AI的默认倾向是"说正确但没用的话"。主动告诉AI不要用什么词、不要什么结构，效果往往更好。例如"不要用互联网黑话"、"不要用首先其次最后的三段式"。', prompt:'帮我写200字的产品介绍。不要用"赋能""抓手""闭环"等互联网黑话，不要用"首先、其次、最后"的三段式。' },
+  { level:'入门', title:'费曼学习法', brief:'让AI用12岁小孩能懂的话解释复杂概念。', detail:'遇到不懂的概念，让AI用最简单的话解释，就像给12岁的小学生讲课。用生活中的例子，不用专业术语。如果还是不懂，让AI换一种方式再解释一遍。', prompt:'请用最简单的话解释什么是"区块链"，就像我是一个12岁的小学生。用生活中的例子，不要用专业术语。' },
+  { level:'入门', title:'翻译+解释二合一', brief:'让AI翻译的同时解释文化背景。', detail:'翻译不只是字面转换，还需要理解文化背景。在翻译请求中加入"请解释文化背景和语言习惯"，AI会给出更地道、更有深度的翻译。', prompt:'请翻译以下英文段落，并解释其中的文化背景和俚语含义：\n\n[粘贴英文]' },
+  { level:'进阶', title:'让AI自我反思', brief:'AI回答后追加一句让它重新审视，质量明显提升。', detail:'AI的第一次回答往往是"直觉反应"。追加一句"请重新审视你的回答，找出问题并改进"，让AI自我反思，质量会显著提升。这个方法已被大量实验验证有效。', prompt:'（在AI给出回答后）请重新审视你刚才的回答，找出可能的问题或遗漏，然后给出改进后的版本。' },
+  { level:'进阶', title:'多角色辩论法', brief:'让AI从多个角色角度分析同一个问题。', detail:'同一个问题，让AI分别扮演不同角色来分析，你会得到更全面、更有深度的回答。不同角色的视角碰撞，能发现单一视角看不到的盲点。', prompt:'请分别从以下三个角色的角度分析"该不该让孩子学编程"：\n1. 教育心理学家\n2. 互联网公司技术负责人\n3. 一个10岁孩子的妈妈\n每个角色给出2-3个核心观点。' },
+  { level:'进阶', title:'增强型思维链', brief:'用结构化思考框架替代简单的"一步步思考"。', detail:'基础的"请一步步思考"已经过时。2026年的进阶玩法是用结构化思考框架：需求拆解→方案设计→方案选型→代码实现→验证优化。每一步都要求输出详细内容。', prompt:'请按以下步骤解决问题：\n1. 需求拆解：列出所有要求和约束\n2. 方案设计：提出3种思路并说明优缺点\n3. 方案选型：对比选择最优方案\n4. 代码实现：编写完整代码\n5. 验证优化：编写测试用例' },
+  { level:'进阶', title:'指令前置+分隔符', brief:'把最重要的指令放在最开头，用分隔符隔开内容。', detail:'LLM对Prompt开头的内容注意力权重最高。把任务指令放在最前面，用三个引号或三个反引号把参考内容隔开，AI能更准确地理解你的意图。', prompt:'请总结以下文章要点，输出bullet points，每条不超过20字。\n\n文章：\n"""\n[粘贴文章内容]\n"""' },
+  { level:'进阶', title:'反馈闭环设计', brief:'先让AI出方案，你确认后再让它实现。', detail:'不要让AI一次性写完所有代码。先让它输出设计方案，你确认方向后，再让它逐个模块实现。每完成一个模块就暂停等你确认。这种方式比一次性写完更可靠。', prompt:'第一步：请先输出整体设计方案（不写代码），我确认后再实现。\n（确认后）\n第二步：请先实现核心模块，每完成一个函数就停下等我确认。' },
+  { level:'进阶', title:'多轮对话状态管理', brief:'长对话中用"进度看板"帮AI记住上下文。', detail:'对话超过20轮后AI会逐渐"健忘"。在关键节点插入"进度看板"：列出已完成、进行中、待办的步骤，帮AI重新定位。这比让AI从头读对话历史更高效。', prompt:'【进度看板】\n✅ 需求分析（已完成）\n✅ 方案设计（已完成）\n⬜ 代码实现（进行中）\n⬜ 测试验证（待办）\n\n请基于以上进度，继续代码实现阶段。' },
+  { level:'进阶', title:'元提示词', brief:'用提示词生成更好的提示词。', detail:'当你不确定怎么写提示词时，让AI帮你优化。告诉AI你想要什么效果，让它以"提示词工程专家"的身份帮你重写一个更好的版本。', prompt:'你是一个提示词工程专家，请帮我优化以下提示词：\n原始提示词："写一个Python函数"\n优化要求：1.明确角色设定 2.提供上下文 3.指定输出格式 4.添加约束条件\n请生成优化后的提示词。' },
+  { level:'进阶', title:'模型选型策略', brief:'70%用轻量模型，30%上旗舰模型。', detail:'同一个AI产品通常有多个模型。轻量模型适合翻译、总结、格式化等简单任务，速度快；旗舰模型适合复杂推理、创意生成等高难度任务。先用轻量试，不行再升级。', prompt:'日常习惯：任何问题先用轻量模型问一次。如果回答不满意，再切到旗舰模型。大约70%的问题轻量就够了。' },
+  { level:'进阶', title:'组合使用多个AI工具', brief:'高手从不只用一个AI，让每个工具做自己最擅长的。', detail:'最佳实践是组合使用：用Gemini搜索最新数据→把数据喂给Claude写报告→用ChatGPT转成PPT大纲→用Gamma生成PPT。每个工具做自己最擅长的事，效率拉满。', prompt:'工作流示例：\n1. Gemini搜索行业数据\n2. Claude写分析报告\n3. ChatGPT转PPT大纲\n4. Gamma生成PPT' },
+  { level:'精通', title:'长上下文黄金区域管理', brief:'百万token窗口下，开头5%和结尾5%是注意力黄金区。', detail:'面对百万级上下文，把最重要的指令放在Prompt最开头，把关键参考文档放在末尾，中间放大量上下文。这样AI对关键信息的关注度最高。', prompt:'【任务指令】\n你是代码审查专家，请审查安全性问题...\n\n【代码库上下文】\n（粘贴整个代码库）\n\n【重点参考】\n重点审查：auth.py, db.py' },
+  { level:'精通', title:'系统提示词隔离', brief:'用System指令建立"人格隔离区"，让AI保持一致风格。', detail:'通过System指令设定AI的"人格"：禁止使用某些词、必须用特定格式输出、专注于技术问题等。这种隔离让AI在特定任务中保持高度一致的风格，不受对话内容干扰。', prompt:'[系统指令]\n你是专业代码审查专家，以严谨著称。\n- 禁止使用褒义词\n- 每个评价必须包含问题描述和修复建议\n- 使用"问题：/建议："格式输出' },
+  { level:'精通', title:'输出格式契约', brief:'用严格结构化格式约束输出，防止AI自由发挥。', detail:'用Markdown标题、代码块、表格等结构化格式约束AI输出，比自然语言描述有效10倍。第一次就要求结构化输出，省去后续手动整理的麻烦。', prompt:'请严格按以下格式输出：\n# 标题\n## 问题1：[名称]\n- 严重程度：🔴高危/🟡中危/🟢低危\n- 问题描述：[描述]\n- 修复建议：\n```python\n[修复代码]\n```' },
+  { level:'精通', title:'防幻觉机制', brief:'要求AI标注不确定的地方，关键数据必须二次验证。', detail:'AI最大的问题是"幻觉"——一本正经地编造不存在的信息。在提示词中加一句"如果你不确定，请直接说不知道，不要编造"，并要求AI对关键信息标注置信度。', prompt:'请分析以下数据并给出结论。如果你不确定的地方，请明确标注"需要人工确认"。不要编造任何数据。\n\n数据：[粘贴数据]' },
+  { level:'精通', title:'防讨好机制', brief:'AI倾向于说你想听的话，要求它直言不讳。', detail:'AI有一种"讨好"倾向——你说想做什么，它大概率说好。要获得真实有用的建议，需要主动要求AI扮演反方角色，找出方案的问题和风险。', prompt:'请扮演一个严苛的投资人，找出这个创业方案最大的3个问题和风险。不需要说优点，请直言不讳。' },
+  { level:'精通', title:'CREATE原则', brief:'高质量提示词的五要素：背景、任务、示例、约束、语气。', detail:'2026年提示词核心框架CREATE：Context(角色设定)→Request(任务指令)→Examples(示例)→Adjustments(约束条件)→Tone(语气风格)。每个要素都不可或缺，组合使用效果最佳。', prompt:'【角色】你是有10年经验的XX专家\n【任务】请完成XX\n【示例】参考以下范例...\n【约束】不超过500字，用表格输出\n【语气】专业简洁' },
+  { level:'精通', title:'从指挥到委托', brief:'2026年新范式：定义目标而非过程，信任AI的自主判断。', detail:'旧范式是"按步骤做1234"；新范式是"目标是什么、成功标准是什么、约束是什么，请自主规划"。GPT-5.5等新一代模型已具备强大自主规划能力，过度指挥反而限制发挥。', prompt:'目标：从JSON文件中提取异常数据并记录原因。\n成功标准：输出的CSV能被Excel直接打开。\n约束：数据量约10万条，注意内存使用。\n请自主规划最优方案并执行。' },
+  { level:'进阶', title:'上下文摘要法', brief:'长对话每3-5轮总结一次，用摘要替代原文。', detail:'对话超过20轮AI会"健忘"。解决方法：每3-5轮让AI总结一次讨论要点，后续对话用摘要替代完整历史。既节省token又保持上下文连贯。', prompt:'请总结我们到目前为止讨论的要点，用100字以内概括。后续我会基于这个摘要继续提问。' },
+  { level:'入门', title:'表格对比法', brief:'让AI用表格做对比分析，一目了然。', detail:'做选择时，让AI用表格从多个维度对比选项，比看文字描述清晰得多。指定对比维度和评分标准，AI会给出结构化的对比结果。', prompt:'请用表格对比以下3款手机，维度包括：价格、拍照、续航、性能、性价比评分。最后一行给出你的推荐和理由。' },
+  { level:'进阶', title:'链式提示词', brief:'把复杂任务串联成提示词链，每步输出作为下步输入。', detail:'复杂任务拆成多个AI调用，前一步的输出作为后一步的输入。例如：AI1提取关键词→AI2根据关键词写大纲→AI3根据大纲写正文。每步都可独立优化。', prompt:'步骤1：请提取以下文章的5个关键词。\n（得到关键词后）\n步骤2：请根据这5个关键词写一篇文章大纲。\n（得到大纲后）\n步骤3：请根据大纲写一篇800字文章。' },
+  { level:'精通', title:'多模态提示词', brief:'2026年的提示词不再是纯文本，图文混合效果最佳。', detail:'2026年的AI模型支持多模态输入。在提示词中结合图片、图表、代码截图，AI能理解更丰富的上下文。特别是Gemini 3.1在多模态方面表现突出。', prompt:'请分析这张数据图表的趋势，并给出3条业务建议。\n\n[上传图片]' },
+  { level:'入门', title:'AI写邮件模板', brief:'告诉AI发件人、收件人、目的，直接生成可用邮件。', detail:'写邮件时，告诉AI：你是谁、发给谁、什么目的、什么语气、多少字。AI会生成一封可以直接发送的邮件。比从模板库里找模板快得多。', prompt:'帮我写商务邮件。发件人：XX公司市场总监。收件人：潜在合作伙伴。目的：邀请参加产品发布会。语气：专业但不生硬，300字以内。' }
+];
+
+function getTodayAITips() {
+  var d = new Date();
+  var startIdx = (d.getFullYear() * 366 + (d.getMonth()+1) * 31 + d.getDate()) * 10;
+  var tips = [];
+  for(var i = 0; i < 10; i++) {
+    tips.push(AI_TIPS[(startIdx + i) % AI_TIPS.length]);
+  }
+  return tips;
+}
+
+function renderAITips() {
+  var tips = getTodayAITips();
+  var levelClass = { '入门':'beginner', '进阶':'intermediate', '精通':'advanced' };
+  $('aitips-list').innerHTML = '<div class="history-card-grid">' + tips.map(function(t, i) {
+    return '<div class="history-card" onclick="toggleAITipDetail(' + i + ')">' +
+      '<div class="history-card-header">' +
+        '<div class="history-card-num" style="background:' + (t.level==='入门'?'rgba(93,190,157,0.12)':t.level==='进阶'?'rgba(74,126,199,0.12)':'rgba(224,100,80,0.12)') + ';color:' + (t.level==='入门'?'var(--accent-dark)':t.level==='进阶'?'#4a7ec7':'#e06450') + ';">' + t.level + '</div>' +
+        '<h4 class="history-card-title">' + t.title + '</h4>' +
+      '</div>' +
+      '<p class="history-card-desc">' + t.brief + '</p>' +
+      '<div class="history-card-detail" id="aitip-detail-' + i + '">' +
+        '<div class="history-detail-content">' + t.detail + '</div>' +
+        '<h5 style="margin:14px 0 10px;color:var(--accent-dark);">示例提示词</h5>' +
+        '<div style="background:rgba(0,0,0,0.03);border-radius:var(--radius-sm);padding:12px;font-size:0.82rem;line-height:1.7;color:var(--ink);border:1px solid var(--rule);white-space:pre-wrap;">' + t.prompt + '</div>' +
+      '</div>' +
+    '</div>';
+  }).join('') + '</div>';
+}
+
+function toggleAITipDetail(idx) {
+  var detail = $('aitip-detail-' + idx);
+  if(!detail) return;
+  detail.classList.toggle('show');
+}
 
 function renderHomeStats() {
   // Quick stats
@@ -2832,7 +3198,7 @@ function renderHomeStats() {
   }
 
   $('quick-stats').innerHTML = `
-    <div class="quick-stat"><div class="qs-icon">🏥</div><div class="qs-value">${monthVisits}</div><div class="qs-label">本月拜访客户</div></div>
+    <div class="quick-stat"><div class="qs-icon">💡</div><div class="qs-value">${essays.length + readings.length + fragments.length}</div><div class="qs-label">灵感记录</div></div>
     <div class="quick-stat"><div class="qs-icon">💪</div><div class="qs-value">${exerciseThisMonth}</div><div class="qs-label">本月运动天数</div></div>
     <div class="quick-stat"><div class="qs-icon">📖</div><div class="qs-value">${booksRead}</div><div class="qs-label">已读完书籍</div></div>
     <div class="quick-stat" style="${weightLoss==='--'?'opacity:0.5':''}"><div class="qs-icon">⚖️</div><div class="qs-value ${weightLossClass}">${weightLoss}kg</div><div class="qs-label">累计体重变化</div></div>
@@ -2870,8 +3236,9 @@ function renderHomeStats() {
   const booksInProgress = books.filter(b => b.current > 0 && b.current < b.total).length;
 
   $('monthly-summary').innerHTML = `
-    <div class="summary-item"><span class="si-label">客户总数</span><span class="si-val">${totalClients} 个（A类${aClients}个）</span></div>
-    <div class="summary-item"><span class="si-label">连锁开发</span><span class="si-val">${totalChains} 个进行中，${signedChains} 个已签约</span></div>
+    <div class="summary-item"><span class="si-label">灵感随笔</span><span class="si-val">${essays.length} 篇</span></div>
+    <div class="summary-item"><span class="si-label">读书笔记</span><span class="si-val">${readings.length} 条</span></div>
+    <div class="summary-item"><span class="si-label">知识碎片</span><span class="si-val">${fragments.length} 条</span></div>
     <div class="summary-item"><span class="si-label">通史章节</span><span class="si-val">${HISTORY_SCHEDULE.length}个章节可自由学习</span></div>
     <div class="summary-item"><span class="si-label">阅读进度</span><span class="si-val">${totalBooks} 本书，${booksInProgress} 本在读，${booksRead} 本读完</span></div>
     <div class="summary-item"><span class="si-label">本月体重记录</span><span class="si-val">${recentWeights.length} 次${latestW ? '，最新 '+getWeightVal(latestW)+'kg' : ''}</span></div>
@@ -2879,21 +3246,22 @@ function renderHomeStats() {
   `;
 
   // News cards
-  $('news-cards').innerHTML = OTC_NEWS.map((n,i) => `
-    <div class="news-card">
-      <div>
-        <span class="news-priority ${n.priority}">${n.priority==='high'?'高相关':'重要'}</span>
-        <span class="news-title">${n.title}</span>
-      </div>
-      <div class="news-desc">${n.desc}</div>
-      <div class="news-tags">${n.tags.map(t => `<span class="news-tag">${t}</span>`).join('')}</div>
-      <div class="news-meta">
-        <span class="news-source">${n.source}</span>
-        <span>${n.date}</span>
-        <a class="news-link" href="${n.url}" target="_blank" rel="noopener noreferrer" onclick="return openVideo('${n.url}')">查看原文 →</a>
-      </div>
-    </div>
-  `).join('');
+  // Daily news by category
+  var categories = ['综合','科技','社会','财经'];
+  var newsHtml = categories.map(function(cat) {
+    var catNews = DAILY_NEWS.filter(function(n) { return n.category === cat; });
+    if(!catNews.length) return '';
+    var cards = catNews.map(function(n) {
+      return '<div class="news-card">' +
+        '<div><span class="news-priority ' + n.priority + '">' + (n.priority==='high'?'热门':'关注') + '</span><span class="news-title">' + n.title + '</span></div>' +
+        '<div class="news-desc">' + n.desc + '</div>' +
+        '<div class="news-tags">' + n.tags.map(function(t) { return '<span class="news-tag">' + t + '</span>'; }).join('') + '</div>' +
+        '<div class="news-meta"><span class="news-source">' + n.source + '</span><span>' + n.date + '</span><a class="news-link" href="' + n.url + '" target="_blank" rel="noopener noreferrer">查看原文 →</a></div>' +
+      '</div>';
+    }).join('');
+    return '<div style="margin-bottom:20px;"><h5 style="color:var(--accent-dark);margin-bottom:10px;font-size:0.9rem;border-left:3px solid var(--accent);padding-left:8px;">' + cat + '</h5>' + cards + '</div>';
+  }).join('');
+  $('news-cards').innerHTML = newsHtml;
 
   // Psychology card
   renderPsychology();
@@ -3065,7 +3433,9 @@ function initApp() {
   renderHomeStats();
   renderClients(); renderChains(); renderWeeklyReminder();
   renderPoetsByDynasty(); renderHistoryToday();
-  renderMedicalTracks(); renderBooks();
+  renderMedicalTracks(); renderBooks(); renderAITips();
+  renderEssays(); renderReadings(); renderFragments();
+  renderMediaInspires(); renderMediaAccounts(); renderMediaTools();
   renderWeights(); initBMI(); renderStages(); renderCalendar(); updateCompareSelects();
   if (initSupabase()) showSyncButtons();
 }
