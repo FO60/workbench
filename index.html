@@ -1087,7 +1087,47 @@ function saveData(k, d) { localStorage.setItem(k, JSON.stringify(d)); if(!_isLoa
 /* 所有默认数据为空——由用户自行录入 */
 const DEFAULT_CLIENTS = [];
 const DEFAULT_CHAINS = [];
-const DEFAULT_BOOKS = [];
+const DEFAULT_BOOKS = [
+  // 首批推荐
+  { id: 9001, title: '夜晚的潜水艇', author: '陈春成', total: 280, current: 0, type: '文学' },
+  { id: 9002, title: '台北人', author: '白先勇', total: 320, current: 0, type: '文学' },
+  { id: 9003, title: '万物有灵且美', author: '吉米·哈利', total: 300, current: 0, type: '文学' },
+  { id: 9004, title: '俗女养成记', author: '江鹅', total: 200, current: 0, type: '文学' },
+  { id: 9005, title: '蛇结', author: '弗朗索瓦·莫里亚克', total: 240, current: 0, type: '文学' },
+  // 短篇 / 散文类
+  { id: 9006, title: '人间草木', author: '汪曾祺', total: 260, current: 0, type: '文学' },
+  { id: 9007, title: '受戒', author: '汪曾祺', total: 180, current: 0, type: '文学' },
+  { id: 9008, title: '我的阿勒泰', author: '李娟', total: 260, current: 0, type: '文学' },
+  { id: 9009, title: '记一忘三二', author: '李娟', total: 240, current: 0, type: '文学' },
+  { id: 9010, title: '命若琴弦', author: '史铁生', total: 200, current: 0, type: '文学' },
+  { id: 9011, title: '病隙碎笔', author: '史铁生', total: 220, current: 0, type: '文学' },
+  { id: 9012, title: '山茶文具店', author: '小川糸', total: 280, current: 0, type: '文学' },
+  { id: 9013, title: '一直游到海水变蓝', author: '余华', total: 300, current: 0, type: '文学' },
+  { id: 9014, title: '小径分岔的花园', author: '博尔赫斯', total: 220, current: 0, type: '文学' },
+  { id: 9015, title: '寂寞的游戏', author: '袁哲生', total: 200, current: 0, type: '文学' },
+  { id: 9016, title: '绝世荒唐', author: '欧·亨利', total: 320, current: 0, type: '文学' },
+  // 治愈 / 轻松类
+  { id: 9017, title: '东京八平米', author: '吉井忍', total: 260, current: 0, type: '文学' },
+  { id: 9018, title: '明亮夜晚', author: '崔恩荣', total: 280, current: 0, type: '文学' },
+  { id: 9019, title: '去有花的地方', author: '安宁', total: 240, current: 0, type: '文学' },
+  { id: 9020, title: '幸得诸君慰平生', author: '故园风雨前', total: 280, current: 0, type: '文学' },
+  { id: 9021, title: '有花生的寻常一天', author: '宫本辉', total: 240, current: 0, type: '文学' },
+  { id: 9022, title: '我们仨', author: '杨绛', total: 200, current: 0, type: '文学' },
+  // 其他
+  { id: 9023, title: '此生未完成', author: '于娟', total: 260, current: 0, type: '文学' },
+  { id: 9024, title: '三毛系列', author: '三毛', total: 300, current: 0, type: '文学' },
+  { id: 9025, title: '白雪猪头', author: '苏童', total: 200, current: 0, type: '文学' },
+  { id: 9026, title: '西瓜船', author: '苏童', total: 220, current: 0, type: '文学' },
+  { id: 9027, title: '夜间故事', author: '苏童', total: 240, current: 0, type: '文学' },
+  { id: 9028, title: '红尘万丈', author: '海元帅', total: 280, current: 0, type: '其他' },
+  { id: 9029, title: '山河遗爱', author: '简媜', total: 300, current: 0, type: '其他' },
+  { id: 9030, title: '道德经', author: '老子', total: 200, current: 0, type: '其他' },
+  { id: 9031, title: '北京法源寺', author: '李敖', total: 360, current: 0, type: '历史' },
+  { id: 9032, title: '福尔摩斯探案集', author: '柯南·道尔', total: 400, current: 0, type: '其他' },
+  { id: 9033, title: '黑暗中我们能走多高', author: '赵瑜', total: 260, current: 0, type: '其他' },
+  { id: 9034, title: '时间之书', author: '余世存', total: 320, current: 0, type: '其他' },
+  { id: 9035, title: '守夜', author: '史蒂芬·金', total: 340, current: 0, type: '其他' }
+];
 const DEFAULT_WEIGHTS = [];
 const DEFAULT_STAGES = [
   { id:1, title:'高蛋白减肥法第一阶段', startDate:'2026-07-15', days:21 },
@@ -3392,6 +3432,11 @@ function showSyncButtons() {
 }
 
 function initApp() {
+  // Seed default books if reading plan is empty
+  if(books.length === 0 && DEFAULT_BOOKS.length > 0) {
+    books = DEFAULT_BOOKS.slice();
+    saveData(STORE_KEYS.books, books);
+  }
   renderHomeStats();
   renderClients(); renderChains(); renderWeeklyReminder();
   renderPoetsByDynasty(); renderHistoryToday();
