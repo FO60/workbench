@@ -658,6 +658,26 @@ td .badge { display: inline-block; padding: 4px 12px; border-radius: 20px; font-
 .gap-2 { gap: 16px; }
 .text-center { text-align: center; }
 .hidden { display: none !important; }
+
+/* ====== Renovation ====== */
+.reno-cat-card { background: var(--card-gradient); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,250,0.60); border-radius: var(--radius); padding: 18px 20px; margin-bottom: 14px; box-shadow: 0 2px 12px var(--shadow); transition: all 0.25s; }
+.reno-cat-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
+.reno-cat-title { font-size: 1.05rem; font-weight: 700; color: var(--accent-dark); display: flex; align-items: center; gap: 8px; }
+.reno-cat-total { font-size: 0.85rem; color: #000; font-weight: 600; }
+.reno-cat-total .mat { color: var(--accent-dark); }
+.reno-cat-total .lab { color: var(--lake-blue); }
+.reno-item { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px dashed var(--rule); font-size: 0.85rem; }
+.reno-item:last-child { border-bottom: none; }
+.reno-item .ri-name { flex: 1; color: #000; }
+.reno-item .ri-type { font-size: 0.72rem; padding: 2px 8px; border-radius: 8px; font-weight: 600; margin: 0 8px; }
+.reno-item .ri-type.material { background: rgba(189,221,34,0.15); color: var(--accent-dark); }
+.reno-item .ri-type.labor { background: rgba(46,139,192,0.12); color: var(--lake-blue); }
+.reno-item .ri-amount { font-weight: 700; color: var(--accent-dark); min-width: 80px; text-align: right; }
+.reno-item .ri-actions { display: flex; gap: 4px; margin-left: 8px; }
+.reno-income-card { background: var(--card-gradient); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,250,0.60); border-radius: var(--radius); padding: 14px 18px; margin-bottom: 10px; box-shadow: 0 2px 8px var(--shadow); display: flex; justify-content: space-between; align-items: center; }
+.reno-summary-stat { background: var(--card-gradient); border: 1px solid rgba(255,255,250,0.60); border-radius: var(--radius-sm); padding: 16px; text-align: center; }
+.reno-summary-stat .rs-value { font-size: 1.4rem; font-weight: 700; }
+.reno-summary-stat .rs-label { font-size: 0.8rem; color: #000; margin-top: 4px; }
 </style>
 </head>
 <body>
@@ -713,6 +733,10 @@ td .badge { display: inline-block; padding: 4px 12px; border-radius: 20px; font-
       <svg viewBox="0 0 24 24"><path d="M20 5h-3.17L15 3H9L7.17 5H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z"/></svg>
       新媒体
     </div>
+    <div class="nav-item" data-tab="reno">
+      <svg viewBox="0 0 24 24"><path d="M22 7H2V5h20v2zm-1 2v11c0 .55-.45 1-1 1h-3v-7H7v7H4c-.55 0-1-.45-1-1V9h18zM9 17v3h6v-3H9z"/></svg>
+      装修记录
+    </div>
   </aside>
 
   <!-- Mobile Bottom Nav -->
@@ -740,6 +764,10 @@ td .badge { display: inline-block; padding: 4px 12px; border-radius: 20px; font-
     <div class="nav-item-mobile" data-tab="media">
       <svg viewBox="0 0 24 24"><path d="M20 5h-3.17L15 3H9L7.17 5H4c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm-8 13c-2.76 0-5-2.24-5-5s2.24-5 5-5 5 2.24 5 5-2.24 5-5 5z"/></svg>
       新媒体
+    </div>
+    <div class="nav-item-mobile" data-tab="reno">
+      <svg viewBox="0 0 24 24"><path d="M22 7H2V5h20v2zm-1 2v11c0 .55-.45 1-1 1h-3v-7H7v7H4c-.55 0-1-.45-1-1V9h18zM9 17v3h6v-3H9z"/></svg>
+      装修
     </div>
   </nav>
 
@@ -1047,6 +1075,42 @@ td .badge { display: inline-block; padding: 4px 12px; border-radius: 20px; font-
         <div class="history-card-grid" id="media-tools-list"></div>
       </div>
     </section>
+
+    <!-- ====== RENOVATION SECTION ====== -->
+    <section id="reno" class="section">
+      <div class="sub-tabs">
+        <div class="sub-tab active" data-subtab="reno-expense">支出记录</div>
+        <div class="sub-tab" data-subtab="reno-income">其他收入</div>
+        <div class="sub-tab" data-subtab="reno-summary">汇总</div>
+      </div>
+
+      <!-- Expense Sub-tab -->
+      <div class="sub-content active" id="sub-reno-expense">
+        <div class="flex-between mb-2">
+          <h3>装修支出</h3>
+          <div style="display:flex;gap:8px;">
+            <button class="btn btn-secondary btn-sm" onclick="openRenoCategoryModal()">+ 新建类别</button>
+            <button class="btn btn-primary btn-sm" onclick="openRenoItemModal()">+ 添加支出</button>
+          </div>
+        </div>
+        <div id="reno-category-list"></div>
+      </div>
+
+      <!-- Income Sub-tab -->
+      <div class="sub-content" id="sub-reno-income">
+        <div class="flex-between mb-2">
+          <h3>其他收入</h3>
+          <button class="btn btn-primary btn-sm" onclick="openRenoIncomeModal()">+ 添加收入</button>
+        </div>
+        <div id="reno-income-list"></div>
+      </div>
+
+      <!-- Summary Sub-tab -->
+      <div class="sub-content" id="sub-reno-summary">
+        <h3 style="margin-bottom:16px;">装修汇总</h3>
+        <div id="reno-summary-content"></div>
+      </div>
+    </section>
   </main>
 </div>
 
@@ -1108,7 +1172,7 @@ Resources:`;for(let t of c){if(!t||typeof t!=`string`)throw Error(`@supabase/aut
 </script>
 <script>
 /* ========================== DATA STORE ========================== */
-const STORE_KEYS = { clients:'wb_clients_v3', chains:'wb_chains_v3', books:'wb_books_v2', weights:'wb_weights_v2', height:'wb_height', exercise:'wb_exercise', history:'wb_history_progress', stages:'wb_stages', inspire_essays:'wb_essays', inspire_readings:'wb_readings', inspire_fragments:'wb_fragments', media_inspires:'wb_media_inspires', media_accounts:'wb_media_accounts' };
+const STORE_KEYS = { clients:'wb_clients_v3', chains:'wb_chains_v3', books:'wb_books_v2', weights:'wb_weights_v2', height:'wb_height', exercise:'wb_exercise', history:'wb_history_progress', stages:'wb_stages', inspire_essays:'wb_essays', inspire_readings:'wb_readings', inspire_fragments:'wb_fragments', media_inspires:'wb_media_inspires', media_accounts:'wb_media_accounts', reno_categories:'wb_reno_categories', reno_incomes:'wb_reno_incomes' };
 function loadData(k, f) { try { return JSON.parse(localStorage.getItem(k)) || f; } catch { return f; } }
 let _isLoadingFromCloud = false;
 let _syncTimer = null;
@@ -1201,6 +1265,88 @@ let readings = loadData(STORE_KEYS.inspire_readings, []);
 let fragments = loadData(STORE_KEYS.inspire_fragments, []);
 let mediaInspires = loadData(STORE_KEYS.media_inspires, []);
 let mediaAccounts = loadData(STORE_KEYS.media_accounts, []);
+
+/* ========================== RENOVATION DEFAULT DATA ========================== */
+const DEFAULT_RENO_CATEGORIES = [
+  { id: 'rc-rent', name: '租房', icon: '🏠', items: [
+    { id: 1, name: '房租1', type: 'material', amount: 3397, note: '' },
+    { id: 2, name: '房租2', type: 'material', amount: 3200, note: '' },
+    { id: 3, name: '房租3', type: 'material', amount: 2547.75, note: '' },
+    { id: 4, name: '房租4', type: 'material', amount: 2310, note: '' },
+    { id: 5, name: '水费', type: 'material', amount: 50, note: '' },
+    { id: 6, name: '水费', type: 'material', amount: 50, note: '' },
+    { id: 7, name: '电费', type: 'material', amount: 100, note: '' },
+    { id: 8, name: '燃气费', type: 'material', amount: 100, note: '' },
+    { id: 9, name: '烟', type: 'material', amount: 30, note: '' },
+    { id: 10, name: '水', type: 'material', amount: 7.9, note: '' },
+    { id: 11, name: '水', type: 'material', amount: 15.8, note: '' }
+  ]},
+  { id: 'rc-property', name: '物业费', icon: '📋', items: [
+    { id: 1, name: '物业费', type: 'material', amount: 271, note: '' },
+    { id: 2, name: '物业费', type: 'material', amount: 246, note: '' },
+    { id: 3, name: '物业费', type: 'material', amount: 245, note: '' },
+    { id: 4, name: '物业费', type: 'material', amount: 271.08, note: '' },
+    { id: 5, name: '装修物业管理费', type: 'material', amount: 2661.31, note: '一共' }
+  ]},
+  { id: 'rc-move', name: '搬家', icon: '🚚', items: [
+    { id: 1, name: '打包材料', type: 'material', amount: 60, note: '' },
+    { id: 2, name: '货拉拉搬家', type: 'material', amount: 80, note: '' },
+    { id: 3, name: '货拉拉', type: 'material', amount: 660, note: '另算120过路费+150搬运费' },
+    { id: 4, name: '过路费', type: 'material', amount: 120, note: '' },
+    { id: 5, name: '搬运费', type: 'labor', amount: 150, note: '' }
+  ]},
+  { id: 'rc-demolish', name: '拆除', icon: '🔨', items: [
+    { id: 1, name: '上门拆除柜体师傅', type: 'labor', amount: 220, note: '' },
+    { id: 2, name: '拆空调两台', type: 'labor', amount: 200, note: '' }
+  ]},
+  { id: 'rc-install', name: '安装', icon: '🔧', items: [
+    { id: 1, name: '老家安装柜子', type: 'labor', amount: 400, note: '' }
+  ]},
+  { id: 'rc-fire', name: '消防', icon: '🧯', items: [
+    { id: 1, name: '消防人工', type: 'labor', amount: 3500, note: '' },
+    { id: 2, name: '消防材料', type: 'material', amount: 240, note: '' }
+  ]},
+  { id: 'rc-plumb-elec', name: '水电', icon: '⚡', items: [
+    { id: 1, name: '水电人工', type: 'labor', amount: 3500, note: '' },
+    { id: 2, name: '水电材料', type: 'material', amount: 2456, note: '含运费' },
+    { id: 3, name: '水电材料补充', type: 'material', amount: 295, note: '' },
+    { id: 4, name: '波纹管', type: 'material', amount: 358, note: '电工材料' },
+    { id: 5, name: '地线', type: 'material', amount: 232, note: '电工材料' },
+    { id: 6, name: '墙固', type: 'material', amount: 80, note: '电工材料' }
+  ]},
+  { id: 'rc-mat', name: '建材', icon: '🧱', items: [
+    { id: 1, name: '3包水泥+一方机沙', type: 'material', amount: 301, note: '' },
+    { id: 2, name: '推车', type: 'material', amount: 98, note: '' },
+    { id: 3, name: '爬架', type: 'material', amount: 260, note: '' },
+    { id: 4, name: '铁网', type: 'material', amount: 22, note: '' }
+  ]},
+  { id: 'rc-carpentry', name: '木工', icon: '🪵', items: [
+    { id: 1, name: '实木板4张', type: 'material', amount: 248, note: '' },
+    { id: 2, name: '运输搬运', type: 'material', amount: 30, note: '木工材料' },
+    { id: 3, name: '木工材料1', type: 'material', amount: 1700, note: '' },
+    { id: 4, name: '木工材料2', type: 'material', amount: 670, note: '' },
+    { id: 5, name: '运费搬运', type: 'material', amount: 80, note: '主龙骨卖掉+60' },
+    { id: 6, name: '5张石膏板+运费', type: 'material', amount: 213, note: '' },
+    { id: 7, name: '木工人工', type: 'labor', amount: 5060, note: '' }
+  ]},
+  { id: 'rc-misc', name: '杂项', icon: '📦', items: [
+    { id: 1, name: '刀片+铲墙面刀', type: 'material', amount: 15, note: '' },
+    { id: 2, name: '隔音棉+扎带+阻尼片', type: 'material', amount: 74, note: '' }
+  ]}
+];
+const DEFAULT_RENO_INCOMES = [
+  { id: 1, name: '电竞桌卖出', amount: 150, note: '' },
+  { id: 2, name: '卖厕所门', amount: 100, note: '' },
+  { id: 3, name: '卖剩余钢和塑料', amount: 130, note: '' }
+];
+const RENO_SEED_VERSION = 'v1';
+let renoCategories = loadData(STORE_KEYS.reno_categories, DEFAULT_RENO_CATEGORIES);
+let renoIncomes = loadData(STORE_KEYS.reno_incomes, DEFAULT_RENO_INCOMES);
+if(localStorage.getItem('wb_reno_seed') !== RENO_SEED_VERSION) {
+  if(renoCategories.length === 0) { renoCategories = DEFAULT_RENO_CATEGORIES.slice(); saveData(STORE_KEYS.reno_categories, renoCategories); }
+  if(renoIncomes.length === 0) { renoIncomes = DEFAULT_RENO_INCOMES.slice(); saveData(STORE_KEYS.reno_incomes, renoIncomes); }
+  localStorage.setItem('wb_reno_seed', RENO_SEED_VERSION);
+}
 /* 清除旧版本测试数据 */
 ['wb_clients_v2','wb_chains_v2','wb_books','wb_weights'].forEach(k => { try { localStorage.removeItem(k); } catch(e){} });
 if(!localStorage.getItem(STORE_KEYS.stages)) saveData(STORE_KEYS.stages, stages);
@@ -1878,13 +2024,14 @@ function switchTab(tab) {
   document.querySelectorAll('.nav-item-mobile[data-tab="' + tab + '"]').forEach(n => n.classList.add('active'));
   document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
   $(tab).classList.add('active');
-  const titles = { home:'首页', inspire:'每日灵感', knowledge:'传统知识', skills:'能力提升', health:'身材管理', media:'新媒体运营' };
+  const titles = { home:'首页', inspire:'每日灵感', knowledge:'传统知识', skills:'能力提升', health:'身材管理', media:'新媒体运营', reno:'装修记录' };
   $('page-title').textContent = titles[tab];
   if(tab === 'home') { setTimeout(renderHomeStats, 50); }
   if(tab === 'knowledge') { renderPoetsByDynasty(); renderHistoryToday(); }
   if(tab === 'inspire') { renderEssays(); renderReadings(); renderFragments(); }
   if(tab === 'skills') { renderBooks(); renderAITips(); }
   if(tab === 'media') { renderMediaInspires(); renderMediaAccounts(); renderMediaTools(); }
+  if(tab === 'reno') { renderRenoCategories(); renderRenoIncomes(); renderRenoSummary(); }
   if(tab === 'health') { setTimeout(initWeightChart, 50); renderStages(); renderCalendar(); updateCompareSelects(); }
 }
 document.querySelectorAll('.nav-item').forEach(item => {
@@ -2797,6 +2944,241 @@ function deleteBook(id) {
   saveData(STORE_KEYS.books, books); renderBooks(); closeModal();
 }
 
+/* ========================== RENOVATION MODULE ========================== */
+function renderRenoCategories() {
+  var html = renoCategories.map(function(cat) {
+    var matTotal = cat.items.filter(function(i){return i.type==='material';}).reduce(function(s,i){return s+(parseFloat(i.amount)||0);},0);
+    var labTotal = cat.items.filter(function(i){return i.type==='labor';}).reduce(function(s,i){return s+(parseFloat(i.amount)||0);},0);
+    var catTotal = matTotal + labTotal;
+    var itemsHtml = cat.items.length ? cat.items.map(function(item, idx) {
+      return '<div class="reno-item">' +
+        '<span class="ri-name">' + item.name + (item.note ? ' <span style="font-size:0.75rem;color:#000;">(' + item.note + ')</span>' : '') + '</span>' +
+        '<span class="ri-type ' + item.type + '">' + (item.type==='material'?'材料':'人工') + '</span>' +
+        '<span class="ri-amount">¥' + (parseFloat(item.amount)||0).toFixed(2) + '</span>' +
+        '<div class="ri-actions">' +
+          '<button class="btn btn-secondary btn-sm" style="padding:4px 8px;font-size:0.72rem;min-height:28px;" onclick="editRenoItem(\'' + cat.id + '\',' + idx + ')">编辑</button>' +
+          '<button class="btn btn-danger btn-sm" style="padding:4px 8px;font-size:0.72rem;min-height:28px;" onclick="deleteRenoItem(\'' + cat.id + '\',' + idx + ')">删</button>' +
+        '</div>' +
+      '</div>';
+    }).join('') : '<p style="color:#000;font-size:0.85rem;padding:8px 0;">暂无记录</p>';
+    return '<div class="reno-cat-card">' +
+      '<div class="reno-cat-header">' +
+        '<div class="reno-cat-title">' + (cat.icon||'📁') + ' ' + cat.name +
+          '<div style="display:flex;gap:6px;margin-left:8px;">' +
+            '<button class="btn btn-secondary btn-sm" style="padding:3px 8px;font-size:0.7rem;min-height:26px;" onclick="editRenoCategory(\'' + cat.id + '\')">编辑类别</button>' +
+            '<button class="btn btn-danger btn-sm" style="padding:3px 8px;font-size:0.7rem;min-height:26px;" onclick="deleteRenoCategory(\'' + cat.id + '\')">删除类别</button>' +
+          '</div>' +
+        '</div>' +
+        '<div class="reno-cat-total">材料 ¥' + matTotal.toFixed(2) + ' | 人工 ¥' + labTotal.toFixed(2) + ' | 合计 ¥' + catTotal.toFixed(2) + '</div>' +
+      '</div>' +
+      itemsHtml +
+    '</div>';
+  }).join('');
+  $('reno-category-list').innerHTML = html || '<p style="color:#000;text-align:center;padding:20px;">暂无类别，点击右上角新建</p>';
+}
+
+function renderRenoIncomes() {
+  var total = renoIncomes.reduce(function(s,i){return s+(parseFloat(i.amount)||0);},0);
+  var html = '<div class="reno-cat-card" style="margin-bottom:14px;"><div class="reno-cat-header"><div class="reno-cat-title">💰 其他收入</div><div class="reno-cat-total">合计 ¥' + total.toFixed(2) + '</div></div>';
+  html += renoIncomes.length ? renoIncomes.map(function(item, idx) {
+    return '<div class="reno-item">' +
+      '<span class="ri-name">' + item.name + (item.note ? ' <span style="font-size:0.75rem;color:#000;">(' + item.note + ')</span>' : '') + '</span>' +
+      '<span class="ri-amount" style="color:var(--lake-blue);">+¥' + (parseFloat(item.amount)||0).toFixed(2) + '</span>' +
+      '<div class="ri-actions">' +
+        '<button class="btn btn-secondary btn-sm" style="padding:4px 8px;font-size:0.72rem;min-height:28px;" onclick="editRenoIncome(' + idx + ')">编辑</button>' +
+        '<button class="btn btn-danger btn-sm" style="padding:4px 8px;font-size:0.72rem;min-height:28px;" onclick="deleteRenoIncome(' + idx + ')">删</button>' +
+      '</div>' +
+    '</div>';
+  }).join('') : '<p style="color:#000;font-size:0.85rem;padding:8px 0;">暂无收入记录</p>';
+  html += '</div>';
+  $('reno-income-list').innerHTML = html;
+}
+
+function renderRenoSummary() {
+  var totalMat = 0, totalLab = 0, totalIncome = 0;
+  renoCategories.forEach(function(cat) {
+    cat.items.forEach(function(i) {
+      if(i.type === 'material') totalMat += parseFloat(i.amount)||0;
+      else totalLab += parseFloat(i.amount)||0;
+    });
+  });
+  renoIncomes.forEach(function(i) { totalIncome += parseFloat(i.amount)||0; });
+  var totalExpense = totalMat + totalLab;
+  var netCost = totalExpense - totalIncome;
+
+  var html = '<div class="quick-stats" style="margin-bottom:20px;">' +
+    '<div class="reno-summary-stat"><div class="rs-value" style="color:var(--accent-dark);">¥' + totalMat.toFixed(2) + '</div><div class="rs-label">材料总支出</div></div>' +
+    '<div class="reno-summary-stat"><div class="rs-value" style="color:var(--lake-blue);">¥' + totalLab.toFixed(2) + '</div><div class="rs-label">人工总支出</div></div>' +
+    '<div class="reno-summary-stat"><div class="rs-value" style="color:#1e6f9c;">+¥' + totalIncome.toFixed(2) + '</div><div class="rs-label">总收入</div></div>' +
+    '<div class="reno-summary-stat"><div class="rs-value" style="color:' + (netCost>0?'#d9534f':'var(--accent-dark)') + ';">¥' + netCost.toFixed(2) + '</div><div class="rs-label">净支出</div></div>' +
+  '</div>';
+
+  html += '<div class="glass-card"><h4 style="margin-bottom:12px;">各工种支出明细</h4>';
+  html += '<div class="table-wrap"><table><thead><tr><th>类别</th><th>材料</th><th>人工</th><th>合计</th></tr></thead><tbody>';
+  renoCategories.forEach(function(cat) {
+    var m = cat.items.filter(function(i){return i.type==='material';}).reduce(function(s,i){return s+(parseFloat(i.amount)||0);},0);
+    var l = cat.items.filter(function(i){return i.type==='labor';}).reduce(function(s,i){return s+(parseFloat(i.amount)||0);},0);
+    html += '<tr><td>' + (cat.icon||'📁') + ' ' + cat.name + '</td><td>¥' + m.toFixed(2) + '</td><td>¥' + l.toFixed(2) + '</td><td style="font-weight:700;">¥' + (m+l).toFixed(2) + '</td></tr>';
+  });
+  html += '<tr style="background:var(--accent-light);font-weight:700;"><td>合计</td><td>¥' + totalMat.toFixed(2) + '</td><td>¥' + totalLab.toFixed(2) + '</td><td>¥' + totalExpense.toFixed(2) + '</td></tr>';
+  html += '</tbody></table></div></div>';
+
+  $('reno-summary-content').innerHTML = html;
+}
+
+/* === Reno Modal Functions === */
+function openRenoItemModal() {
+  var catOptions = renoCategories.map(function(c){return '<option value="' + c.id + '">' + (c.icon||'📁') + ' ' + c.name + '</option>';}).join('');
+  $('modal-title').textContent = '添加装修支出';
+  $('modal-body').innerHTML =
+    '<div class="form-group"><label>类别</label><select id="m-reno-cat">' + catOptions + '</select></div>' +
+    '<div class="form-row"><div class="form-group"><label>名称 *</label><input type="text" id="m-reno-name" placeholder="例如：波纹管"></div>' +
+    '<div class="form-group"><label>类型</label><select id="m-reno-type"><option value="material">材料</option><option value="labor">人工</option></select></div></div>' +
+    '<div class="form-row"><div class="form-group"><label>金额 *</label><input type="number" id="m-reno-amount" placeholder="0.00" step="0.01"></div>' +
+    '<div class="form-group"><label>备注</label><input type="text" id="m-reno-note" placeholder="选填"></div></div>';
+  $('modal-confirm').onclick = function() {
+    var catId = $('m-reno-cat').value;
+    var name = $('m-reno-name').value.trim();
+    var type = $('m-reno-type').value;
+    var amount = parseFloat($('m-reno-amount').value);
+    var note = $('m-reno-note').value.trim();
+    if(!name) return alert('请填写名称');
+    if(!amount || amount <= 0) return alert('请填写有效金额');
+    var cat = renoCategories.find(function(c){return c.id===catId;});
+    if(!cat) return;
+    cat.items.push({ id: Date.now(), name: name, type: type, amount: amount, note: note });
+    saveData(STORE_KEYS.reno_categories, renoCategories);
+    renderRenoCategories(); renderRenoSummary(); closeModal();
+  };
+  $('modal-overlay').classList.add('show');
+}
+
+function editRenoItem(catId, idx) {
+  var cat = renoCategories.find(function(c){return c.id===catId;});
+  if(!cat || !cat.items[idx]) return;
+  var item = cat.items[idx];
+  $('modal-title').textContent = '编辑支出';
+  $('modal-body').innerHTML =
+    '<div class="form-group"><label>类别：' + (cat.icon||'📁') + ' ' + cat.name + '</label></div>' +
+    '<div class="form-row"><div class="form-group"><label>名称 *</label><input type="text" id="m-reno-name" value="' + item.name + '"></div>' +
+    '<div class="form-group"><label>类型</label><select id="m-reno-type"><option value="material" ' + (item.type==='material'?'selected':'') + '>材料</option><option value="labor" ' + (item.type==='labor'?'selected':'') + '>人工</option></select></div></div>' +
+    '<div class="form-row"><div class="form-group"><label>金额 *</label><input type="number" id="m-reno-amount" value="' + item.amount + '" step="0.01"></div>' +
+    '<div class="form-group"><label>备注</label><input type="text" id="m-reno-note" value="' + (item.note||'') + '"></div></div>';
+  $('modal-confirm').onclick = function() {
+    var name = $('m-reno-name').value.trim();
+    var type = $('m-reno-type').value;
+    var amount = parseFloat($('m-reno-amount').value);
+    var note = $('m-reno-note').value.trim();
+    if(!name) return alert('请填写名称');
+    if(!amount || amount <= 0) return alert('请填写有效金额');
+    cat.items[idx] = { id: item.id, name: name, type: type, amount: amount, note: note };
+    saveData(STORE_KEYS.reno_categories, renoCategories);
+    renderRenoCategories(); renderRenoSummary(); closeModal();
+  };
+  $('modal-overlay').classList.add('show');
+}
+
+function deleteRenoItem(catId, idx) {
+  if(!confirm('确定删除这条记录吗？')) return;
+  var cat = renoCategories.find(function(c){return c.id===catId;});
+  if(!cat) return;
+  cat.items.splice(idx, 1);
+  saveData(STORE_KEYS.reno_categories, renoCategories);
+  renderRenoCategories(); renderRenoSummary();
+}
+
+function openRenoCategoryModal() {
+  $('modal-title').textContent = '新建装修类别';
+  $('modal-body').innerHTML =
+    '<div class="form-row"><div class="form-group"><label>类别名称 *</label><input type="text" id="m-reno-cat-name" placeholder="例如：油漆"></div>' +
+    '<div class="form-group"><label>图标（emoji）</label><input type="text" id="m-reno-cat-icon" placeholder="🎨" value="📁"></div></div>';
+  $('modal-confirm').onclick = function() {
+    var name = $('m-reno-cat-name').value.trim();
+    if(!name) return alert('请填写类别名称');
+    var icon = $('m-reno-cat-icon').value.trim() || '📁';
+    renoCategories.push({ id: 'rc-' + Date.now(), name: name, icon: icon, items: [] });
+    saveData(STORE_KEYS.reno_categories, renoCategories);
+    renderRenoCategories(); renderRenoSummary(); closeModal();
+  };
+  $('modal-overlay').classList.add('show');
+}
+
+function editRenoCategory(catId) {
+  var cat = renoCategories.find(function(c){return c.id===catId;});
+  if(!cat) return;
+  $('modal-title').textContent = '编辑类别';
+  $('modal-body').innerHTML =
+    '<div class="form-row"><div class="form-group"><label>类别名称 *</label><input type="text" id="m-reno-cat-name" value="' + cat.name + '"></div>' +
+    '<div class="form-group"><label>图标（emoji）</label><input type="text" id="m-reno-cat-icon" value="' + (cat.icon||'📁') + '"></div></div>' +
+    '<div style="margin-top:12px;text-align:right;"><button class="btn btn-danger btn-sm" onclick="deleteRenoCategory(\'' + catId + '\')">删除此类别</button></div>';
+  $('modal-confirm').onclick = function() {
+    var name = $('m-reno-cat-name').value.trim();
+    if(!name) return alert('请填写类别名称');
+    cat.name = name;
+    cat.icon = $('m-reno-cat-icon').value.trim() || '📁';
+    saveData(STORE_KEYS.reno_categories, renoCategories);
+    renderRenoCategories(); renderRenoSummary(); closeModal();
+  };
+  $('modal-overlay').classList.add('show');
+}
+
+function deleteRenoCategory(catId) {
+  var cat = renoCategories.find(function(c){return c.id===catId;});
+  if(!cat) return;
+  var msg = cat.items.length > 0 ? '该类别下有 ' + cat.items.length + ' 条记录，确定删除整个类别吗？' : '确定删除此类别吗？';
+  if(!confirm(msg)) return;
+  renoCategories = renoCategories.filter(function(c){return c.id!==catId;});
+  saveData(STORE_KEYS.reno_categories, renoCategories);
+  renderRenoCategories(); renderRenoSummary(); closeModal();
+}
+
+function openRenoIncomeModal() {
+  $('modal-title').textContent = '添加收入';
+  $('modal-body').innerHTML =
+    '<div class="form-row"><div class="form-group"><label>名称 *</label><input type="text" id="m-reno-inc-name" placeholder="例如：卖废品"></div>' +
+    '<div class="form-group"><label>金额 *</label><input type="number" id="m-reno-inc-amount" placeholder="0.00" step="0.01"></div></div>' +
+    '<div class="form-group"><label>备注</label><input type="text" id="m-reno-inc-note" placeholder="选填"></div>';
+  $('modal-confirm').onclick = function() {
+    var name = $('m-reno-inc-name').value.trim();
+    var amount = parseFloat($('m-reno-inc-amount').value);
+    var note = $('m-reno-inc-note').value.trim();
+    if(!name) return alert('请填写名称');
+    if(!amount || amount <= 0) return alert('请填写有效金额');
+    renoIncomes.push({ id: Date.now(), name: name, amount: amount, note: note });
+    saveData(STORE_KEYS.reno_incomes, renoIncomes);
+    renderRenoIncomes(); renderRenoSummary(); closeModal();
+  };
+  $('modal-overlay').classList.add('show');
+}
+
+function editRenoIncome(idx) {
+  if(!renoIncomes[idx]) return;
+  var item = renoIncomes[idx];
+  $('modal-title').textContent = '编辑收入';
+  $('modal-body').innerHTML =
+    '<div class="form-row"><div class="form-group"><label>名称 *</label><input type="text" id="m-reno-inc-name" value="' + item.name + '"></div>' +
+    '<div class="form-group"><label>金额 *</label><input type="number" id="m-reno-inc-amount" value="' + item.amount + '" step="0.01"></div></div>' +
+    '<div class="form-group"><label>备注</label><input type="text" id="m-reno-inc-note" value="' + (item.note||'') + '"></div>';
+  $('modal-confirm').onclick = function() {
+    var name = $('m-reno-inc-name').value.trim();
+    var amount = parseFloat($('m-reno-inc-amount').value);
+    var note = $('m-reno-inc-note').value.trim();
+    if(!name) return alert('请填写名称');
+    if(!amount || amount <= 0) return alert('请填写有效金额');
+    renoIncomes[idx] = { id: item.id, name: name, amount: amount, note: note };
+    saveData(STORE_KEYS.reno_incomes, renoIncomes);
+    renderRenoIncomes(); renderRenoSummary(); closeModal();
+  };
+  $('modal-overlay').classList.add('show');
+}
+
+function deleteRenoIncome(idx) {
+  if(!confirm('确定删除这条收入记录吗？')) return;
+  renoIncomes.splice(idx, 1);
+  saveData(STORE_KEYS.reno_incomes, renoIncomes);
+  renderRenoIncomes(); renderRenoSummary();
+}
+
 /* ========================== HEALTH MODULE ========================== */
 $('w-date').value = todayStr();
 if(userHeight) $('w-height').value = userHeight;
@@ -3440,6 +3822,8 @@ async function syncFromCloud() {
   if (data.exercise_days) { exerciseDays = data.exercise_days; saveData(STORE_KEYS.exercise, exerciseDays); }
   if (data.history_progress !== undefined) { historyProgress = data.history_progress; saveData(STORE_KEYS.history, historyProgress); }
   if (data.stages) { stages = data.stages; saveData(STORE_KEYS.stages, stages); }
+  if (data.reno_categories) { renoCategories = data.reno_categories; saveData(STORE_KEYS.reno_categories, renoCategories); }
+  if (data.reno_incomes) { renoIncomes = data.reno_incomes; saveData(STORE_KEYS.reno_incomes, renoIncomes); }
   _isLoadingFromCloud = false;
 }
 
@@ -3483,7 +3867,9 @@ async function syncToCloud(silent) {
     height: userHeight,
     exercise_days: exerciseDays,
     history_progress: historyProgress,
-    stages: stages
+    stages: stages,
+    reno_categories: renoCategories,
+    reno_incomes: renoIncomes
   };
 
   const { data: existing } = await supabaseClient
@@ -3549,6 +3935,7 @@ function initApp() {
   renderBooks(); renderAITips();
   renderEssays(); renderReadings(); renderFragments();
   renderMediaInspires(); renderMediaAccounts(); renderMediaTools();
+  renderRenoCategories(); renderRenoIncomes(); renderRenoSummary();
   renderWeights(); initBMI(); renderStages(); renderCalendar(); updateCompareSelects();
   if (initSupabase()) showSyncButtons();
 }
