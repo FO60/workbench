@@ -11,11 +11,11 @@
 :root {
   --bg: #feffef;
   --bg2: rgba(255,255,250,0.88);
-  --ink: #558b2f;
+  --ink: #5a6e1a;
   --muted: #2E8BC0;
   --rule: rgba(46,139,192,0.10);
   --accent: #bddd22;
-  --accent-dark: #558b2f;
+  --accent-dark: #5a6e1a;
   --accent2: #2E8BC0;
   --accent-light: rgba(189,221,34,0.10);
   --accent2-light: rgba(46,139,192,0.08);
@@ -23,9 +23,10 @@
   --card: rgba(255,255,250,0.88);
   --lychee: #feffef;
   --tender-green: #bddd22;
-  --tender-green-dark: #558b2f;
+  --tender-green-dark: #5a6e1a;
   --lake-blue: #2E8BC0;
   --lake-blue-dark: #1e6f9c;
+  --card-gradient: linear-gradient(135deg, rgba(254,255,239,0.95), rgba(255,255,250,0.80));
   --radius: 20px;
   --radius-sm: 12px;
   --font: 'PingFang SC', 'Microsoft YaHei', 'Noto Sans SC', -apple-system, sans-serif;
@@ -97,11 +98,11 @@ body {
   display: flex; flex-direction: column; align-items: center; justify-content: center;
   gap: 4px; flex: 1; height: 100%;
   cursor: pointer; transition: all 0.2s;
-  color: var(--muted); font-size: 0.72rem; font-weight: 500;
+  color: #bddd22; font-size: 0.72rem; font-weight: 500;
   user-select: none;
 }
 .nav-item-mobile svg { width: 22px; height: 22px; fill: currentColor; }
-.nav-item-mobile.active { color: var(--accent-dark); font-weight: 700; }
+.nav-item-mobile.active { color: #5a6e1a; font-weight: 700; }
 .nav-item-mobile:active { transform: scale(0.95); }
 
 /* ====== Main Content ====== */
@@ -111,13 +112,13 @@ body {
 .date-badge {
   background: var(--bg2); backdrop-filter: blur(12px);
   border: 1px solid var(--rule); padding: 6px 14px;
-  border-radius: 20px; font-size: 0.85rem; color: var(--muted);
+  border-radius: 20px; font-size: 0.85rem; color: #000;
   box-shadow: 0 2px 8px var(--shadow);
 }
 
 /* ====== Glass Card ====== */
 .glass-card {
-  background: var(--bg2); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
+  background: var(--card-gradient); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px);
   border: 1px solid rgba(255,255,250,0.60); border-radius: var(--radius);
   padding: 22px; box-shadow: 0 2px 12px var(--shadow);
   transition: transform 0.3s cubic-bezier(0.4,0,0.2,1), box-shadow 0.3s;
@@ -209,7 +210,7 @@ body {
 /* ====== Forms ====== */
 .form-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; margin-bottom: 12px; }
 .form-group { display: flex; flex-direction: column; gap: 5px; }
-.form-group label { font-size: 0.8rem; font-weight: 600; color: var(--muted); }
+.form-group label { font-size: 0.8rem; font-weight: 600; color: #000; }
 .form-group input, .form-group select, .form-group textarea {
   padding: 10px 14px; border: 1px solid var(--rule); border-radius: var(--radius-sm);
   background: rgba(255,255,250,0.65); font-family: var(--font); font-size: 0.9rem;
@@ -229,10 +230,10 @@ th { font-weight: 600; color: var(--accent-dark); font-size: 0.78rem; text-trans
 tr:hover td { background: rgba(46,139,192,0.03); }
 td .badge { display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: 600; }
 .badge-a { background: rgba(30,111,156,0.12); color: #1e6f9c; }
-.badge-b { background: rgba(189,221,34,0.15); color: #558b2f; }
+.badge-b { background: rgba(189,221,34,0.15); color: #5a6e1a; }
 .badge-c { background: rgba(46,139,192,0.15); color: var(--lake-blue); }
 .badge-success { background: rgba(46,139,192,0.15); color: var(--lake-blue); }
-.badge-warn { background: rgba(189,221,34,0.15); color: #558b2f; }
+.badge-warn { background: rgba(189,221,34,0.15); color: #5a6e1a; }
 .badge-info { background: rgba(46,139,192,0.12); color: #2E8BC0; }
 .badge-gray { background: rgba(145,138,126,0.12); color: var(--muted); }
 
@@ -285,8 +286,8 @@ td .badge { display: inline-block; padding: 4px 12px; border-radius: 20px; font-
 .reminder-item:last-child { border-bottom: none; }
 .reminder-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); margin-top: 6px; flex-shrink: 0; }
 .reminder-content { flex: 1; }
-.reminder-title { font-weight: 600; color: var(--ink); font-size: 0.92rem; }
-.reminder-desc { font-size: 0.82rem; color: var(--muted); margin-top: 2px; line-height: 1.5; }
+.reminder-title { font-weight: 600; color: #000; font-size: 0.92rem; }
+.reminder-desc { font-size: 0.82rem; color: #000; margin-top: 2px; line-height: 1.5; }
 
 /* ====== Chain Checklist ====== */
 .checklist { display: grid; grid-template-columns: repeat(2, 1fr); gap: 8px; margin: 10px 0; }
@@ -315,7 +316,7 @@ td .badge { display: inline-block; padding: 4px 12px; border-radius: 20px; font-
 .client-cat-card .cat-badge.b { background: rgba(189,221,34,0.12); color: var(--accent2); }
 .client-cat-card .cat-badge.c { background: rgba(46,139,192,0.12); color: var(--accent-dark); }
 .client-cat-card .cat-name { font-weight: 600; color: var(--ink); margin-bottom: 4px; }
-.client-cat-card .cat-count { font-size: 0.8rem; color: var(--muted); }
+.client-cat-card .cat-count { font-size: 0.8rem; color: #000; }
 .client-cat-card .cat-next { font-size: 0.75rem; color: #1e6f9c; margin-top: 6px; }
 .client-list-item { display: flex; align-items: center; gap: 12px; padding: 14px; background: rgba(255,255,250,0.50); border: 1px solid var(--rule); border-radius: var(--radius-sm); margin-bottom: 10px; cursor: pointer; transition: all 0.2s; }
 .client-list-item:hover { background: var(--accent-light); border-color: var(--accent); }
@@ -325,13 +326,13 @@ td .badge { display: inline-block; padding: 4px 12px; border-radius: 20px; font-
 .client-list-item .cli-badge.c { background: rgba(46,139,192,0.12); color: var(--accent-dark); }
 .client-list-item .cli-info { flex: 1; }
 .client-list-item .cli-name { font-weight: 600; color: var(--ink); font-size: 0.92rem; }
-.client-list-item .cli-meta { font-size: 0.78rem; color: var(--muted); margin-top: 2px; }
+.client-list-item .cli-meta { font-size: 0.78rem; color: #000; margin-top: 2px; }
 .client-list-item .cli-arrow { color: var(--muted); font-size: 1.1rem; }
 .client-detail-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; gap: 10px; }
 .client-detail-header h4 { font-size: 1.1rem; color: var(--accent-dark); }
 .client-detail-section { margin-bottom: 18px; }
 .client-detail-section h5 { font-size: 0.85rem; color: var(--accent-dark); font-weight: 600; margin-bottom: 8px; }
-.client-detail-section p { font-size: 0.85rem; color: var(--muted); line-height: 1.7; }
+.client-detail-section p { font-size: 0.85rem; color: #000; line-height: 1.7; }
 .client-visit-item { background: rgba(255,255,250,0.50); border: 1px solid var(--rule); border-radius: var(--radius-sm); padding: 12px 14px; margin-bottom: 8px; }
 .client-visit-item .v-date { font-size: 0.75rem; color: var(--accent-dark); font-weight: 600; margin-bottom: 4px; }
 .client-visit-item .v-content { font-size: 0.85rem; color: var(--ink); line-height: 1.6; }
@@ -369,12 +370,12 @@ td .badge { display: inline-block; padding: 4px 12px; border-radius: 20px; font-
   border-bottom: 2px solid var(--rule);
 }
 .dynasty-name { font-size: 1.15rem; font-weight: 700; color: var(--accent-dark); }
-.dynasty-meta { font-size: 0.8rem; color: var(--muted); }
+.dynasty-meta { font-size: 0.8rem; color: #000; }
 .poet-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 18px; }
 @media (max-width: 600px) { .poet-grid { grid-template-columns: repeat(2, 1fr); gap: 12px; } }
 @media (max-width: 400px) { .poet-grid { grid-template-columns: 1fr; } }
 .poet-card {
-  background: var(--bg2); backdrop-filter: blur(16px);
+  background: var(--card-gradient); backdrop-filter: blur(16px);
   border: 1px solid rgba(255,255,250,0.60); border-radius: var(--radius);
   padding: 20px; cursor: pointer; transition: transform 0.3s cubic-bezier(0.4,0,0.2,1), box-shadow 0.3s, border-color 0.3s;
   box-shadow: 0 2px 12px var(--shadow); position: relative;
@@ -401,7 +402,7 @@ td .badge { display: inline-block; padding: 4px 12px; border-radius: 20px; font-
 
 /* ====== History Cards ====== */
 .history-card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 16px; }
-.history-card { background: var(--card); border: 1px solid var(--rule); border-radius: var(--radius); padding: 18px; cursor: pointer; transition: box-shadow 0.2s, border-color 0.2s; }
+.history-card { background: var(--card-gradient); border: 1px solid var(--rule); border-radius: var(--radius); padding: 18px; cursor: pointer; transition: box-shadow 0.2s, border-color 0.2s; }
 .history-card:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.06); border-color: rgba(46,139,192,0.35); }
 .history-card-header { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
 .history-card-num { min-width: 52px; text-align: center; font-size: 0.75rem; font-weight: 700; color: var(--accent-dark); background: var(--accent-light); padding: 4px 8px; border-radius: var(--radius-sm); }
@@ -425,7 +426,7 @@ td .badge { display: inline-block; padding: 4px 12px; border-radius: 20px; font-
 
 /* Deep History Cards */
 .deep-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(320px, 1fr)); gap: 16px; }
-.deep-card { background: var(--card); border: 1px solid var(--rule); border-radius: var(--radius); padding: 20px; cursor: pointer; transition: box-shadow 0.2s, border-color 0.2s; }
+.deep-card { background: var(--card-gradient); border: 1px solid var(--rule); border-radius: var(--radius); padding: 20px; cursor: pointer; transition: box-shadow 0.2s, border-color 0.2s; }
 .deep-card:hover { box-shadow: 0 4px 16px rgba(0,0,0,0.06); border-color: rgba(46,139,192,0.35); }
 .deep-card-header { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
 .deep-card-era { min-width: 60px; text-align: center; font-size: 0.75rem; font-weight: 700; color: #fff; background: var(--accent-dark); padding: 4px 8px; border-radius: var(--radius-sm); }
@@ -449,7 +450,7 @@ td .badge { display: inline-block; padding: 4px 12px; border-radius: 20px; font-
 
 /* ====== Learning Track ====== */
 .track-card {
-  background: var(--bg2); backdrop-filter: blur(16px);
+  background: var(--card-gradient); backdrop-filter: blur(16px);
   border: 1px solid rgba(255,255,250,0.60); border-radius: var(--radius);
   padding: 20px; margin-bottom: 16px; box-shadow: 0 2px 12px var(--shadow);
   transition: all 0.25s;
@@ -461,7 +462,7 @@ td .badge { display: inline-block; padding: 4px 12px; border-radius: 20px; font-
 .track-level-intermediate { background: rgba(189,221,34,0.15); color: #a8901a; }
 .track-level-advanced { background: rgba(30,111,156,0.12); color: #1e6f9c; }
 .track-card h4 { font-size: 1.05rem; color: var(--accent-dark); }
-.track-card .track-desc { font-size: 0.88rem; color: var(--muted); line-height: 1.7; margin-bottom: 10px; }
+.track-card .track-desc { font-size: 0.88rem; color: #000; line-height: 1.7; margin-bottom: 10px; }
 .track-card .track-topics { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 10px; }
 .track-card .topic-tag { font-size: 0.75rem; padding: 4px 10px; border-radius: 10px; background: var(--accent-light); color: var(--accent-dark); cursor: pointer; transition: all 0.2s; }
 .track-card .topic-tag:hover { background: var(--accent); color: #fff; transform: scale(1.05); }
@@ -472,15 +473,26 @@ td .badge { display: inline-block; padding: 4px 12px; border-radius: 20px; font-
 .track-card .track-video svg { width: 12px; height: 12px; fill: currentColor; }
 
 /* ====== Book Cards ====== */
+.book-grid-2 { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
 .book-card {
-  background: var(--bg2); backdrop-filter: blur(16px);
-  border: 1px solid rgba(255,255,250,0.60); border-radius: var(--radius);
-  padding: 18px; display: flex; flex-direction: column; gap: 10px;
-  box-shadow: 0 2px 12px var(--shadow);
+  border-radius: var(--radius-sm); cursor: pointer; overflow: hidden;
+  transition: all 0.25s; border: 1px solid rgba(255,255,250,0.60);
+  box-shadow: 0 2px 8px var(--shadow);
 }
-.book-card h4 { font-size: 1rem; color: var(--accent-dark); }
-.book-card .author { font-size: 0.8rem; color: var(--muted); }
-.book-card .book-type { font-size: 0.72rem; padding: 3px 8px; border-radius: 8px; background: var(--accent2-light); color: var(--accent2); font-weight: 600; display: inline-block; width: fit-content; }
+.book-card:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(46,139,192,0.12); }
+.book-card-header { padding: 12px 14px; display: flex; flex-direction: column; gap: 4px; }
+.book-card-header h4 { font-size: 0.88rem; color: var(--accent-dark); margin: 0; line-height: 1.3; }
+.book-card-header .author { font-size: 0.72rem; color: #000; }
+.book-card-bar { height: 5px; background: rgba(0,0,0,0.06); border-radius: 0; overflow: hidden; }
+.book-card-bar > div { height: 100%; border-radius: 0; transition: width 0.4s; }
+.book-card-pct { font-size: 0.7rem; font-weight: 700; padding: 2px 14px 4px; text-align: right; }
+.book-card-detail { display: none; padding: 14px; border-top: 1px solid var(--rule); background: rgba(254,255,239,0.60); }
+.book-card-detail.show { display: block; animation: fadeIn 0.3s; }
+.book-card-detail .detail-row { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; font-size: 0.8rem; }
+.book-card-detail .detail-row span:first-child { color: #000; }
+.book-card-detail .detail-actions { display: flex; gap: 8px; margin-top: 10px; }
+@media (max-width: 480px) { .book-grid-2 { gap: 10px; } .book-card-header { padding: 10px 12px; } .book-card-header h4 { font-size: 0.82rem; } }
+.book-card .book-type { font-size: 0.68rem; padding: 2px 6px; border-radius: 6px; background: var(--accent2-light); color: var(--accent2); font-weight: 600; display: inline-block; width: fit-content; }
 .book-progress { display: flex; align-items: center; gap: 10px; }
 .book-progress-bar { flex: 1; height: 6px; background: var(--accent-light); border-radius: 3px; overflow: hidden; }
 .book-progress-bar > div { height: 100%; background: linear-gradient(90deg, var(--tender-green), var(--lake-blue)); border-radius: 3px; transition: width 0.4s; }
@@ -494,10 +506,10 @@ td .badge { display: inline-block; padding: 4px 12px; border-radius: 20px; font-
 .bmi-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
 .bmi-header .bmi-big { text-align: left; }
 .bmi-header .bmi-big .bmi-value { font-size: 2.5rem; font-weight: 700; color: var(--accent-dark); line-height: 1; }
-.bmi-header .bmi-big .bmi-label { font-size: 0.8rem; color: var(--muted); margin-top: 4px; }
+.bmi-header .bmi-big .bmi-label { font-size: 0.8rem; color: #000; margin-top: 4px; }
 .bmi-header .bmi-rating { text-align: right; }
 .bmi-header .bmi-rating .bmi-status { font-size: 1.2rem; font-weight: 700; color: var(--accent-dark); }
-.bmi-header .bmi-rating .bmi-label { font-size: 0.8rem; color: var(--muted); margin-top: 4px; }
+.bmi-header .bmi-rating .bmi-label { font-size: 0.8rem; color: #000; margin-top: 4px; }
 .bmi-bar-wrap { position: relative; margin: 12px 0 4px; }
 .bmi-bar { display: flex; height: 14px; border-radius: 7px; overflow: hidden; }
 .bmi-bar-seg { flex: 1; }
@@ -509,19 +521,19 @@ td .badge { display: inline-block; padding: 4px 12px; border-radius: 20px; font-
 .bmi-bar-labels span { position: absolute; transform: translateX(-50%); font-size: 0.72rem; color: var(--muted); }
 .bmi-marker { position: absolute; top: -5px; width: 0; height: 0; border-left: 6px solid transparent; border-right: 6px solid transparent; border-top: 8px solid #333; transform: translateX(-50%); transition: left 0.3s; display: none; }
 .bmi-legend { display: flex; justify-content: center; gap: 16px; margin-top: 14px; flex-wrap: wrap; }
-.bmi-legend-item { display: flex; align-items: center; gap: 6px; font-size: 0.78rem; color: var(--muted); }
+.bmi-legend-item { display: flex; align-items: center; gap: 6px; font-size: 0.78rem; color: #000; }
 .bmi-legend-dot { width: 10px; height: 10px; border-radius: 3px; }
 
 /* ====== Stage Management ====== */
-.stage-card { background: var(--bg2); backdrop-filter: blur(16px); border: 1px solid rgba(255,255,250,0.60); border-radius: var(--radius); padding: 18px 20px; margin-bottom: 14px; box-shadow: 0 2px 12px var(--shadow); transition: all 0.25s; }
+.stage-card { background: var(--card-gradient); backdrop-filter: blur(16px); border: 1px solid rgba(255,255,250,0.60); border-radius: var(--radius); padding: 18px 20px; margin-bottom: 14px; box-shadow: 0 2px 12px var(--shadow); transition: all 0.25s; }
 .stage-card.current { border-color: var(--accent); box-shadow: 0 4px 20px rgba(46,139,192,0.2); }
 .stage-card.completed { opacity: 0.6; }
 .stage-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; flex-wrap: wrap; gap: 8px; }
 .stage-title { font-size: 1rem; font-weight: 700; color: var(--accent-dark); }
-.stage-dates { font-size: 0.8rem; color: var(--muted); }
+.stage-dates { font-size: 0.8rem; color: #000; }
 .stage-progress-bar { height: 8px; background: var(--accent-light); border-radius: 4px; overflow: hidden; margin: 8px 0; }
 .stage-progress-bar > div { height: 100%; background: linear-gradient(90deg, var(--accent), var(--accent-dark)); border-radius: 4px; transition: width 0.4s; }
-.stage-meta { display: flex; justify-content: space-between; font-size: 0.78rem; color: var(--muted); }
+.stage-meta { display: flex; justify-content: space-between; font-size: 0.78rem; color: #000; }
 .stage-day-badge { display: inline-flex; align-items: center; justify-content: center; padding: 2px 10px; border-radius: 10px; font-size: 0.75rem; font-weight: 600; }
 .stage-day-badge.current { background: var(--accent); color: #fff; }
 .stage-day-badge.upcoming { background: var(--accent2-light); color: var(--accent2); }
@@ -553,14 +565,14 @@ td .badge { display: inline-block; padding: 4px 12px; border-radius: 20px; font-
 .calendar-day.exercised { background: linear-gradient(135deg, rgba(46,139,192,0.2), rgba(189,221,34,0.1), rgba(46,139,192,0.05)); border-color: rgba(46,139,192,0.3); }
 .calendar-day.exercised::after { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--accent); position: absolute; bottom: 6px; }
 .calendar-day.has-weight::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--accent2); position: absolute; top: 6px; }
-.calendar-legend { display: flex; gap: 16px; margin-top: 14px; font-size: 0.8rem; color: var(--muted); }
+.calendar-legend { display: flex; gap: 16px; margin-top: 14px; font-size: 0.8rem; color: #000; }
 .calendar-legend span { display: flex; align-items: center; gap: 6px; }
 .calendar-legend .dot { width: 8px; height: 8px; border-radius: 50%; }
 
 /* ====== Date Compare ====== */
 .compare-result { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-top: 16px; }
 .compare-item { text-align: center; padding: 16px; background: rgba(255,255,250,0.40); border-radius: var(--radius-sm); border: 1px solid var(--rule); }
-.compare-item .compare-label { font-size: 0.8rem; color: var(--muted); margin-bottom: 6px; }
+.compare-item .compare-label { font-size: 0.8rem; color: #000; margin-bottom: 6px; }
 .compare-item .compare-val { font-size: 1.4rem; font-weight: 700; }
 .compare-item .compare-diff { font-size: 0.82rem; margin-top: 4px; }
 .diff-up { color: #1e6f9c; }
@@ -569,19 +581,19 @@ td .badge { display: inline-block; padding: 4px 12px; border-radius: 20px; font-
 
 /* ====== Homepage ====== */
 .quick-stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; margin-bottom: 20px; }
-.quick-stat { background: var(--bg2); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,250,0.60); border-radius: var(--radius); padding: 18px; text-align: center; box-shadow: 0 2px 12px var(--shadow); transition: transform 0.3s cubic-bezier(0.4,0,0.2,1), box-shadow 0.3s; cursor: default; }
+.quick-stat { background: var(--card-gradient); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,250,0.60); border-radius: var(--radius); padding: 18px; text-align: center; box-shadow: 0 2px 12px var(--shadow); transition: transform 0.3s cubic-bezier(0.4,0,0.2,1), box-shadow 0.3s; cursor: default; }
 .quick-stat:hover { transform: translateY(-3px); box-shadow: 0 8px 24px rgba(46,139,192,0.12); }
-.quick-stat .qs-icon { margin-bottom: 6px; display: flex; justify-content: center; }
+.quick-stat .qs-icon { margin-bottom: 6px; display: flex; justify-content: center; font-size: 1.8rem; line-height: 1; }
 .quick-stat .qs-value { font-size: 1.5rem; font-weight: 700; color: var(--accent-dark); }
-.quick-stat .qs-label { font-size: 0.78rem; color: var(--muted); margin-top: 2px; }
+.quick-stat .qs-label { font-size: 0.78rem; color: #000; margin-top: 2px; }
 .home-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 20px; }
 .home-grid.full { grid-template-columns: 1fr; }
-.summary-block { background: var(--bg2); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,250,0.60); border-radius: var(--radius); padding: 20px; box-shadow: 0 2px 12px var(--shadow); transition: transform 0.3s cubic-bezier(0.4,0,0.2,1), box-shadow 0.3s; }
+.summary-block { background: var(--card-gradient); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,250,0.60); border-radius: var(--radius); padding: 20px; box-shadow: 0 2px 12px var(--shadow); transition: transform 0.3s cubic-bezier(0.4,0,0.2,1), box-shadow 0.3s; }
 .summary-block:hover { box-shadow: 0 8px 24px rgba(46,139,192,0.10); transform: translateY(-2px); }
 .summary-block h4 { color: var(--accent-dark); margin-bottom: 12px; font-size: 1rem; }
 .summary-item { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px dashed var(--rule); font-size: 0.85rem; }
 .summary-item:last-child { border-bottom: none; }
-.summary-item .si-label { color: var(--muted); }
+.summary-item .si-label { color: #000; }
 .summary-item .si-val { font-weight: 600; color: var(--ink); }
 .news-tabs { display: flex; gap: 10px; margin-bottom: 16px; flex-wrap: wrap; }
 .news-tab { padding: 7px 20px; border-radius: 22px; font-size: 0.88rem; font-weight: 600; cursor: pointer; transition: all 0.25s ease; background: transparent; color: var(--accent-dark); border: 1.5px solid var(--accent-dark); user-select: none; }
@@ -612,7 +624,7 @@ td .badge { display: inline-block; padding: 4px 12px; border-radius: 20px; font-
 .psychology-detail { display: none; margin-top: 12px; padding-top: 12px; border-top: 1px dashed var(--rule); font-size: 0.85rem; color: var(--ink); line-height: 1.7; }
 .psychology-detail.show { display: block; animation: fadeIn 0.3s; }
 /* ====== Inspiration Cards ====== */
-.inspire-card { background: var(--bg2); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,250,0.60); border-radius: var(--radius); padding: 16px 20px; margin-bottom: 12px; box-shadow: 0 2px 12px var(--shadow); transition: transform 0.3s cubic-bezier(0.4,0,0.2,1), box-shadow 0.3s; }
+.inspire-card { background: var(--card-gradient); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,250,0.60); border-radius: var(--radius); padding: 16px 20px; margin-bottom: 12px; box-shadow: 0 2px 12px var(--shadow); transition: transform 0.3s cubic-bezier(0.4,0,0.2,1), box-shadow 0.3s; }
 .inspire-card:hover { box-shadow: 0 8px 24px rgba(46,139,192,0.12); transform: translateY(-2px); }
 .inspire-card .inspire-meta { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; font-size: 0.78rem; color: var(--muted); }
 .inspire-card .inspire-tag { padding: 2px 10px; border-radius: 10px; font-size: 0.72rem; font-weight: 600; }
@@ -656,17 +668,17 @@ td .badge { display: inline-block; padding: 4px 12px; border-radius: 20px; font-
     <div style="text-align:center;margin-bottom:20px;">
       <div style="margin-bottom:8px;"><svg viewBox="0 0 24 24" width="36" height="36" fill="none" stroke="var(--accent)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/><circle cx="12" cy="16" r="1.5"/></svg></div>
       <h3 style="color:var(--accent-dark);margin-bottom:4px;">数据同步登录</h3>
-      <p style="font-size:0.85rem;color:var(--muted);">输入访问码即可在多台设备间同步数据</p>
+      <p style="font-size:0.85rem;color:#000;">输入访问码即可在多台设备间同步数据</p>
     </div>
     <div class="form-group" style="margin-bottom:16px;">
-      <label style="font-size:0.8rem;font-weight:600;color:var(--muted);">访问码</label>
+      <label style="font-size:0.8rem;font-weight:600;color:#000;">访问码</label>
       <input type="text" id="access-code-input" placeholder="例如：yuyu2026" style="width:100%;padding:12px 14px;border:1px solid var(--rule);border-radius:var(--radius-sm);background:rgba(255,255,250,0.65);font-size:1rem;outline:none;">
-      <p style="font-size:0.75rem;color:var(--muted);margin-top:6px;">手机和电脑输入相同的访问码，数据会自动同步</p>
+      <p style="font-size:0.75rem;color:#000;margin-top:6px;">手机和电脑输入相同的访问码，数据会自动同步</p>
     </div>
     <button class="btn btn-primary" id="login-btn" onclick="doLogin()" style="width:100%;justify-content:center;padding:12px;">进入工作台</button>
     <div id="login-error" style="color:#1e6f9c;font-size:0.85rem;text-align:center;margin-top:12px;display:none;"></div>
     <div style="margin-top:16px;padding-top:16px;border-top:1px solid var(--rule);text-align:center;">
-      <p style="font-size:0.75rem;color:var(--muted);">首次使用请直接输入一个自己喜欢的访问码</p>
+      <p style="font-size:0.75rem;color:#000;">首次使用请直接输入一个自己喜欢的访问码</p>
     </div>
   </div>
 </div>
@@ -821,7 +833,7 @@ td .badge { display: inline-block; padding: 4px 12px; border-radius: 20px; font-
       <!-- Poets Sub-tab -->
       <div class="sub-content active" id="sub-poets">
         <div id="poet-list-view">
-          <p style="color:var(--muted);font-size:0.85rem;margin-bottom:16px;">按朝代排列，每周学习一位诗人，重要诗人安排更长学习时间。点击卡片查看详情、代表诗作及推荐视频。</p>
+          <p style="color:#000;font-size:0.85rem;margin-bottom:16px;">按朝代排列，每周学习一位诗人，重要诗人安排更长学习时间。点击卡片查看详情、代表诗作及推荐视频。</p>
           <div id="dynasty-list"></div>
         </div>
         <div id="poet-detail-view" class="poem-detail">
@@ -833,7 +845,7 @@ td .badge { display: inline-block; padding: 4px 12px; border-radius: 20px; font-
             </div>
             <p id="pd-dynasty" style="color:var(--accent2);font-weight:600;margin-bottom:12px;"></p>
             <p id="pd-era-position" style="background:var(--accent-light);padding:12px 16px;border-radius:var(--radius-sm);font-size:0.88rem;line-height:1.7;margin-bottom:14px;"></p>
-            <p id="pd-bio" style="line-height:1.8;color:var(--muted);margin-bottom:16px;"></p>
+            <p id="pd-bio" style="line-height:1.8;color:#000;margin-bottom:16px;"></p>
             <div class="week-plan" id="pd-plan"></div>
             <h4 style="margin-bottom:8px;">代表景点 / 足迹</h4>
             <div id="pd-places" class="mb-2" style="display:flex;gap:8px;flex-wrap:wrap;"></div>
@@ -849,7 +861,7 @@ td .badge { display: inline-block; padding: 4px 12px; border-radius: 20px; font-
         <div style="margin-bottom:16px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;">
           <div>
             <h3 style="margin-bottom:6px;">中国通史</h3>
-            <p style="color:var(--muted);font-size:0.85rem;margin:0;" id="history-mode-desc">8个章节可自由学习，点击卡片展开详情</p>
+            <p style="color:#000;font-size:0.85rem;margin:0;" id="history-mode-desc">8个章节可自由学习，点击卡片展开详情</p>
           </div>
           <div class="history-mode-switch">
             <button class="history-mode-btn active" id="history-mode-basic" onclick="switchHistoryMode('basic')">基础学习</button>
@@ -872,7 +884,7 @@ td .badge { display: inline-block; padding: 4px 12px; border-radius: 20px; font-
       <div class="sub-content active" id="sub-aitips">
         <div style="margin-bottom:16px;">
           <h3 style="margin-bottom:6px;">AI技巧库</h3>
-          <p style="color:var(--muted);font-size:0.85rem;margin:0;">点击顶部类别切换，每类按入门→进阶→精通排列，点击卡片展开查看详情和原文链接</p>
+          <p style="color:#000;font-size:0.85rem;margin:0;">点击顶部类别切换，每类按入门→进阶→精通排列，点击卡片展开查看详情和原文链接</p>
         </div>
         <div class="news-tabs" id="aitips-cat-tabs"></div>
         <div id="aitips-list"></div>
@@ -884,10 +896,10 @@ td .badge { display: inline-block; padding: 4px 12px; border-radius: 20px; font-
           <h3>我的阅读计划</h3>
           <button class="btn btn-primary btn-sm" onclick="openModal('book')">+ 添加书籍</button>
         </div>
-        <div class="grid-3 mb-3" id="book-grid"></div>
+        <div class="book-grid-2 mb-3" id="book-grid"></div>
         <div class="glass-card">
           <h3 style="margin-bottom:12px;">推荐文学读本</h3>
-          <p style="font-size:0.82rem;color:var(--muted);margin-bottom:14px;">以下书目与诗人学习、个人成长相互串联，建议穿插阅读。</p>
+          <p style="font-size:0.82rem;color:#000;margin-bottom:14px;">以下书目与诗人学习、个人成长相互串联，建议穿插阅读。</p>
           <div id="recommend-books"></div>
         </div>
       </div>
@@ -971,7 +983,7 @@ td .badge { display: inline-block; padding: 4px 12px; border-radius: 20px; font-
           <span><span class="dot" style="background:var(--accent2);"></span>有体重记录</span>
           <span><span class="dot" style="background:var(--accent);border:2px solid var(--accent-dark);"></span>今天</span>
         </div>
-        <div style="margin-top:14px;font-size:0.82rem;color:var(--muted);">点击任意日期可标记/取消该日运动状态</div>
+        <div style="margin-top:14px;font-size:0.82rem;color:#000;">点击任意日期可标记/取消该日运动状态</div>
       </div>
 
       <!-- Date Compare -->
@@ -1015,7 +1027,7 @@ td .badge { display: inline-block; padding: 4px 12px; border-radius: 20px; font-
           <h3>家具装修灵感库</h3>
           <button class="btn btn-primary btn-sm" onclick="openMediaModal('inspire')">+ 添加灵感</button>
         </div>
-        <p style="color:var(--muted);font-size:0.85rem;margin-bottom:16px;">收集热门笔记、爆款标题、拍摄灵感，为内容创作积累素材</p>
+        <p style="color:#000;font-size:0.85rem;margin-bottom:16px;">收集热门笔记、爆款标题、拍摄灵感，为内容创作积累素材</p>
         <div id="media-inspire-list"></div>
       </div>
 
@@ -1025,7 +1037,7 @@ td .badge { display: inline-block; padding: 4px 12px; border-radius: 20px; font-
           <h3>账号管理</h3>
           <button class="btn btn-primary btn-sm" onclick="openMediaModal('account')">+ 记录数据</button>
         </div>
-        <p style="color:var(--muted);font-size:0.85rem;margin-bottom:16px;">记录各平台账号数据变化，追踪运营效果</p>
+        <p style="color:#000;font-size:0.85rem;margin-bottom:16px;">记录各平台账号数据变化，追踪运营效果</p>
         <div id="media-account-list"></div>
       </div>
 
@@ -1071,7 +1083,7 @@ td .badge { display: inline-block; padding: 4px 12px; border-radius: 20px; font-
 })();
 </script>
 <script>
-(function(){var s=getComputedStyle(document.documentElement);var accent=s.getPropertyValue('--accent').trim()||'#2E8BC0';var accent2=s.getPropertyValue('--accent2').trim()||'#558b2f';var ink=s.getPropertyValue('--ink').trim()||'#2a2f3a';var muted=s.getPropertyValue('--muted').trim()||'#8a8e9a';var rule=s.getPropertyValue('--rule').trim()||'rgba(46,139,192,0.12)';var ci=null;function gW(w){return w.morning||w.bedtime||w.weight||0;}
+(function(){var s=getComputedStyle(document.documentElement);var accent=s.getPropertyValue('--accent').trim()||'#2E8BC0';var accent2=s.getPropertyValue('--accent2').trim()||'#5a6e1a';var ink=s.getPropertyValue('--ink').trim()||'#2a2f3a';var muted=s.getPropertyValue('--muted').trim()||'#8a8e9a';var rule=s.getPropertyValue('--rule').trim()||'rgba(46,139,192,0.12)';var ci=null;function gW(w){return w.morning||w.bedtime||w.weight||0;}
 window.initWeightChart=function(){var el=document.getElementById('weight-chart');if(!el)return;var ws=[];try{ws=JSON.parse(localStorage.getItem('wb_weights_v2'))||JSON.parse(localStorage.getItem('wb_weights'))||[];}catch(e){}if(ws.length===0){el.innerHTML='<p style="text-align:center;color:'+muted+';padding:40px 0;">暂无体重记录，请在左侧添加</p>';return;}ws.sort(function(a,b){return a.date.localeCompare(b.date);});var dates=ws.map(function(w){return w.date;});var mv=ws.map(function(w){return w.morning||null;});var bv=ws.map(function(w){return w.bedtime||null;});if(ci)ci.dispose();ci=echarts.init(el,null,{renderer:'svg'});var series=[];var hm=mv.some(function(v){return v!==null;});var hb=bv.some(function(v){return v!==null;});if(hm){series.push({name:'晨起空腹',type:'line',data:mv,smooth:true,symbol:'circle',symbolSize:8,connectNulls:true,lineStyle:{width:3,color:accent},itemStyle:{color:accent,borderColor:'#fff',borderWidth:2},areaStyle:{color:{type:'linear',x:0,y:0,x2:0,y2:1,colorStops:[{offset:0,color:accent+'30'},{offset:1,color:accent+'05'}]}}});}if(hb){series.push({name:'睡前',type:'line',data:bv,smooth:true,symbol:'circle',symbolSize:8,connectNulls:true,lineStyle:{width:3,color:accent2},itemStyle:{color:accent2,borderColor:'#fff',borderWidth:2}});}if(series.length===0){var vals=ws.map(function(w){return w.weight||0;});series.push({name:'体重',type:'line',data:vals,smooth:true,symbol:'circle',symbolSize:8,lineStyle:{width:3,color:accent},itemStyle:{color:accent,borderColor:'#fff',borderWidth:2},areaStyle:{color:{type:'linear',x:0,y:0,x2:0,y2:1,colorStops:[{offset:0,color:accent+'30'},{offset:1,color:accent+'05'}]}}});}ci.setOption({animation:false,tooltip:{trigger:'axis',appendToBody:true,backgroundColor:'rgba(255,255,250,0.92)',borderColor:rule,textStyle:{color:ink}},legend:{textStyle:{color:muted},bottom:0},grid:{left:'3%',right:'4%',bottom:'12%',top:'10%',containLabel:true},xAxis:{type:'category',boundaryGap:false,data:dates,axisLine:{lineStyle:{color:rule}},axisLabel:{color:muted}},yAxis:{type:'value',scale:true,axisLine:{show:false},splitLine:{lineStyle:{color:rule,type:'dashed'}},axisLabel:{color:muted,formatter:'{value} kg'}},series:series});window.addEventListener('resize',function(){ci&&ci.resize();});};document.addEventListener('DOMContentLoaded',function(){if(document.getElementById('health')&&document.getElementById('health').classList.contains('active')){setTimeout(window.initWeightChart,100);}});})();
 </script>
 <script>
@@ -2023,7 +2035,7 @@ function renderWeeklyReminder() {
     if(ds >= 7) reminders.push({ title:`跟进 ${ch.name}`, desc:`${ld?'已'+ds+'天未拜访':'尚未拜访'}。当前阶段：${ch.stage}。${genSmartChainNext(ch)}`, priority:ch.stage==='待签约'?1:ch.stage==='方案洽谈'?2:3 });
   });
   reminders.sort((a,b)=>a.priority-b.priority);
-  $('reminder-list').innerHTML = reminders.length ? reminders.map(r => `<div class="reminder-item"><div class="reminder-dot"></div><div class="reminder-content"><div class="reminder-title">${r.title}</div><div class="reminder-desc">${r.desc}</div></div></div>`).join('') : '<p style="color:var(--muted);font-size:0.88rem;">本周暂无待拜访客户，保持良好的节奏！</p>';
+  $('reminder-list').innerHTML = reminders.length ? reminders.map(r => `<div class="reminder-item"><div class="reminder-dot"></div><div class="reminder-content"><div class="reminder-title">${r.title}</div><div class="reminder-desc">${r.desc}</div></div></div>`).join('') : '<p style="color:#000;font-size:0.88rem;">本周暂无待拜访客户，保持良好的节奏！</p>';
 }
 let currentClientFilter = '';
 let currentClientCategory = '';
@@ -2073,7 +2085,7 @@ function filterClientSearch() {
   $('client-category-view').classList.add('hidden');
   $('client-list-view').classList.remove('hidden');
   $('client-detail-view').classList.add('hidden');
-  $('client-list-header').innerHTML = `<span>搜索结果："${$('client-search').value}"</span><span style="color:var(--muted);font-size:0.85rem;">共 ${matched.length} 家</span>`;
+  $('client-list-header').innerHTML = `<span>搜索结果："${$('client-search').value}"</span><span style="color:#000;font-size:0.85rem;">共 ${matched.length} 家</span>`;
   $('client-list').innerHTML = matched.map(c => {
     const info = genNextVisitInfo(c);
     const over = info.daysOver > 0;
@@ -2087,7 +2099,7 @@ function filterClientSearch() {
         <div class="cli-arrow">›</div>
       </div>
     `;
-  }).join('') || '<p style="color:var(--muted);text-align:center;padding:20px;">未找到匹配客户</p>';
+  }).join('') || '<p style="color:#000;text-align:center;padding:20px;">未找到匹配客户</p>';
 }
 
 function showClientCategoryView() {
@@ -2140,7 +2152,7 @@ function renderClientList() {
         <div class="cli-arrow">›</div>
       </div>
     `;
-  }).join('') || '<p style="color:var(--muted);text-align:center;padding:20px;">暂无该类客户</p>';
+  }).join('') || '<p style="color:#000;text-align:center;padding:20px;">暂无该类客户</p>';
 }
 
 function showClientDetail(cid) {
@@ -2179,7 +2191,7 @@ function showClientDetail(cid) {
     </div>
     <div class="client-detail-section">
       <h5>我们的药品</h5>
-      <div>${c.drugs.length ? c.drugs.map(d => `<span class="client-drug-tag">${d}</span>`).join('') : '<span style="color:var(--muted);font-size:0.85rem;">暂无药品</span>'}</div>
+      <div>${c.drugs.length ? c.drugs.map(d => `<span class="client-drug-tag">${d}</span>`).join('') : '<span style="color:#000;font-size:0.85rem;">暂无药品</span>'}</div>
     </div>
     <div class="client-detail-section">
       <h5>拜访记录（${c.visits.length} 次）</h5>
@@ -2192,7 +2204,7 @@ function showClientDetail(cid) {
             <button class="btn btn-danger btn-sm" onclick="deleteVisit(${c.id},${c.visits.length-1-i})">删除</button>
           </div>
         </div>
-      `).join('') : '<p style="color:var(--muted);font-size:0.85rem;">暂无拜访记录</p>'}
+      `).join('') : '<p style="color:#000;font-size:0.85rem;">暂无拜访记录</p>'}
     </div>
   `;
 }
@@ -2239,12 +2251,12 @@ function renderChains() {
     const items = [{key:'hasLearnedScale',label:'了解规模'},{key:'hasLearnedDecisionMaker',label:'确认决策人'},{key:'hasLearnedCompetitors',label:'了解竞品'},{key:'hasLearnedPainPoints',label:'了解痛点'},{key:'hasShownSamples',label:'已送样品'},{key:'hasDiscussedPrice',label:'价格谈判'},{key:'hasSigned',label:'已签约'}];
     return `<div class="glass-card mb-3" style="padding:18px;">
       <div class="flex-between mb-2"><div><h4 style="display:inline;">${ch.name}</h4> <span class="badge badge-info" style="margin-left:8px;">${ch.stage}</span></div><div><button class="btn btn-primary btn-sm" onclick="openChainVisitModal(${ch.id})">+ 记录拜访</button> <button class="btn btn-danger btn-sm" onclick="deleteItem('chains',${ch.id})">删除</button></div></div>
-      <p style="font-size:0.85rem;color:var(--muted);margin-bottom:10px;">联系人：${ch.contact} ${ch.phone?'| 电话：'+ch.phone:''} | 上次拜访：${ld}</p>
+      <p style="font-size:0.85rem;color:#000;margin-bottom:10px;">联系人：${ch.contact} ${ch.phone?'| 电话：'+ch.phone:''} | 上次拜访：${ld}</p>
       <div class="checklist">${items.map(ci=>`<label class="check-item ${ck[ci.key]?'done':''}"><input type="checkbox" ${ck[ci.key]?'checked':''} onchange="toggleChainCheck(${ch.id},'${ci.key}',this.checked)">${ci.label}</label>`).join('')}</div>
       ${ch.visitHistory.length?`<div style="margin-top:12px;"><strong style="font-size:0.85rem;color:var(--accent-dark);">拜访记录</strong>${ch.visitHistory.map(h=>`<div class="talk-bubble"><div class="talk-date">${h.date}</div><div><strong>谈了什么：</strong>${h.talked}</div><div style="margin-top:4px;"><strong>了解到：</strong>${h.learned}</div>${h.next?`<div class="talk-next">下次计划：${h.next}</div>`:''}</div>`).join('')}</div>`:''}
       <div class="smart-box"><div class="smart-title">智能下一步建议</div><div>${sn}</div></div>
     </div>`;
-  }).join('') || '<p style="color:var(--muted);text-align:center;padding:20px;">暂无连锁</p>';
+  }).join('') || '<p style="color:#000;text-align:center;padding:20px;">暂无连锁</p>';
 }
 function toggleChainCheck(id, key, checked) {
   const ch = chains.find(x=>x.id===id); if(!ch) return;
@@ -2309,7 +2321,7 @@ function showPoetDetail(idx) {
   $('pd-bio').textContent = poet.bio;
   $('pd-plan').innerHTML = `<div class="plan-title">本周学习计划</div>${poet.plan}`;
   $('pd-places').innerHTML = poet.places.map(pl=>`<span class="badge badge-info">${pl}</span>`).join('');
-  $('pd-poems').innerHTML = poet.poems.map(pm=>`<div class="poem-verse"><strong>${pm.title}</strong><p style="margin:8px 0;">${pm.content}</p><p style="font-size:0.82rem;color:var(--muted);">赏析：${pm.note}</p></div>`).join('');
+  $('pd-poems').innerHTML = poet.poems.map(pm=>`<div class="poem-verse"><strong>${pm.title}</strong><p style="margin:8px 0;">${pm.content}</p><p style="font-size:0.82rem;color:#000;">赏析：${pm.note}</p></div>`).join('');
   $('pd-videos').innerHTML = '<h4 style="margin-bottom:8px;">推荐观看</h4>' + poet.videos.map(v => `<a class="video-link" href="${v.url}" target="_blank" rel="noopener noreferrer" onclick="return openVideo('${v.url}')"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>${v.title}</a>`).join(' ');
 }
 function showPoetList() {
@@ -2346,7 +2358,7 @@ function renderEssays() {
       tagsHtml +
       '<div class="inspire-actions"><button class="btn btn-secondary btn-sm" onclick="editInspireItem(\'essay\',' + e.id + ')">编辑</button><button class="btn btn-danger btn-sm" onclick="deleteInspireItem(\'essay\',' + e.id + ')">删除</button></div>' +
     '</div>';
-  }).join('') : '<p style="color:var(--muted);text-align:center;padding:20px;">' + (essayFilterTag ? '该标签下还没有随笔' : '还没有写过随笔，点击右上角开始记录吧') + '</p>';
+  }).join('') : '<p style="color:#000;text-align:center;padding:20px;">' + (essayFilterTag ? '该标签下还没有随笔' : '还没有写过随笔，点击右上角开始记录吧') + '</p>';
 }
 function filterEssayTag(tag) { essayFilterTag = tag; renderEssays(); }
 
@@ -2360,7 +2372,7 @@ function renderReadings() {
       '<div class="inspire-content">' + e.content + '</div>' +
       '<div class="inspire-actions"><button class="btn btn-secondary btn-sm" onclick="editInspireItem(\'reading\',' + e.id + ')">编辑</button><button class="btn btn-danger btn-sm" onclick="deleteInspireItem(\'reading\',' + e.id + ')">删除</button></div>' +
     '</div>';
-  }).join('') : '<p style="color:var(--muted);text-align:center;padding:20px;">还没有读书笔记，点击右上角开始记录吧</p>';
+  }).join('') : '<p style="color:#000;text-align:center;padding:20px;">还没有读书笔记，点击右上角开始记录吧</p>';
 }
 
 function renderFragments() {
@@ -2372,7 +2384,7 @@ function renderFragments() {
       '<div class="inspire-content">' + e.content + '</div>' +
       '<div class="inspire-actions"><button class="btn btn-secondary btn-sm" onclick="editInspireItem(\'fragment\',' + e.id + ')">编辑</button><button class="btn btn-danger btn-sm" onclick="deleteInspireItem(\'fragment\',' + e.id + ')">删除</button></div>' +
     '</div>';
-  }).join('') : '<p style="color:var(--muted);text-align:center;padding:20px;">还没有知识碎片，点击右上角开始记录吧</p>';
+  }).join('') : '<p style="color:#000;text-align:center;padding:20px;">还没有知识碎片，点击右上角开始记录吧</p>';
 }
 
 function openInspireModal(type) {
@@ -2467,7 +2479,7 @@ function renderMediaInspires() {
       (e.link ? '<div style="margin-top:8px;"><a href="' + e.link + '" target="_blank" rel="noopener noreferrer" style="color:var(--accent-dark);font-size:0.8rem;font-weight:600;">查看原文 →</a></div>' : '') +
       '<div class="inspire-actions"><button class="btn btn-secondary btn-sm" onclick="editMediaItem(\'inspire\',' + e.id + ')">编辑</button><button class="btn btn-danger btn-sm" onclick="deleteMediaItem(\'inspire\',' + e.id + ')">删除</button></div>' +
     '</div>';
-  }).join('') : '<p style="color:var(--muted);text-align:center;padding:20px;">还没有灵感记录，点击右上角开始收集吧</p>';
+  }).join('') : '<p style="color:#000;text-align:center;padding:20px;">还没有灵感记录，点击右上角开始收集吧</p>';
 }
 
 function renderMediaAccounts() {
@@ -2481,10 +2493,10 @@ function renderMediaAccounts() {
         (e.likes ? '获赞：' + e.likes + '　' : '') +
         (e.views ? '播放：' + e.views : '') +
       '</div>' +
-      (e.remark ? '<div style="margin-top:8px;font-size:0.82rem;color:var(--muted);">' + e.remark + '</div>' : '') +
+      (e.remark ? '<div style="margin-top:8px;font-size:0.82rem;color:#000;">' + e.remark + '</div>' : '') +
       '<div class="inspire-actions"><button class="btn btn-secondary btn-sm" onclick="editMediaItem(\'account\',' + e.id + ')">编辑</button><button class="btn btn-danger btn-sm" onclick="deleteMediaItem(\'account\',' + e.id + ')">删除</button></div>' +
     '</div>';
-  }).join('') : '<p style="color:var(--muted);text-align:center;padding:20px;">还没有数据记录，开始追踪你的账号成长吧</p>';
+  }).join('') : '<p style="color:#000;text-align:center;padding:20px;">还没有数据记录，开始追踪你的账号成长吧</p>';
 }
 
 function renderMediaTools() {
@@ -2715,27 +2727,53 @@ function toggleDeepDetail(idx) {
 }
 
 /* ========================== BOOKS MODULE ========================== */
+function getBookCardStyle(pct) {
+  /* Color changes based on reading progress */
+  if(pct === 0) return { bg: 'rgba(255,255,250,0.50)', bar: '#ccc', pctColor: '#999' };
+  if(pct < 25) return { bg: 'rgba(189,221,34,0.08)', bar: '#bddd22', pctColor: '#5a6e1a' };
+  if(pct < 50) return { bg: 'rgba(189,221,34,0.15)', bar: '#bddd22', pctColor: '#5a6e1a' };
+  if(pct < 75) return { bg: 'rgba(189,221,34,0.22)', bar: '#8fb018', pctColor: '#5a6e1a' };
+  if(pct < 100) return { bg: 'rgba(189,221,34,0.30)', bar: '#5a6e1a', pctColor: '#5a6e1a' };
+  return { bg: 'rgba(90,110,26,0.15)', bar: '#5a6e1a', pctColor: '#5a6e1a' };
+}
 function renderBooks() {
-  $('book-grid').innerHTML = books.map(b => {
+  $('book-grid').innerHTML = books.map((b, idx) => {
     const pct = Math.round((b.current/b.total)*100);
-    return `<div class="book-card">
-      <div class="flex-between"><h4 style="margin:0">${b.title}</h4><div><button class="btn btn-secondary btn-sm" onclick="openBookEditModal(${b.id})">编辑</button></div></div>
-      <div class="author">${b.author} · ${b.total}页</div>
-      ${b.type ? `<span class="book-type">${b.type}</span>` : ''}
-      <div class="book-progress"><div class="book-progress-bar"><div style="width:${pct}%"></div></div><span style="font-size:0.8rem;min-width:40px;text-align:right;">${pct}%</span></div>
-      <div class="flex-between" style="margin-top:4px;"><span style="font-size:0.8rem;color:var(--muted);">已读 ${b.current} 页</span><button class="btn btn-primary btn-sm" onclick="updateBookProgress(${b.id})">更新进度</button></div>
+    const s = getBookCardStyle(pct);
+    return `<div class="book-card" style="background:${s.bg};" onclick="toggleBookDetail(${idx})">
+      <div class="book-card-header">
+        <h4>${b.title}${pct>=100?' ✅':''}</h4>
+        <div class="author">${b.author}${b.type ? ' · ' + b.type : ''}</div>
+      </div>
+      <div class="book-card-bar"><div style="width:${pct}%;background:${s.bar};"></div></div>
+      <div class="book-card-pct" style="color:${s.pctColor};">${pct}%</div>
+      <div class="book-card-detail" id="book-detail-${idx}" onclick="event.stopPropagation();">
+        <div class="detail-row"><span>总页数</span><span>${b.total} 页</span></div>
+        <div class="detail-row"><span>已读</span><span>${b.current} 页</span></div>
+        <div class="detail-row"><span>剩余</span><span>${b.total - b.current} 页</span></div>
+        <div class="detail-actions">
+          <button class="btn btn-primary btn-sm" onclick="updateBookProgress(${b.id})">更新进度</button>
+          <button class="btn btn-secondary btn-sm" onclick="openBookEditModal(${b.id})">编辑</button>
+          <button class="btn btn-danger btn-sm" onclick="deleteBook(${b.id})">删除</button>
+        </div>
+      </div>
     </div>`;
-  }).join('') || '<p style="color:var(--muted);grid-column:1/-1;text-align:center;">暂无书籍</p>';
+  }).join('') || '<p style="color:#000;grid-column:1/-1;text-align:center;">暂无书籍</p>';
   $('recommend-books').innerHTML = RECOMMEND_BOOKS.map(b => `
     <div style="display:flex;gap:12px;padding:12px 0;border-bottom:1px dashed var(--rule);">
       <div style="flex:1;">
         <strong style="color:var(--accent-dark);">${b.title}</strong>
-        <span style="font-size:0.8rem;color:var(--muted);margin-left:8px;">${b.author}</span>
+        <span style="font-size:0.8rem;color:#000;margin-left:8px;">${b.author}</span>
         <span class="book-type" style="margin-left:8px;">${b.type}</span>
-        <p style="font-size:0.82rem;color:var(--muted);margin-top:4px;">${b.reason}</p>
+        <p style="font-size:0.82rem;color:#000;margin-top:4px;">${b.reason}</p>
       </div>
     </div>
   `).join('');
+}
+function toggleBookDetail(idx) {
+  var detail = $('book-detail-' + idx);
+  if(!detail) return;
+  detail.classList.toggle('show');
 }
 function updateBookProgress(id) {
   const b = books.find(x=>x.id===id); if(!b) return;
@@ -2833,7 +2871,7 @@ function renderWeights() {
       }
     }
     return `<tr><td>${w.date}</td><td>${w.morning||'-'}</td><td>${w.bedtime||'-'}</td><td><span style="color:${bmiColor(bmi)};font-weight:600;">${bmi}</span></td><td>${diffHtml}</td><td><button class="btn btn-danger btn-sm" onclick="deleteItem('weights',${w.id})">删除</button></td></tr>`;
-  }).join('') || '<tr><td colspan="6" style="text-align:center;color:var(--muted)">暂无记录</td></tr>';
+  }).join('') || '<tr><td colspan="6" style="text-align:center;color:#000">暂无记录</td></tr>';
 }
 
 /* ========================== STAGE MANAGEMENT ========================== */
@@ -2879,7 +2917,7 @@ function renderStages() {
         <span>${pct}%</span>
       </div>
     </div>`;
-  }).join('') || '<p style="color:var(--muted);text-align:center;padding:20px;">暂无阶段，点击右上角添加</p>';
+  }).join('') || '<p style="color:#000;text-align:center;padding:20px;">暂无阶段，点击右上角添加</p>';
 }
 function deleteStage(id) {
   if(!confirm('确定删除此阶段？')) return;
@@ -2981,12 +3019,12 @@ function compareDates() {
     <div class="compare-item">
       <div class="compare-label">${a.date}</div>
       <div class="compare-val" style="color:var(--accent-dark);">${aW}</div>
-      <div class="compare-desc" style="font-size:0.78rem;color:var(--muted);">BMI ${calcBMI(aW, a.height)}</div>
+      <div class="compare-desc" style="font-size:0.78rem;color:#000;">BMI ${calcBMI(aW, a.height)}</div>
     </div>
     <div class="compare-item">
       <div class="compare-label">${b.date}</div>
       <div class="compare-val" style="color:var(--accent-dark);">${bW}</div>
-      <div class="compare-desc" style="font-size:0.78rem;color:var(--muted);">BMI ${calcBMI(bW, b.height)}</div>
+      <div class="compare-desc" style="font-size:0.78rem;color:#000;">BMI ${calcBMI(bW, b.height)}</div>
     </div>
     <div class="compare-item">
       <div class="compare-label">变化（${daysDiff}天）</div>
@@ -3002,7 +3040,7 @@ function openModal(type) {
   if(type === 'client') {
     $('modal-title').textContent = '添加客户';
     $('modal-body').innerHTML = `
-      <div style="background:var(--accent-light);border-radius:var(--radius-sm);padding:10px 14px;margin-bottom:14px;font-size:0.82rem;color:var(--muted);line-height:1.6;">
+      <div style="background:var(--accent-light);border-radius:var(--radius-sm);padding:10px 14px;margin-bottom:14px;font-size:0.82rem;color:#000;line-height:1.6;">
         <strong style="color:var(--accent-dark);">填写参考示例</strong><br>
         以下信息填写越完整，系统给出的拜访建议越专业精准。不确定的字段可留空，后续拜访中逐步补充。
       </div>
@@ -3238,10 +3276,10 @@ function renderHomeStats() {
   }
 
   $('quick-stats').innerHTML = `
-    <div class="quick-stat"><div class="qs-icon"><svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="var(--accent)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6"/><path d="M10 22h4"/><path d="M12 2a7 7 0 0 0-4 12.7c.6.5 1 1.2 1 2V17h6v-.3c0-.8.4-1.5 1-2A7 7 0 0 0 12 2z"/></svg></div><div class="qs-value">${essays.length + readings.length + fragments.length}</div><div class="qs-label">灵感记录</div></div>
-    <div class="quick-stat"><div class="qs-icon"><svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="var(--accent)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6.5 6.5h11"/><path d="M6.5 17.5h11"/><path d="M4 10h2v4H4z"/><path d="M18 10h2v4h-2z"/><path d="M6 12h12"/></svg></div><div class="qs-value">${exerciseThisMonth}</div><div class="qs-label">本月运动天数</div></div>
-    <div class="quick-stat"><div class="qs-icon"><svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="var(--accent)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"/><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"/></svg></div><div class="qs-value">${booksRead}</div><div class="qs-label">已读完书籍</div></div>
-    <div class="quick-stat" style="${weightLoss==='--'?'opacity:0.5':''}"><div class="qs-icon"><svg viewBox="0 0 24 24" width="28" height="28" fill="none" stroke="var(--accent)" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v18"/><path d="M5 8h14"/><circle cx="12" cy="5" r="2"/><path d="M5 8c0 4 3 7 7 7s7-3 7-7"/></svg></div><div class="qs-value ${weightLossClass}">${weightLoss}kg</div><div class="qs-label">累计体重变化</div></div>
+    <div class="quick-stat"><div class="qs-icon">🥦</div><div class="qs-value">${essays.length + readings.length + fragments.length}</div><div class="qs-label">灵感记录</div></div>
+    <div class="quick-stat"><div class="qs-icon">🥝</div><div class="qs-value">${exerciseThisMonth}</div><div class="qs-label">本月运动天数</div></div>
+    <div class="quick-stat"><div class="qs-icon">🥥</div><div class="qs-value">${booksRead}</div><div class="qs-label">已读完书籍</div></div>
+    <div class="quick-stat" style="${weightLoss==='--'?'opacity:0.5':''}"><div class="qs-icon">🍅</div><div class="qs-value ${weightLossClass}">${weightLoss}kg</div><div class="qs-label">累计体重变化</div></div>
   `;
 
   // Weekly plan
@@ -3262,9 +3300,9 @@ function renderHomeStats() {
   $('weekly-plan').innerHTML = weekPlanItems.length ? weekPlanItems.map((r,i) => `
     <div class="summary-item">
       <span class="si-label">${i+1}. ${r.title}</span>
-      <span class="si-val" style="font-size:0.8rem;color:var(--muted);">${r.desc.slice(0,30)}...</span>
+      <span class="si-val" style="font-size:0.8rem;color:#000;">${r.desc.slice(0,30)}...</span>
     </div>
-  `).join('') : '<p style="color:var(--muted);font-size:0.85rem;text-align:center;padding:12px;">本周暂无紧急待办，保持节奏！</p>';
+  `).join('') : '<p style="color:#000;font-size:0.85rem;text-align:center;padding:12px;">本周暂无紧急待办，保持节奏！</p>';
 
   // Monthly summary
   const totalClients = clients.length;
@@ -3311,7 +3349,7 @@ function renderNewsByCategory(cat) {
       '<div class="news-meta"><span class="news-source">' + n.source + '</span><span>' + n.date + '</span><a class="news-link" href="' + n.url + '" target="_blank" rel="noopener noreferrer">查看原文 →</a></div>' +
     '</div>';
   }).join('');
-  $('news-cards').innerHTML = cards || '<p style="color:var(--muted);text-align:center;padding:20px;">暂无该类别新闻</p>';
+  $('news-cards').innerHTML = cards || '<p style="color:#000;text-align:center;padding:20px;">暂无该类别新闻</p>';
 }
 
 function renderPsychology() {
