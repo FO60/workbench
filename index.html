@@ -19,6 +19,7 @@
   --accent-light: rgba(139,154,130,0.12);
   --accent2-light: rgba(184,149,128,0.12);
   --shadow: rgba(139,154,130,0.08);
+  --card: rgba(250,247,243,0.80);
   --radius: 16px;
   --radius-sm: 10px;
   --font: 'PingFang SC', 'Microsoft YaHei', 'Noto Sans SC', -apple-system, sans-serif;
@@ -1063,6 +1064,8 @@ const STORE_KEYS = { clients:'wb_clients_v3', chains:'wb_chains_v3', books:'wb_b
 function loadData(k, f) { try { return JSON.parse(localStorage.getItem(k)) || f; } catch { return f; } }
 let _isLoadingFromCloud = false;
 let _syncTimer = null;
+let supabaseClient = null;
+let currentAccessCode = localStorage.getItem('wb_access_code') || '';
 function autoSyncToCloud() {
   if (!supabaseClient || !currentAccessCode) return;
   clearTimeout(_syncTimer);
@@ -1774,6 +1777,7 @@ function switchTab(tab) {
   const titles = { home:'首页', inspire:'每日灵感', knowledge:'传统知识', skills:'能力提升', health:'身材管理', media:'新媒体运营' };
   $('page-title').textContent = titles[tab];
   if(tab === 'home') { setTimeout(renderHomeStats, 50); }
+  if(tab === 'knowledge') { renderPoetsByDynasty(); renderHistoryToday(); }
   if(tab === 'inspire') { renderEssays(); renderReadings(); renderFragments(); }
   if(tab === 'skills') { renderBooks(); renderAITips(); }
   if(tab === 'media') { renderMediaInspires(); renderMediaAccounts(); renderMediaTools(); }
@@ -1932,9 +1936,9 @@ let currentClientCategory = '';
 
 function renderClients() {
   const tm = clients.filter(c => c.visits.some(v => v.date.startsWith(todayStr().slice(0,7)))).length;
-  $('stat-visits').textContent = tm;
-  $('stat-a').textContent = clients.filter(c=>c.category==='A').length;
-  $('stat-chains').textContent = chains.length;
+  if($('stat-visits')) $('stat-visits').textContent = tm;
+  if($('stat-a')) $('stat-a').textContent = clients.filter(c=>c.category==='A').length;
+  if($('stat-chains')) $('stat-chains').textContent = chains.length;
   renderClientCategoryCards();
 }
 
@@ -3159,8 +3163,6 @@ function togglePsychologyDetail() {
 // Supabase 项目配置
 const SUPABASE_URL = 'https://qbodtvgqrbgzhzgaedoi.supabase.co';
 const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InFib2R0dmdxcmJnemh6Z2FlZG9pIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODUxNDE3NzksImV4cCI6MjEwMDcxNzc3OX0.7cFzpaBMDSXh1J2ztOZdLFcGqa-O-Iwai5wevx4Ak5Y';
-let supabaseClient = null;
-let currentAccessCode = localStorage.getItem('wb_access_code') || '';
 
 function initSupabase() {
   if (typeof supabase !== 'undefined' && !SUPABASE_URL.includes('YOUR_')) {
