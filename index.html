@@ -593,6 +593,12 @@ td .badge { display: inline-block; padding: 4px 12px; border-radius: 20px; font-
 .inspire-card .inspire-content { font-size: 0.88rem; color: var(--ink); line-height: 1.8; white-space: pre-wrap; }
 .inspire-card .inspire-book { font-size: 0.8rem; color: var(--accent-dark); margin-top: 8px; font-weight: 600; }
 .inspire-card .inspire-actions { margin-top: 10px; display: flex; gap: 8px; }
+.essay-tags-filter { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 14px; }
+.essay-tag-chip { padding: 5px 14px; border-radius: 18px; font-size: 0.82rem; font-weight: 600; cursor: pointer; transition: all 0.2s ease; background: transparent; color: var(--accent-dark); border: 1.5px solid var(--accent-dark); user-select: none; }
+.essay-tag-chip:hover:not(.active) { background: var(--accent-light); }
+.essay-tag-chip.active { background: var(--accent-dark); color: #f5f2ed; border-color: transparent; }
+.essay-item-tags { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 8px; }
+.essay-item-tag { font-size: 0.72rem; padding: 2px 10px; border-radius: 12px; background: var(--accent-light); color: var(--accent-dark); font-weight: 500; }
 .news-card .news-tag { font-size: 0.7rem; padding: 2px 8px; border-radius: 8px; background: var(--accent-light); color: var(--accent-dark); }
 @media (max-width: 900px) { .quick-stats { grid-template-columns: repeat(2, 1fr); } .home-grid { grid-template-columns: 1fr; } }
 
@@ -752,6 +758,7 @@ td .badge { display: inline-block; padding: 4px 12px; border-radius: 20px; font-
           <h3>我的随笔</h3>
           <button class="btn btn-primary btn-sm" onclick="openInspireModal('essay')">+ 写随笔</button>
         </div>
+        <div id="essay-tags-filter" class="essay-tags-filter"></div>
         <div id="essay-list"></div>
       </div>
 
@@ -827,12 +834,22 @@ td .badge { display: inline-block; padding: 4px 12px; border-radius: 20px; font-
     <!-- ====== SKILLS SECTION ====== -->
     <section id="skills" class="section">
       <div class="sub-tabs">
-        <div class="sub-tab active" data-subtab="books">书本</div>
-        <div class="sub-tab" data-subtab="aitips">AI技巧</div>
+        <div class="sub-tab active" data-subtab="aitips">AI技巧</div>
+        <div class="sub-tab" data-subtab="books">书本</div>
+      </div>
+
+      <!-- AI Tips Sub-tab -->
+      <div class="sub-content active" id="sub-aitips">
+        <div style="margin-bottom:16px;">
+          <h3 style="margin-bottom:6px;">AI技巧库</h3>
+          <p style="color:var(--muted);font-size:0.85rem;margin:0;">点击顶部类别切换，每类按入门→进阶→精通排列，点击卡片展开查看详情和原文链接</p>
+        </div>
+        <div class="news-tabs" id="aitips-cat-tabs"></div>
+        <div id="aitips-list"></div>
       </div>
 
       <!-- Books Sub-tab -->
-      <div class="sub-content active" id="sub-books">
+      <div class="sub-content" id="sub-books">
         <div class="flex-between mb-2">
           <h3>我的阅读计划</h3>
           <button class="btn btn-primary btn-sm" onclick="openModal('book')">+ 添加书籍</button>
@@ -843,17 +860,6 @@ td .badge { display: inline-block; padding: 4px 12px; border-radius: 20px; font-
           <p style="font-size:0.82rem;color:var(--muted);margin-bottom:14px;">以下书目与诗人学习、个人成长相互串联，建议穿插阅读。</p>
           <div id="recommend-books"></div>
         </div>
-      </div>
-
-      <!-- AI Tips Sub-tab -->
-      <div class="sub-content" id="sub-aitips">
-        <div style="margin-bottom:16px;display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px;">
-          <div>
-            <h3 style="margin-bottom:6px;">AI技巧库</h3>
-            <p style="color:var(--muted);font-size:0.85rem;margin:0;">每日推荐AI实用技巧，从入门到进阶，点击卡片展开查看详情</p>
-          </div>
-        </div>
-        <div id="aitips-list"></div>
       </div>
     </section>
 
@@ -2229,17 +2235,32 @@ function openVideo(url) {
 }
 
 /* ========================== INSPIRATION MODULE ========================== */
+var essayFilterTag = '';
 function renderEssays() {
-  var sorted = essays.slice().sort(function(a,b) { return b.date.localeCompare(a.date); });
+  // Collect all tags
+  var allTags = [];
+  essays.forEach(function(e) { if(e.tags) e.tags.forEach(function(t) { if(allTags.indexOf(t) === -1) allTags.push(t); }); });
+  // Render tag filter
+  var filterHtml = '<div class="essay-tag-chip' + (essayFilterTag === '' ? ' active' : '') + '" data-etag="" onclick="filterEssayTag(\'\')">全部</div>';
+  allTags.forEach(function(t) {
+    filterHtml += '<div class="essay-tag-chip' + (essayFilterTag === t ? ' active' : '') + '" data-etag="' + t + '" onclick="filterEssayTag(\'' + t.replace(/'/g,"\\'") + '\')">' + t + '</div>';
+  });
+  if($('essay-tags-filter')) $('essay-tags-filter').innerHTML = filterHtml;
+  // Filter essays
+  var filtered = essayFilterTag ? essays.filter(function(e) { return e.tags && e.tags.indexOf(essayFilterTag) !== -1; }) : essays;
+  var sorted = filtered.slice().sort(function(a,b) { return b.date.localeCompare(a.date); });
   $('essay-list').innerHTML = sorted.length ? sorted.map(function(e) {
+    var tagsHtml = (e.tags && e.tags.length) ? '<div class="essay-item-tags">' + e.tags.map(function(t) { return '<span class="essay-item-tag">' + t + '</span>'; }).join('') + '</div>' : '';
     return '<div class="inspire-card">' +
       '<div class="inspire-meta"><span class="inspire-tag essay">随笔</span><span>' + e.date + '</span></div>' +
       (e.title ? '<div class="inspire-title">' + e.title + '</div>' : '') +
       '<div class="inspire-content">' + e.content + '</div>' +
+      tagsHtml +
       '<div class="inspire-actions"><button class="btn btn-secondary btn-sm" onclick="editInspireItem(\'essay\',' + e.id + ')">编辑</button><button class="btn btn-danger btn-sm" onclick="deleteInspireItem(\'essay\',' + e.id + ')">删除</button></div>' +
     '</div>';
-  }).join('') : '<p style="color:var(--muted);text-align:center;padding:20px;">还没有写过随笔，点击右上角开始记录吧</p>';
+  }).join('') : '<p style="color:var(--muted);text-align:center;padding:20px;">' + (essayFilterTag ? '该标签下还没有随笔' : '还没有写过随笔，点击右上角开始记录吧') + '</p>';
 }
+function filterEssayTag(tag) { essayFilterTag = tag; renderEssays(); }
 
 function renderReadings() {
   var sorted = readings.slice().sort(function(a,b) { return b.date.localeCompare(a.date); });
@@ -2270,9 +2291,11 @@ function openInspireModal(type) {
   var titles = { essay:'写随笔', reading:'添加读书笔记', fragment:'记录知识碎片' };
   $('modal-title').textContent = titles[type];
   var bookField = type === 'reading' ? '<div class="form-group"><label>出自哪本书</label><input type="text" id="m-inspire-book" placeholder="书名（选填）"></div>' : '';
+  var tagField = type === 'essay' ? '<div class="form-group"><label>标签</label><input type="text" id="m-inspire-tags" placeholder="多个标签用逗号分隔，如：生活,感悟,职场"></div>' : '';
   $('modal-body').innerHTML =
     '<div class="form-group"><label>标题</label><input type="text" id="m-inspire-title" placeholder="标题（选填）"></div>' +
     bookField +
+    tagField +
     '<div class="form-group"><label>内容</label><textarea id="m-inspire-content" rows="8" style="width:100%;padding:12px;border:1px solid var(--rule);border-radius:var(--radius-sm);font-size:0.9rem;resize:vertical;" placeholder="写下你的想法..."></textarea></div>' +
     '<div class="form-group"><label>日期</label><input type="date" id="m-inspire-date" value="' + todayStr() + '"></div>';
   $('modal-confirm').onclick = function() {
@@ -2282,7 +2305,11 @@ function openInspireModal(type) {
     var date = $('m-inspire-date').value || todayStr();
     var item = { id: Date.now(), title: title, content: content, date: date };
     if(type === 'reading') { item.book = $('m-inspire-book') ? $('m-inspire-book').value.trim() : ''; readings.push(item); saveData(STORE_KEYS.inspire_readings, readings); renderReadings(); }
-    else if(type === 'essay') { essays.push(item); saveData(STORE_KEYS.inspire_essays, essays); renderEssays(); }
+    else if(type === 'essay') {
+      var tagStr = $('m-inspire-tags') ? $('m-inspire-tags').value.trim() : '';
+      item.tags = tagStr ? tagStr.split(/[,，]/).map(function(t){return t.trim();}).filter(function(t){return t;}) : [];
+      essays.push(item); saveData(STORE_KEYS.inspire_essays, essays); renderEssays();
+    }
     else { fragments.push(item); saveData(STORE_KEYS.inspire_fragments, fragments); renderFragments(); }
     closeModal();
   };
@@ -2299,9 +2326,11 @@ function editInspireItem(type, id) {
   var titles = { essay:'编辑随笔', reading:'编辑读书笔记', fragment:'编辑知识碎片' };
   $('modal-title').textContent = titles[type];
   var bookField = type === 'reading' ? '<div class="form-group"><label>出自哪本书</label><input type="text" id="m-inspire-book" value="' + (item.book||'') + '" placeholder="书名（选填）"></div>' : '';
+  var tagField = type === 'essay' ? '<div class="form-group"><label>标签</label><input type="text" id="m-inspire-tags" value="' + (item.tags ? item.tags.join(',') : '') + '" placeholder="多个标签用逗号分隔"></div>' : '';
   $('modal-body').innerHTML =
     '<div class="form-group"><label>标题</label><input type="text" id="m-inspire-title" value="' + (item.title||'') + '"></div>' +
     bookField +
+    tagField +
     '<div class="form-group"><label>内容</label><textarea id="m-inspire-content" rows="8" style="width:100%;padding:12px;border:1px solid var(--rule);border-radius:var(--radius-sm);font-size:0.9rem;resize:vertical;">' + (item.content||'') + '</textarea></div>' +
     '<div class="form-group"><label>日期</label><input type="date" id="m-inspire-date" value="' + (item.date||todayStr()) + '"></div>';
   $('modal-confirm').onclick = function() {
@@ -2310,6 +2339,7 @@ function editInspireItem(type, id) {
     if(!item.content) { alert('请填写内容'); return; }
     item.date = $('m-inspire-date').value || todayStr();
     if(type === 'reading' && $('m-inspire-book')) { item.book = $('m-inspire-book').value.trim(); }
+    if(type === 'essay' && $('m-inspire-tags')) { var ts = $('m-inspire-tags').value.trim(); item.tags = ts ? ts.split(/[,，]/).map(function(t){return t.trim();}).filter(function(t){return t;}) : []; }
     saveData(storeKey, arr); renderFn(); closeModal();
   };
   $('modal-overlay').classList.add('show');
@@ -2979,55 +3009,98 @@ var DAILY_NEWS = [
 ];
 
 var AI_TIPS = [
-  { level:'入门', title:'角色设定法', brief:'给AI设定一个专业角色，回答质量立刻提升。', detail:'在提示词开头告诉AI"你是一位XX领域的专家"，会激活模型中相关的专业知识库。例如"你是一位有10年经验的营养师"比直接问"怎么吃健康"效果好得多。角色越具体，回答越专业。', prompt:'你是一位有10年经验的营养师，请为久坐办公的白领设计一周午餐方案，要求：营养均衡、制作简单、成本低廉。' },
-  { level:'入门', title:'明确输出格式', brief:'告诉AI用什么格式输出，省去二次整理的时间。', detail:'AI默认输出是大段文字。如果你需要表格、列表、JSON等格式，在提示词中明确说明。例如"请用Markdown表格输出"、"请输出为JSON格式"。格式约束越具体，AI越不会自由发挥。', prompt:'请将以下信息整理为Markdown表格，列名为：产品名、价格、优点、缺点。\n\n信息：[粘贴产品信息]' },
-  { level:'入门', title:'分步骤引导', brief:'大任务拆成小步骤，每步都能检查方向。', detail:'不要一次性给AI一个大任务，而是拆成多个小步骤。先让AI列大纲，你确认后再让它写正文，最后让它润色。每一步你都能纠正方向，避免最终产出完全跑偏。', prompt:'第一步：请先列出这篇关于"远程办公效率"的文章大纲，不要写正文。\n（确认大纲后）\n第二步：请根据大纲展开第一部分的内容，约300字。' },
-  { level:'入门', title:'给AI一个范例', brief:'一个好范例胜过1000字的描述。', detail:'与其费力描述你想要的风格，不如直接给AI一个范例。AI会自动分析范例的语气、结构、长度，然后高度还原。这叫"少样本提示"(Few-shot)，是OpenAI官方推荐的最佳实践。', prompt:'请模仿以下文案风格，为"降噪耳机"写3条产品文案：\n\n范例："一杯咖啡的时间，搞定一周的会议纪要。"' },
-  { level:'入门', title:'限制字数和范围', brief:'加一句"不超过XX字"，AI就不会写废话。', detail:'AI倾向于写很长的回答。在提示词中加入字数限制、要点数量限制，可以让输出更精炼。例如"用3个要点总结，每个不超过50字"。', prompt:'请用3个要点总结《被讨厌的勇气》的核心观点，每个要点不超过50字。' },
-  { level:'入门', title:'让AI先问你', brief:'不确定怎么描述需求？让AI来问你。', detail:'当你不确定该怎么描述需求时，反过来让AI先问你问题。AI会根据它的知识库问出最关键的问题，比你瞎描述有用得多。', prompt:'我想让你帮我制定个人理财计划。但你先别急着给建议，先问我5个关键问题，了解我的具体情况之后再给出方案。' },
-  { level:'入门', title:'明确说"不要什么"', brief:'告诉AI不要做什么，比告诉它要做什么更有效。', detail:'AI的默认倾向是"说正确但没用的话"。主动告诉AI不要用什么词、不要什么结构，效果往往更好。例如"不要用互联网黑话"、"不要用首先其次最后的三段式"。', prompt:'帮我写200字的产品介绍。不要用"赋能""抓手""闭环"等互联网黑话，不要用"首先、其次、最后"的三段式。' },
-  { level:'入门', title:'费曼学习法', brief:'让AI用12岁小孩能懂的话解释复杂概念。', detail:'遇到不懂的概念，让AI用最简单的话解释，就像给12岁的小学生讲课。用生活中的例子，不用专业术语。如果还是不懂，让AI换一种方式再解释一遍。', prompt:'请用最简单的话解释什么是"区块链"，就像我是一个12岁的小学生。用生活中的例子，不要用专业术语。' },
-  { level:'入门', title:'翻译+解释二合一', brief:'让AI翻译的同时解释文化背景。', detail:'翻译不只是字面转换，还需要理解文化背景。在翻译请求中加入"请解释文化背景和语言习惯"，AI会给出更地道、更有深度的翻译。', prompt:'请翻译以下英文段落，并解释其中的文化背景和俚语含义：\n\n[粘贴英文]' },
-  { level:'进阶', title:'让AI自我反思', brief:'AI回答后追加一句让它重新审视，质量明显提升。', detail:'AI的第一次回答往往是"直觉反应"。追加一句"请重新审视你的回答，找出问题并改进"，让AI自我反思，质量会显著提升。这个方法已被大量实验验证有效。', prompt:'（在AI给出回答后）请重新审视你刚才的回答，找出可能的问题或遗漏，然后给出改进后的版本。' },
-  { level:'进阶', title:'多角色辩论法', brief:'让AI从多个角色角度分析同一个问题。', detail:'同一个问题，让AI分别扮演不同角色来分析，你会得到更全面、更有深度的回答。不同角色的视角碰撞，能发现单一视角看不到的盲点。', prompt:'请分别从以下三个角色的角度分析"该不该让孩子学编程"：\n1. 教育心理学家\n2. 互联网公司技术负责人\n3. 一个10岁孩子的妈妈\n每个角色给出2-3个核心观点。' },
-  { level:'进阶', title:'增强型思维链', brief:'用结构化思考框架替代简单的"一步步思考"。', detail:'基础的"请一步步思考"已经过时。2026年的进阶玩法是用结构化思考框架：需求拆解→方案设计→方案选型→代码实现→验证优化。每一步都要求输出详细内容。', prompt:'请按以下步骤解决问题：\n1. 需求拆解：列出所有要求和约束\n2. 方案设计：提出3种思路并说明优缺点\n3. 方案选型：对比选择最优方案\n4. 代码实现：编写完整代码\n5. 验证优化：编写测试用例' },
-  { level:'进阶', title:'指令前置+分隔符', brief:'把最重要的指令放在最开头，用分隔符隔开内容。', detail:'LLM对Prompt开头的内容注意力权重最高。把任务指令放在最前面，用三个引号或三个反引号把参考内容隔开，AI能更准确地理解你的意图。', prompt:'请总结以下文章要点，输出bullet points，每条不超过20字。\n\n文章：\n"""\n[粘贴文章内容]\n"""' },
-  { level:'进阶', title:'反馈闭环设计', brief:'先让AI出方案，你确认后再让它实现。', detail:'不要让AI一次性写完所有代码。先让它输出设计方案，你确认方向后，再让它逐个模块实现。每完成一个模块就暂停等你确认。这种方式比一次性写完更可靠。', prompt:'第一步：请先输出整体设计方案（不写代码），我确认后再实现。\n（确认后）\n第二步：请先实现核心模块，每完成一个函数就停下等我确认。' },
-  { level:'进阶', title:'多轮对话状态管理', brief:'长对话中用"进度看板"帮AI记住上下文。', detail:'对话超过20轮后AI会逐渐"健忘"。在关键节点插入"进度看板"：列出已完成、进行中、待办的步骤，帮AI重新定位。这比让AI从头读对话历史更高效。', prompt:'【进度看板】\n✅ 需求分析（已完成）\n✅ 方案设计（已完成）\n⬜ 代码实现（进行中）\n⬜ 测试验证（待办）\n\n请基于以上进度，继续代码实现阶段。' },
-  { level:'进阶', title:'元提示词', brief:'用提示词生成更好的提示词。', detail:'当你不确定怎么写提示词时，让AI帮你优化。告诉AI你想要什么效果，让它以"提示词工程专家"的身份帮你重写一个更好的版本。', prompt:'你是一个提示词工程专家，请帮我优化以下提示词：\n原始提示词："写一个Python函数"\n优化要求：1.明确角色设定 2.提供上下文 3.指定输出格式 4.添加约束条件\n请生成优化后的提示词。' },
-  { level:'进阶', title:'模型选型策略', brief:'70%用轻量模型，30%上旗舰模型。', detail:'同一个AI产品通常有多个模型。轻量模型适合翻译、总结、格式化等简单任务，速度快；旗舰模型适合复杂推理、创意生成等高难度任务。先用轻量试，不行再升级。', prompt:'日常习惯：任何问题先用轻量模型问一次。如果回答不满意，再切到旗舰模型。大约70%的问题轻量就够了。' },
-  { level:'进阶', title:'组合使用多个AI工具', brief:'高手从不只用一个AI，让每个工具做自己最擅长的。', detail:'最佳实践是组合使用：用Gemini搜索最新数据→把数据喂给Claude写报告→用ChatGPT转成PPT大纲→用Gamma生成PPT。每个工具做自己最擅长的事，效率拉满。', prompt:'工作流示例：\n1. Gemini搜索行业数据\n2. Claude写分析报告\n3. ChatGPT转PPT大纲\n4. Gamma生成PPT' },
-  { level:'精通', title:'长上下文黄金区域管理', brief:'百万token窗口下，开头5%和结尾5%是注意力黄金区。', detail:'面对百万级上下文，把最重要的指令放在Prompt最开头，把关键参考文档放在末尾，中间放大量上下文。这样AI对关键信息的关注度最高。', prompt:'【任务指令】\n你是代码审查专家，请审查安全性问题...\n\n【代码库上下文】\n（粘贴整个代码库）\n\n【重点参考】\n重点审查：auth.py, db.py' },
-  { level:'精通', title:'系统提示词隔离', brief:'用System指令建立"人格隔离区"，让AI保持一致风格。', detail:'通过System指令设定AI的"人格"：禁止使用某些词、必须用特定格式输出、专注于技术问题等。这种隔离让AI在特定任务中保持高度一致的风格，不受对话内容干扰。', prompt:'[系统指令]\n你是专业代码审查专家，以严谨著称。\n- 禁止使用褒义词\n- 每个评价必须包含问题描述和修复建议\n- 使用"问题：/建议："格式输出' },
-  { level:'精通', title:'输出格式契约', brief:'用严格结构化格式约束输出，防止AI自由发挥。', detail:'用Markdown标题、代码块、表格等结构化格式约束AI输出，比自然语言描述有效10倍。第一次就要求结构化输出，省去后续手动整理的麻烦。', prompt:'请严格按以下格式输出：\n# 标题\n## 问题1：[名称]\n- 严重程度：🔴高危/🟡中危/🟢低危\n- 问题描述：[描述]\n- 修复建议：\n```python\n[修复代码]\n```' },
-  { level:'精通', title:'防幻觉机制', brief:'要求AI标注不确定的地方，关键数据必须二次验证。', detail:'AI最大的问题是"幻觉"——一本正经地编造不存在的信息。在提示词中加一句"如果你不确定，请直接说不知道，不要编造"，并要求AI对关键信息标注置信度。', prompt:'请分析以下数据并给出结论。如果你不确定的地方，请明确标注"需要人工确认"。不要编造任何数据。\n\n数据：[粘贴数据]' },
-  { level:'精通', title:'防讨好机制', brief:'AI倾向于说你想听的话，要求它直言不讳。', detail:'AI有一种"讨好"倾向——你说想做什么，它大概率说好。要获得真实有用的建议，需要主动要求AI扮演反方角色，找出方案的问题和风险。', prompt:'请扮演一个严苛的投资人，找出这个创业方案最大的3个问题和风险。不需要说优点，请直言不讳。' },
-  { level:'精通', title:'CREATE原则', brief:'高质量提示词的五要素：背景、任务、示例、约束、语气。', detail:'2026年提示词核心框架CREATE：Context(角色设定)→Request(任务指令)→Examples(示例)→Adjustments(约束条件)→Tone(语气风格)。每个要素都不可或缺，组合使用效果最佳。', prompt:'【角色】你是有10年经验的XX专家\n【任务】请完成XX\n【示例】参考以下范例...\n【约束】不超过500字，用表格输出\n【语气】专业简洁' },
-  { level:'精通', title:'从指挥到委托', brief:'2026年新范式：定义目标而非过程，信任AI的自主判断。', detail:'旧范式是"按步骤做1234"；新范式是"目标是什么、成功标准是什么、约束是什么，请自主规划"。GPT-5.5等新一代模型已具备强大自主规划能力，过度指挥反而限制发挥。', prompt:'目标：从JSON文件中提取异常数据并记录原因。\n成功标准：输出的CSV能被Excel直接打开。\n约束：数据量约10万条，注意内存使用。\n请自主规划最优方案并执行。' },
-  { level:'进阶', title:'上下文摘要法', brief:'长对话每3-5轮总结一次，用摘要替代原文。', detail:'对话超过20轮AI会"健忘"。解决方法：每3-5轮让AI总结一次讨论要点，后续对话用摘要替代完整历史。既节省token又保持上下文连贯。', prompt:'请总结我们到目前为止讨论的要点，用100字以内概括。后续我会基于这个摘要继续提问。' },
-  { level:'入门', title:'表格对比法', brief:'让AI用表格做对比分析，一目了然。', detail:'做选择时，让AI用表格从多个维度对比选项，比看文字描述清晰得多。指定对比维度和评分标准，AI会给出结构化的对比结果。', prompt:'请用表格对比以下3款手机，维度包括：价格、拍照、续航、性能、性价比评分。最后一行给出你的推荐和理由。' },
-  { level:'进阶', title:'链式提示词', brief:'把复杂任务串联成提示词链，每步输出作为下步输入。', detail:'复杂任务拆成多个AI调用，前一步的输出作为后一步的输入。例如：AI1提取关键词→AI2根据关键词写大纲→AI3根据大纲写正文。每步都可独立优化。', prompt:'步骤1：请提取以下文章的5个关键词。\n（得到关键词后）\n步骤2：请根据这5个关键词写一篇文章大纲。\n（得到大纲后）\n步骤3：请根据大纲写一篇800字文章。' },
-  { level:'精通', title:'多模态提示词', brief:'2026年的提示词不再是纯文本，图文混合效果最佳。', detail:'2026年的AI模型支持多模态输入。在提示词中结合图片、图表、代码截图，AI能理解更丰富的上下文。特别是Gemini 3.1在多模态方面表现突出。', prompt:'请分析这张数据图表的趋势，并给出3条业务建议。\n\n[上传图片]' },
-  { level:'入门', title:'AI写邮件模板', brief:'告诉AI发件人、收件人、目的，直接生成可用邮件。', detail:'写邮件时，告诉AI：你是谁、发给谁、什么目的、什么语气、多少字。AI会生成一封可以直接发送的邮件。比从模板库里找模板快得多。', prompt:'帮我写商务邮件。发件人：XX公司市场总监。收件人：潜在合作伙伴。目的：邀请参加产品发布会。语气：专业但不生硬，300字以内。' }
+  // 提示词
+  { cat:'提示词', level:'入门', title:'角色设定法', brief:'给AI设定一个专业角色，回答质量立刻提升。', detail:'在提示词开头告诉AI"你是一位XX领域的专家"，会激活模型中相关的专业知识库。角色越具体，回答越专业。', prompt:'你是一位有10年经验的营养师，请为久坐办公的白领设计一周午餐方案，要求：营养均衡、制作简单、成本低廉。', url:'https://platform.openai.com/docs/guides/prompt-engineering' },
+  { cat:'提示词', level:'入门', title:'明确输出格式', brief:'告诉AI用什么格式输出，省去二次整理的时间。', detail:'AI默认输出大段文字。明确指定表格、列表、JSON等格式，格式约束越具体效果越好。', prompt:'请将以下信息整理为Markdown表格，列名为：产品名、价格、优点、缺点。\n\n信息：[粘贴产品信息]', url:'https://platform.openai.com/docs/guides/prompt-engineering' },
+  { cat:'提示词', level:'入门', title:'分步骤引导', brief:'大任务拆成小步骤，每步都能检查方向。', detail:'不要一次性给AI一个大任务，拆成多个小步骤，先列大纲确认后再写正文，每步都能纠正方向。', prompt:'第一步：请先列出这篇关于"远程办公效率"的文章大纲。\n第二步：根据大纲展开第一部分内容，约300字。', url:'https://platform.openai.com/docs/guides/prompt-engineering' },
+  { cat:'提示词', level:'进阶', title:'少样本提示(Few-shot)', brief:'一个好范例胜过1000字描述，AI会自动分析风格并还原。', detail:'直接给AI一个范例，它会分析语气、结构、长度并高度还原。这是OpenAI官方推荐的最佳实践。', prompt:'请模仿以下文案风格，为"降噪耳机"写3条产品文案：\n\n范例："一杯咖啡的时间，搞定一周的会议纪要。"', url:'https://platform.openai.com/docs/guides/prompt-engineering' },
+  { cat:'提示词', level:'进阶', title:'思维链(CoT)', brief:'用结构化思考框架替代简单的"一步步思考"。', detail:'2026年进阶玩法：需求拆解→方案设计→方案选型→代码实现→验证优化，每一步都要求输出详细内容。', prompt:'请按以下步骤解决问题：\n1. 需求拆解：列出所有要求和约束\n2. 方案设计：提出3种思路并说明优缺点\n3. 方案选型：对比选择最优方案\n4. 代码实现：编写完整代码\n5. 验证优化：编写测试用例', url:'https://arxiv.org/abs/2201.11903' },
+  { cat:'提示词', level:'进阶', title:'元提示词', brief:'用提示词生成更好的提示词。', detail:'不确定怎么写提示词时，让AI以"提示词工程专家"身份帮你重写一个更好的版本。', prompt:'你是一个提示词工程专家，请帮我优化以下提示词：\n原始提示词："写一个Python函数"\n优化要求：1.明确角色设定 2.提供上下文 3.指定输出格式 4.添加约束条件', url:'https://platform.openai.com/docs/guides/prompt-engineering' },
+  { cat:'提示词', level:'精通', title:'CREATE原则', brief:'高质量提示词五要素：背景、任务、示例、约束、语气。', detail:'Context(角色设定)→Request(任务指令)→Examples(示例)→Adjustments(约束条件)→Tone(语气风格)，每个要素不可或缺。', prompt:'【角色】你是有10年经验的XX专家\n【任务】请完成XX\n【示例】参考以下范例...\n【约束】不超过500字，用表格输出\n【语气】专业简洁', url:'https://platform.openai.com/docs/guides/prompt-engineering' },
+  { cat:'提示词', level:'精通', title:'防幻觉机制', brief:'要求AI标注不确定的地方，关键数据必须二次验证。', detail:'AI最大问题是"幻觉"——编造不存在的信息。加一句"如果不确定请直接说不知道"，并要求标注置信度。', prompt:'请分析以下数据并给出结论。如果你不确定的地方，请明确标注"需要人工确认"。不要编造任何数据。\n\n数据：[粘贴数据]', url:'https://arxiv.org/abs/2311.05232' },
+  { cat:'提示词', level:'精通', title:'长上下文黄金区域', brief:'百万token窗口下，开头5%和结尾5%是注意力黄金区。', detail:'把最重要的指令放在Prompt最开头，关键参考文档放在末尾，中间放大量上下文，AI对关键信息关注度最高。', prompt:'【任务指令】\n你是代码审查专家，请审查安全性问题...\n\n【代码库上下文】\n（粘贴整个代码库）\n\n【重点参考】\n重点审查：auth.py, db.py', url:'https://arxiv.org/abs/2307.03172' },
+
+  // 图片生成
+  { cat:'图片生成', level:'入门', title:'主体+风格+构图', brief:'三要素描述法：先说画什么，再说什么风格，最后说怎么构图。', detail:'AI绘图最基础公式：[主体描述] + [艺术风格] + [构图角度]。例如"一只猫坐在窗台上，水彩风格，俯视角度"。', prompt:'一只橘猫坐在窗台上看夕阳，水彩画风格，温暖的色调，侧面构图，柔和的光线', url:'https://platform.openai.com/docs/guides/images' },
+  { cat:'图片生成', level:'入门', title:'指定画幅比例', brief:'明确告诉AI要横图、竖图还是方图。', detail:'不同用途需要不同比例：社交媒体竖图9:16，公众号横图16:9，头像方图1:1。在描述中加入比例约束。', prompt:'一片金色的麦田，远处有山脉，油画风格，16:9横构图', url:'https://platform.openai.com/docs/guides/images' },
+  { cat:'图片生成', level:'进阶', title:'参考图+ControlNet', brief:'用参考图控制构图姿态，精确还原画面结构。', detail:'上传一张参考图，用ControlNet提取轮廓线/深度图/姿态，AI会严格按照参考图的结构生成新图。', prompt:'[上传参考图] 请保持这个构图和姿态，将人物改为赛博朋克风格，霓虹灯光，雨天街道', url:'https://github.com/lllyasviel/ControlNet' },
+  { cat:'图片生成', level:'进阶', title:'负面提示词', brief:'告诉AI不要画什么，避免畸形手指、多余肢体等问题。', detail:'在负面提示词中加入"extra fingers, deformed hands, blurry, watermark"等，可以大幅减少AI绘图的常见瑕疵。', prompt:'正面：一位穿白裙的女孩在花海中奔跑，梦幻风格\n负面：extra fingers, deformed hands, blurry, watermark, text, low quality', url:'https://stability.ai/news/stable-diffusion-prompt-guide' },
+  { cat:'图片生成', level:'精通', title:'LoRA微调风格', brief:'用LoRA模型精准控制特定画风或角色。', detail:'训练或下载LoRA模型，在生成时指定权重(0.5-1.0)，可以精确控制画风、角色特征、服装等细节。', prompt:'[使用LoRA: anime_style_v2.safetensors, weight:0.7] 一位银发少女站在樱花树下，吉卜力风格', url:'https://civitai.com/articles/1482' },
+  { cat:'图片生成', level:'精通', title:'分层提示词', brief:'用权重和区域控制画面不同部分的生成。', detail:'使用Regional Prompter或分层提示词，指定画面左半部分画山、右半部分画海，实现复杂场景的精确控制。', prompt:'[Regional Prompter]\n左半区：snow mountains, cold tone\n右半区：tropical beach, warm tone\n整体：surrealism, high detail, 4K', url:'https://github.com/huggingface/diffusers' },
+
+  // Skill生成
+  { cat:'Skill生成', level:'入门', title:'明确Skill用途', brief:'先想清楚这个Skill解决什么问题，再动手创建。', detail:'创建AI Skill前，先定义：用户输入是什么、期望输出是什么、需要调用哪些工具。清晰的输入输出定义是成功的一半。', prompt:'创建一个"会议纪要整理"Skill：\n输入：会议录音转写文本\n输出：包含议题、决议、待办的Markdown文档\n工具：文本分析、格式化输出', url:'https://docs.trae.ai/skills' },
+  { cat:'Skill生成', level:'入门', title:'编写清晰的指令模板', brief:'Skill的核心是一段结构化指令，越清晰执行越准确。', detail:'好的Skill指令包含：角色设定、任务描述、输入格式、输出格式、约束条件。用模板化思维编写。', prompt:'【Skill: 周报生成器】\n角色：你是一个项目经理助手\n任务：根据用户提供的本周工作记录，生成结构化周报\n输出格式：\n1. 本周完成\n2. 遇到的问题\n3. 下周计划\n4. 需要协调的资源', url:'https://docs.trae.ai/skills' },
+  { cat:'Skill生成', level:'进阶', title:'工具链编排', brief:'一个Skill可以串联多个工具，形成自动化工作流。', detail:'高级Skill不仅调用AI对话，还串联搜索、代码执行、文件读写等工具。先搜索资料→分析→生成报告→导出文件。', prompt:'【Skill: 行业分析报告】\n步骤1: 调用搜索工具获取行业最新数据\n步骤2: 调用AI分析数据趋势\n步骤3: 生成Markdown格式报告\n步骤4: 调用文件工具导出PDF', url:'https://docs.trae.ai/skills' },
+  { cat:'Skill生成', level:'进阶', title:'异常处理与回退', brief:'给Skill加异常处理逻辑，提高鲁棒性。', detail:'当工具调用失败或AI输出不符合预期时，Skill应该有回退逻辑：重试、降级处理或提示用户手动介入。', prompt:'【Skill: 智能翻译】\n正常流程：调用翻译API→返回结果\n异常处理：\n- API超时→重试1次→仍失败则用AI模型直接翻译\n- 翻译结果为空→提示"请检查输入文本"\n- 语言检测失败→提示用户手动选择源语言', url:'https://docs.trae.ai/skills' },
+  { cat:'Skill生成', level:'精通', title:'多轮交互Skill', brief:'支持上下文记忆的对话型Skill，适合复杂场景。', detail:'高级Skill支持多轮对话：记住用户前几轮的输入和偏好，逐步引导用户完成复杂任务。需要设计状态管理逻辑。', prompt:'【Skill: 论文写作助手】\n第1轮: 询问论文主题和方向\n第2轮: 根据主题生成大纲，询问用户修改意见\n第3轮: 根据确认的大纲，逐章生成内容\n第4轮: 用户反馈修改意见，迭代优化\n状态: 记住用户风格偏好、已写内容、待写章节', url:'https://docs.trae.ai/skills' },
+  { cat:'Skill生成', level:'精通', title:'Skill组合与复用', brief:'把通用功能封装成子Skill，在多个场景中复用。', detail:'将"文本摘要""格式转换""数据校验"等通用功能封装成独立子Skill，通过组合调用构建复杂能力，提高开发效率。', prompt:'【子Skill库】\n- summarize: 文本摘要(输入文本→300字摘要)\n- format_json: JSON格式化(任意文本→结构化JSON)\n- validate: 数据校验(数据+规则→校验报告)\n\n【主Skill: 竞品分析】\n1. 调用search搜集竞品信息\n2. 调用summarize生成摘要\n3. 调用format_json结构化\n4. 调用validate校验数据\n5. 生成分析报告', url:'https://docs.trae.ai/skills' },
+
+  // 视频生成
+  { cat:'视频生成', level:'入门', title:'场景+动作+时长', brief:'视频提示词三要素：描述场景、指定动作、设定时长。', detail:'AI视频生成需要明确：画面里有什么、发生了什么运动、持续多久。描述越具体，生成越符合预期。', prompt:'一只金毛犬在草地上奔跑，阳光明媚，镜头跟随狗狗移动，5秒，电影感画面', url:'https://runwayml.com/guides' },
+  { cat:'视频生成', level:'入门', title:'指定镜头运动', brief:'推拉摇移、航拍、特写，告诉AI你要什么镜头。', detail:'常见的镜头运动：zoom in(推近)、zoom out(拉远)、pan left/right(左右摇)、tracking(跟随)、aerial(航拍)。', prompt:'航拍镜头从海面上方缓缓飞过，逐渐升高揭示整座岛屿，日落金光，10秒', url:'https://runwayml.com/guides' },
+  { cat:'视频生成', level:'进阶', title:'图生视频(Image-to-Video)', brief:'用一张静态图片作为首帧，让AI生成动态视频。', detail:'上传一张图片作为视频起始帧，描述后续动作。比纯文本生成更可控，适合产品展示和场景动画。', prompt:'[上传产品图] 产品缓慢旋转360度，背景渐变为展厅场景，3秒循环', url:'https://runwayml.com/guides' },
+  { cat:'视频生成', level:'进阶', title:'风格迁移视频', brief:'把实拍视频转成动漫、油画等风格。', detail:'上传一段实拍视频，指定目标风格（如宫崎骏动漫风、赛博朋克风），AI会逐帧转换保持运动连贯。', prompt:'[上传实拍视频] 将视频转换为宫崎骏吉卜力动画风格，保持原有的运动轨迹和节奏', url:'https://runwayml.com/guides' },
+  { cat:'视频生成', level:'精通', title:'多镜头编排', brief:'用时间线描述多个镜头，生成有叙事感的短视频。', detail:'高级用法：在提示词中按时间顺序描述多个镜头，AI会自动衔接转场，生成有完整叙事的短视频。', prompt:'镜头1(0-3s): 特写咖啡豆落入研磨机\n镜头2(3-6s): 中景咖啡液缓缓滴落\n镜头3(6-10s): 全景一杯拿铁放在木质桌面上，暖光\n转场: 自然渐变', url:'https://runwayml.com/guides' },
+  { cat:'视频生成', level:'精通', title:'控制运动幅度与节奏', brief:'精确控制画面运动速度和节奏，避免AI自由发挥过度。', detail:'用motion参数(0-1)控制运动幅度，低值更稳定、高值更动感。配合节奏描述("缓慢""快速""渐变")效果更佳。', prompt:'一朵花从含苞到绽放的过程，motion: 0.3(缓慢)，镜头微距特写，背景虚化，8秒延时摄影效果', url:'https://runwayml.com/guides' },
+
+  // PPT生成
+  { cat:'PPT生成', level:'入门', title:'大纲驱动生成', brief:'先给AI一个清晰的大纲，它会自动填充每页内容。', detail:'不要让AI从零开始做PPT。先列好每页的标题和要点，AI会根据大纲自动生成每页的详细内容和布局。', prompt:'请根据以下大纲生成PPT：\n第1页: 封面 - 2026年Q3营销策略\n第2页: 市场现状分析（3个要点）\n第3页: 竞品对比（表格）\n第4页: Q3目标与策略\n第5页: 执行计划时间线', url:'https://gamma.app' },
+  { cat:'PPT生成', level:'入门', title:'指定风格与配色', brief:'告诉AI要什么风格：商务、科技、极简、手绘等。', detail:'AI生成PPT时指定风格和配色方案，如"商务蓝灰风格"或"科技感深色主题"，输出更符合使用场景。', prompt:'生成一份10页的产品发布PPT，风格：科技感，配色：深蓝+银色+白色，每页配图，简洁大气', url:'https://gamma.app' },
+  { cat:'PPT生成', level:'进阶', title:'数据图表自动生成', brief:'给AI原始数据，它自动选择合适的图表类型并生成。', detail:'在PPT中嵌入数据时，告诉AI数据类型和你想表达的信息，它会自动选择柱状图、折线图或饼图。', prompt:'PPT第3页需要展示季度销售数据：\nQ1: 120万 Q2: 180万 Q3: 150万 Q4: 210万\n请用折线图展示趋势，并标注同比增长率', url:'https://gamma.app' },
+  { cat:'PPT生成', level:'进阶', title:'文案+设计一体化', brief:'让AI同时负责文案润色和排版设计，一键出完整PPT。', detail:'高级用法：给AI一段粗略的文字，让它同时优化文案、选择配图、设计排版，输出可直接使用的PPT。', prompt:'请将以下文字转化为5页精美PPT，要求优化文案、自动配图、统一排版：\n"我们的产品是智能音箱，支持语音控制、音乐播放、智能家居管理。目标用户是25-40岁城市白领，售价299元，竞品是小度和小爱同学。"', url:'https://gamma.app' },
+  { cat:'PPT生成', level:'精通', title:'模板化批量生成', brief:'建立PPT模板库，AI按模板自动填充内容，适合周报月报。', detail:'预先设计好PPT模板（封面、目录、内容页、图表页、结尾页），AI根据数据自动选择对应模板并填充，实现周报月报自动化。', prompt:'使用"周报模板v3"生成本周PPT：\n封面: 第30周工作周报\n内容: \n- 完成需求评审3个\n- 修复Bug 12个\n- 上线功能2个\n图表: 用柱状图展示本周每日工时分布\n下周计划: 3条', url:'https://gamma.app' },
+  { cat:'PPT生成', level:'精通', title:'多模态PPT生成', brief:'结合文字、图片、视频，让AI生成多媒体PPT。', detail:'2026年最新玩法：在PPT提示词中嵌入图片URL和视频描述，AI会自动将多媒体元素整合到PPT页面中。', prompt:'生成8页产品介绍PPT：\n第2页: 插入产品外观图[上传图片]\n第5页: 插入30秒产品演示视频\n第7页: 插入用户评价截图\n其余页面: 自动生成文案和配图\n风格: 现代简约', url:'https://gamma.app' },
+
+  // 提示词 - 补充
+  { cat:'提示词', level:'精通', title:'提示词链式调用', brief:'把上一步输出作为下一步输入，实现复杂推理链。', detail:'通过链式提示让AI逐步深入：先生成方案→评估方案→优化方案→输出终稿。每一步的输出都作为下一步的输入，形成完整推理链。', prompt:'第1步：请生成3个产品slogan方案\n第2步：请评估以上3个方案的优缺点，按创意度、记忆度、传播力打分\n第3步：选择得分最高的方案，给出3个优化版本\n第4步：从优化版本中选择最佳，撰写配套的品牌故事', url:'https://platform.openai.com/docs/guides/prompt-engineering' },
+
+  // 图片生成 - 补充
+  { cat:'图片生成', level:'入门', title:'光影描述法', brief:'用光线方向和氛围词控制画面情绪。', detail:'光影是画面的灵魂。描述光源方向（顺光/逆光/侧光）、光线质感（硬光/柔光）和氛围词（温暖/冷冽/梦幻），可以精准控制画面情绪。', prompt:'一位老人坐在窗边读书，侧光从左侧窗户照入，柔和的晨光，温暖宁静的氛围，水彩画风格', url:'https://platform.openai.com/docs/guides/images' },
+  { cat:'图片生成', level:'进阶', title:'种子值复用', brief:'用seed锁定构图，只微调细节实现变体。', detail:'找到一张满意的图后，记录其seed值。后续用相同seed加微调描述，可以保持构图不变只改变风格或细节，高效生成系列图。', prompt:'[seed: 1234567890] 保持与上次相同的构图，将风格从油画改为赛博朋克数字艺术，其余不变', url:'https://stability.ai/news/stable-diffusion-prompt-guide' },
+  { cat:'图片生成', level:'精通', title:'提示词权重调整', brief:'用括号和数字精确控制每个关键词的影响力。', detail:'在Stable Diffusion中用(word:1.5)增强权重、(word:0.5)减弱权重。精确控制画面中各元素的重要性，实现微妙的画面平衡。', prompt:'(masterpiece:1.2), (best quality:1.2), a girl standing in (rain:1.4), (cyberpunk city:1.3), (neon lights:1.2), (looking at viewer:0.8)', url:'https://github.com/AUTOMATIC1111/stable-diffusion-webui' },
+  { cat:'图片生成', level:'精通', title:'迭代优化工作流', brief:'图生图+局部重绘+放大修复，三步打造精品质。', detail:'专业工作流：先用文生图得到大致构图→用图生图微调风格→用局部重绘修复瑕疵（手部、面部）→用放大修复提升分辨率。每一步都在上一步基础上优化。', prompt:'步骤1: 文生图得到基础构图\n步骤2: 图生图，添加"更精致的光影，4K细节"\n步骤3: 局部重绘修复手部，提示词"perfect hands, detailed fingers"\n步骤4: 放大修复， Upscale by 2x, 高清修复', url:'https://github.com/AUTOMATIC1111/stable-diffusion-webui' },
+
+  // Skill生成 - 补充
+  { cat:'Skill生成', level:'入门', title:'定义异常场景', brief:'创建Skill时先想清楚哪些情况会出错，提前写好处理逻辑。', detail:'好的Skill不仅处理正常流程，还要预判异常：输入为空、格式错误、工具超时等。在Skill指令中用"如果...则..."句式覆盖常见异常。', prompt:'【Skill: 邮件起草助手】\n正常流程：根据用户要点生成商务邮件\n异常处理：\n- 如果用户未提供收件人信息→提示"请提供收件人姓名和职位"\n- 如果要点为空→提示"请至少提供一个邮件要点"\n- 如果生成内容超过500字→自动精简并提示用户', url:'https://docs.trae.ai/skills' },
+  { cat:'Skill生成', level:'进阶', title:'上下文注入', brief:'在Skill执行前自动注入背景信息，让AI理解任务全貌。', detail:'高级Skill会在执行前自动收集上下文：当前日期、用户偏好、历史记录等，注入到提示词中。AI有了完整上下文，输出质量显著提升。', prompt:'【Skill: 智能日程助手】\n上下文注入：\n- 当前日期: {{today}}\n- 用户时区: {{timezone}}\n- 已有日程: {{calendar_events}}\n- 用户偏好: 上午不开会、午休12:00-13:00\n\n任务：根据以上上下文，为用户安排明天的3个会议时段', url:'https://docs.trae.ai/skills' },
+  { cat:'Skill生成', level:'精通', title:'自适应Skill', brief:'Skill根据用户反馈自动调整策略，越用越聪明。', detail:'高级Skill内置学习机制：记录用户每次修改的内容，分析偏好模式，下次自动应用。例如用户总是删除"客套话"，Skill后续生成时自动省略。', prompt:'【Skill: 自适应文案生成器】\n学习机制：\n1. 记录用户对生成文案的修改diff\n2. 分析修改模式（如：总在删除感叹号、总在增加数据引用）\n3. 下次生成时自动应用学到的偏好\n4. 每月生成偏好报告供用户确认\n\n当前已学习偏好：\n- 偏好简洁风格（平均句长<20字）\n- 喜欢用数据支撑观点\n- 不使用感叹号', url:'https://docs.trae.ai/skills' },
+  { cat:'Skill生成', level:'精通', title:'Skill版本管理', brief:'像管理代码一样管理Skill版本，支持回滚和A/B测试。', detail:'为Skill建立版本号（v1.0/v1.1/v2.0），每次修改记录变更日志。支持回滚到任意版本，也可以同时运行两个版本做A/B测试，选效果更好的。', prompt:'【Skill版本管理】\nv2.1 (2026-08-01): 优化了输出格式，增加表格模式\nv2.0 (2026-07-15): 重构指令结构，支持多轮对话\nv1.0 (2026-06-01): 初始版本\n\n当前运行: v2.1\nA/B测试: 同时运行v2.0和v2.1，对比用户满意度\n回滚命令: rollback v1.0', url:'https://docs.trae.ai/skills' },
+
+  // 视频生成 - 补充
+  { cat:'视频生成', level:'入门', title:'光线与氛围描述', brief:'视频画面情绪80%由光线决定，学会描述光影。', detail:'视频和图片不同，光线会随时间变化。描述光线变化过程："从清晨柔光渐变为正午强光"，或"霓虹灯闪烁的夜晚"，让AI理解动态光影。', prompt:'一段延时摄影：从黎明到日出的光线变化，城市天际线，云层流动，暖色调逐渐变亮，10秒', url:'https://runwayml.com/guides' },
+  { cat:'视频生成', level:'进阶', title:'运镜节奏控制', brief:'快慢交替的运镜让视频更有节奏感和叙事力。', detail:'高级视频提示词中描述运镜节奏："前3秒缓慢推进营造悬念，中间快速切换制造紧张感，结尾拉远揭示全景"。节奏变化是视频叙事的关键。', prompt:'镜头1(0-3s): 缓慢推近产品特写，营造期待感\n镜头2(3-5s): 快速切换3个使用场景\n镜头3(5-8s): 缓慢拉远，展示产品在生活场景中的全貌\n节奏: 慢-快-慢，情绪: 期待-兴奋-满足', url:'https://runwayml.com/guides' },
+  { cat:'视频生成', level:'精通', title:'角色一致性', brief:'多镜头视频中保持角色外观一致是最大难点。', detail:'用角色参考图+详细描述锁定角色特征。每个镜头都引用相同的角色描述，包括发型、服装、体型、面部特征，确保AI在不同镜头中生成同一角色。', prompt:'[角色参考图上传]\n角色锁定: 短发女性，穿白色衬衫，戴银色耳环\n镜头1: 她走进咖啡馆坐下\n镜头2: 她打开笔记本电脑开始工作\n镜头3: 她端起咖啡微笑\n（所有镜头保持角色外观完全一致）', url:'https://runwayml.com/guides' },
+  { cat:'视频生成', level:'精通', title:'音画同步生成', brief:'让AI视频画面与音乐节奏精准匹配。', detail:'在提示词中描述音乐BPM和关键节拍点，让AI在节拍处安排画面切换或动作变化。如"120BPM，每4拍切换一个镜头"，实现音画完美同步。', prompt:'音乐: 120BPM电子音乐，4/4拍\n画面: 每4拍(2秒)切换一个镜头\n镜头1: 城市夜景航拍\n镜头2: 霓虹灯特写\n镜头3: 人物舞动剪影\n镜头4: 烟花绽放\n节拍同步: 在重音处安排画面高潮', url:'https://runwayml.com/guides' },
+
+  // PPT生成 - 补充
+  { cat:'PPT生成', level:'入门', title:'每页一个核心信息', brief:'一页PPT只讲一个要点，AI生成时也要遵循这个原则。', detail:'在给AI的大纲中，每页只放一个核心信息。不要在一页塞多个主题。告诉AI"每页聚焦一个要点，最多3条子内容"，生成效果更专业。', prompt:'生成5页PPT，每页只聚焦一个核心信息：\n第1页: 我们是谁（公司简介，3条要点）\n第2页: 我们做什么（核心产品，3条要点）\n第3页: 我们的客户（标杆案例，3条要点）\n第4页: 我们的优势（3个差异化优势）\n第5页: 合作方式（3种合作模式）', url:'https://gamma.app' },
+  { cat:'PPT生成', level:'进阶', title:'品牌模板适配', brief:'上传企业品牌模板，AI按模板风格生成PPT。', detail:'将公司PPT模板（含配色、字体、Logo位置）上传给AI，它会按照品牌规范生成内容。确保企业PPT风格统一，不用手动调整格式。', prompt:'[上传品牌模板: 蓝色主色调，微软雅黑字体，右下角Logo]\n请按照模板风格生成10页季度汇报PPT，保持配色和字体一致，Logo固定在右下角，每页留出Logo位置', url:'https://gamma.app' },
+  { cat:'PPT生成', level:'精通', title:'交互式PPT生成', brief:'让AI生成带交互按钮和动画的动态PPT。', detail:'2026年新趋势：AI可以生成带交互的PPT——点击按钮跳转页面、悬停显示详情、动画过渡效果。适合产品演示和培训材料。', prompt:'生成交互式产品演示PPT（10页）：\n- 封面有"开始演示"按钮，点击进入\n- 产品功能页有悬停效果，鼠标移过显示功能详情\n- 页面间用平滑过渡动画\n- 最后一页有"联系我们"按钮，点击跳转官网\n- 支持全键盘操作（方向键翻页）', url:'https://gamma.app' },
+  { cat:'PPT生成', level:'精通', title:'AI辅助演讲稿', brief:'PPT生成时同时生成配套演讲稿，一键搞定演示全流程。', detail:'高级用法：让AI在生成PPT的同时为每页生成演讲稿，包括开场白、过渡语、重点强调和结尾总结。演讲稿与PPT页面一一对应，方便排练。', prompt:'生成8页产品发布会PPT，同时为每页生成配套演讲稿：\n要求：\n- PPT: 简洁视觉风格，每页3-5个关键词\n- 演讲稿: 每页150-200字口语化文本\n- 包含: 开场白(破冰)、过渡语(自然衔接)、重点强调(语气提示)\n- 结尾: 行动号召+感谢\n输出格式: PPT内容 + [演讲稿] 成对展示', url:'https://gamma.app' }
 ];
 
-function getTodayAITips() {
-  var d = new Date();
-  var startIdx = (d.getFullYear() * 366 + (d.getMonth()+1) * 31 + d.getDate()) * 10;
-  var tips = [];
-  for(var i = 0; i < 10; i++) {
-    tips.push(AI_TIPS[(startIdx + i) % AI_TIPS.length]);
-  }
-  return tips;
-}
+var currentAiTipCat = '提示词';
+var AI_TIP_CATS = ['提示词', '图片生成', 'Skill生成', '视频生成', 'PPT生成'];
+var AI_TIP_LEVEL_ORDER = { '入门': 0, '进阶': 1, '精通': 2 };
 
 function renderAITips() {
-  var tips = getTodayAITips();
-  var levelClass = { '入门':'beginner', '进阶':'intermediate', '精通':'advanced' };
+  // Render category tabs
+  var catHtml = AI_TIP_CATS.map(function(c) {
+    return '<div class="news-tab' + (c === currentAiTipCat ? ' active' : '') + '" onclick="switchAiTipCat(\'' + c + '\')">' + c + '</div>';
+  }).join('');
+  if($('aitips-cat-tabs')) $('aitips-cat-tabs').innerHTML = catHtml;
+
+  // Filter and sort by level
+  var tips = AI_TIPS.filter(function(t) { return t.cat === currentAiTipCat; });
+  tips.sort(function(a, b) { return (AI_TIP_LEVEL_ORDER[a.level] || 0) - (AI_TIP_LEVEL_ORDER[b.level] || 0); });
+
   $('aitips-list').innerHTML = '<div class="history-card-grid">' + tips.map(function(t, i) {
+    var levelColor = t.level === '入门' ? 'rgba(139,154,130,0.12)' : t.level === '进阶' ? 'rgba(120,140,160,0.12)' : 'rgba(180,120,100,0.12)';
+    var levelText = t.level === '入门' ? 'var(--accent-dark)' : t.level === '进阶' ? '#7a8ca0' : '#b4786c';
     return '<div class="history-card" onclick="toggleAITipDetail(' + i + ')">' +
       '<div class="history-card-header">' +
-        '<div class="history-card-num" style="background:' + (t.level==='入门'?'rgba(139,154,130,0.12)':t.level==='进阶'?'rgba(120,140,160,0.12)':'rgba(180,120,100,0.12)') + ';color:' + (t.level==='入门'?'var(--accent-dark)':t.level==='进阶'?'#7a8ca0':'#b4786c') + ';">' + t.level + '</div>' +
+        '<div class="history-card-num" style="background:' + levelColor + ';color:' + levelText + ';">' + t.level + '</div>' +
         '<h4 class="history-card-title">' + t.title + '</h4>' +
       '</div>' +
       '<p class="history-card-desc">' + t.brief + '</p>' +
@@ -3035,9 +3108,15 @@ function renderAITips() {
         '<div class="history-detail-content">' + t.detail + '</div>' +
         '<h5 style="margin:14px 0 10px;color:var(--accent-dark);">示例提示词</h5>' +
         '<div style="background:rgba(0,0,0,0.03);border-radius:var(--radius-sm);padding:12px;font-size:0.82rem;line-height:1.7;color:var(--ink);border:1px solid var(--rule);white-space:pre-wrap;">' + t.prompt + '</div>' +
+        (t.url ? '<div style="margin-top:12px;"><a href="' + t.url + '" target="_blank" rel="noopener noreferrer" style="color:var(--accent-dark);font-size:0.8rem;font-weight:600;">查看原文 →</a></div>' : '') +
       '</div>' +
     '</div>';
   }).join('') + '</div>';
+}
+
+function switchAiTipCat(cat) {
+  currentAiTipCat = cat;
+  renderAITips();
 }
 
 function toggleAITipDetail(idx) {
