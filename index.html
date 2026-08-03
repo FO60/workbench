@@ -663,21 +663,30 @@ td .badge { display: inline-block; padding: 4px 12px; border-radius: 20px; font-
 .reno-cat-card { background: var(--card-gradient); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,250,0.60); border-radius: var(--radius); padding: 18px 20px; margin-bottom: 14px; box-shadow: 0 2px 12px var(--shadow); transition: all 0.25s; }
 .reno-cat-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
 .reno-cat-title { font-size: 1.05rem; font-weight: 700; color: var(--accent-dark); display: flex; align-items: center; gap: 8px; }
-.reno-cat-total { font-size: 0.85rem; color: #000; font-weight: 600; }
-.reno-cat-total .mat { color: var(--accent-dark); }
-.reno-cat-total .lab { color: var(--lake-blue); }
+.reno-cat-actions { display: flex; gap: 6px; }
+.reno-cat-summary { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-bottom: 14px; }
+.reno-cat-stat { border-radius: var(--radius-sm); padding: 10px 12px; text-align: center; }
+.reno-cat-stat .rcs-label { font-size: 0.72rem; color: #000; margin-bottom: 2px; }
+.reno-cat-stat .rcs-value { font-size: 1rem; font-weight: 700; }
+.reno-cat-stat.mat { background: rgba(189,221,34,0.10); }
+.reno-cat-stat.mat .rcs-value { color: var(--accent-dark); }
+.reno-cat-stat.lab { background: rgba(46,139,192,0.08); }
+.reno-cat-stat.lab .rcs-value { color: var(--lake-blue); }
+.reno-cat-stat.total { background: var(--accent-light); }
+.reno-cat-stat.total .rcs-value { color: var(--accent-dark); }
 .reno-item { display: flex; justify-content: space-between; align-items: center; padding: 8px 0; border-bottom: 1px dashed var(--rule); font-size: 0.85rem; }
 .reno-item:last-child { border-bottom: none; }
 .reno-item .ri-name { flex: 1; color: #000; }
 .reno-item .ri-type { font-size: 0.72rem; padding: 2px 8px; border-radius: 8px; font-weight: 600; margin: 0 8px; }
 .reno-item .ri-type.material { background: rgba(189,221,34,0.15); color: var(--accent-dark); }
 .reno-item .ri-type.labor { background: rgba(46,139,192,0.12); color: var(--lake-blue); }
+.reno-item .ri-type.other { background: rgba(180,140,60,0.12); color: #9a6b1f; }
 .reno-item .ri-amount { font-weight: 700; color: var(--accent-dark); min-width: 80px; text-align: right; }
 .reno-item .ri-actions { display: flex; gap: 4px; margin-left: 8px; }
-.reno-income-card { background: var(--card-gradient); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,250,0.60); border-radius: var(--radius); padding: 14px 18px; margin-bottom: 10px; box-shadow: 0 2px 8px var(--shadow); display: flex; justify-content: space-between; align-items: center; }
 .reno-summary-stat { background: var(--card-gradient); border: 1px solid rgba(255,255,250,0.60); border-radius: var(--radius-sm); padding: 16px; text-align: center; }
-.reno-summary-stat .rs-value { font-size: 1.4rem; font-weight: 700; }
+.reno-summary-stat .rs-value { font-size: 1.3rem; font-weight: 700; }
 .reno-summary-stat .rs-label { font-size: 0.8rem; color: #000; margin-top: 4px; }
+@media (max-width: 600px) { .reno-cat-summary { gap: 6px; } .reno-cat-stat { padding: 8px 6px; } .reno-cat-stat .rcs-value { font-size: 0.88rem; } .reno-cat-stat .rcs-label { font-size: 0.68rem; } }
 </style>
 </head>
 <body>
@@ -1268,18 +1277,18 @@ let mediaAccounts = loadData(STORE_KEYS.media_accounts, []);
 
 /* ========================== RENOVATION DEFAULT DATA ========================== */
 const DEFAULT_RENO_CATEGORIES = [
-  { id: 'rc-rent', name: '租房', icon: '🏠', items: [
-    { id: 1, name: '房租1', type: 'material', amount: 3397, note: '' },
-    { id: 2, name: '房租2', type: 'material', amount: 3200, note: '' },
-    { id: 3, name: '房租3', type: 'material', amount: 2547.75, note: '' },
-    { id: 4, name: '房租4', type: 'material', amount: 2310, note: '' },
-    { id: 5, name: '水费', type: 'material', amount: 50, note: '' },
-    { id: 6, name: '水费', type: 'material', amount: 50, note: '' },
-    { id: 7, name: '电费', type: 'material', amount: 100, note: '' },
-    { id: 8, name: '燃气费', type: 'material', amount: 100, note: '' },
-    { id: 9, name: '烟', type: 'material', amount: 30, note: '' },
-    { id: 10, name: '水', type: 'material', amount: 7.9, note: '' },
-    { id: 11, name: '水', type: 'material', amount: 15.8, note: '' }
+  { id: 'rc-rent', name: '租房及生活', icon: '🏠', items: [
+    { id: 1, name: '房租1', type: 'other', amount: 3397, note: '' },
+    { id: 2, name: '房租2', type: 'other', amount: 3200, note: '' },
+    { id: 3, name: '房租3', type: 'other', amount: 2547.75, note: '' },
+    { id: 4, name: '房租4', type: 'other', amount: 2310, note: '' },
+    { id: 5, name: '水费', type: 'other', amount: 50, note: '' },
+    { id: 6, name: '水费', type: 'other', amount: 50, note: '' },
+    { id: 7, name: '电费', type: 'other', amount: 100, note: '' },
+    { id: 8, name: '燃气费', type: 'other', amount: 100, note: '' },
+    { id: 9, name: '烟', type: 'other', amount: 30, note: '' },
+    { id: 10, name: '水', type: 'other', amount: 7.9, note: '' },
+    { id: 11, name: '水', type: 'other', amount: 15.8, note: '' }
   ]},
   { id: 'rc-property', name: '物业费', icon: '📋', items: [
     { id: 1, name: '物业费', type: 'material', amount: 271, note: '' },
@@ -1331,7 +1340,8 @@ const DEFAULT_RENO_CATEGORIES = [
   ]},
   { id: 'rc-misc', name: '杂项', icon: '📦', items: [
     { id: 1, name: '刀片+铲墙面刀', type: 'material', amount: 15, note: '' },
-    { id: 2, name: '隔音棉+扎带+阻尼片', type: 'material', amount: 74, note: '' }
+    { id: 2, name: '隔音棉+扎带+阻尼片', type: 'material', amount: 74, note: '' },
+    { id: 3, name: '建渣清运', type: 'labor', amount: 450, note: '' }
   ]}
 ];
 const DEFAULT_RENO_INCOMES = [
@@ -1339,10 +1349,23 @@ const DEFAULT_RENO_INCOMES = [
   { id: 2, name: '卖厕所门', amount: 100, note: '' },
   { id: 3, name: '卖剩余钢和塑料', amount: 130, note: '' }
 ];
-const RENO_SEED_VERSION = 'v1';
+const RENO_SEED_VERSION = 'v2';
 let renoCategories = loadData(STORE_KEYS.reno_categories, DEFAULT_RENO_CATEGORIES);
 let renoIncomes = loadData(STORE_KEYS.reno_incomes, DEFAULT_RENO_INCOMES);
 if(localStorage.getItem('wb_reno_seed') !== RENO_SEED_VERSION) {
+  /* v1→v2 migration: fix rent/living items to 'other' type, add 建渣清运 */
+  if(localStorage.getItem('wb_reno_seed') === 'v1') {
+    var rentCat = renoCategories.find(function(c){return c.id==='rc-rent';});
+    if(rentCat) {
+      rentCat.name = '租房及生活';
+      rentCat.items.forEach(function(i){ i.type = 'other'; });
+    }
+    var miscCat = renoCategories.find(function(c){return c.id==='rc-misc';});
+    if(miscCat && !miscCat.items.find(function(i){return i.name.indexOf('建渣清运')>=0;})) {
+      miscCat.items.push({ id: Date.now(), name: '建渣清运', type: 'labor', amount: 450, note: '' });
+    }
+    saveData(STORE_KEYS.reno_categories, renoCategories);
+  }
   if(renoCategories.length === 0) { renoCategories = DEFAULT_RENO_CATEGORIES.slice(); saveData(STORE_KEYS.reno_categories, renoCategories); }
   if(renoIncomes.length === 0) { renoIncomes = DEFAULT_RENO_INCOMES.slice(); saveData(STORE_KEYS.reno_incomes, renoIncomes); }
   localStorage.setItem('wb_reno_seed', RENO_SEED_VERSION);
@@ -2949,11 +2972,18 @@ function renderRenoCategories() {
   var html = renoCategories.map(function(cat) {
     var matTotal = cat.items.filter(function(i){return i.type==='material';}).reduce(function(s,i){return s+(parseFloat(i.amount)||0);},0);
     var labTotal = cat.items.filter(function(i){return i.type==='labor';}).reduce(function(s,i){return s+(parseFloat(i.amount)||0);},0);
-    var catTotal = matTotal + labTotal;
+    var othTotal = cat.items.filter(function(i){return i.type==='other';}).reduce(function(s,i){return s+(parseFloat(i.amount)||0);},0);
+    var catTotal = matTotal + labTotal + othTotal;
+    var summaryHtml = '<div class="reno-cat-summary">' +
+      '<div class="reno-cat-stat mat"><div class="rcs-label">材料</div><div class="rcs-value">¥' + matTotal.toFixed(2) + '</div></div>' +
+      '<div class="reno-cat-stat lab"><div class="rcs-label">人工</div><div class="rcs-value">¥' + labTotal.toFixed(2) + '</div></div>' +
+      '<div class="reno-cat-stat total"><div class="rcs-label">合计</div><div class="rcs-value">¥' + catTotal.toFixed(2) + '</div></div>' +
+    '</div>';
     var itemsHtml = cat.items.length ? cat.items.map(function(item, idx) {
+      var typeLabel = item.type==='material'?'材料':(item.type==='labor'?'人工':'其他');
       return '<div class="reno-item">' +
         '<span class="ri-name">' + item.name + (item.note ? ' <span style="font-size:0.75rem;color:#000;">(' + item.note + ')</span>' : '') + '</span>' +
-        '<span class="ri-type ' + item.type + '">' + (item.type==='material'?'材料':'人工') + '</span>' +
+        '<span class="ri-type ' + item.type + '">' + typeLabel + '</span>' +
         '<span class="ri-amount">¥' + (parseFloat(item.amount)||0).toFixed(2) + '</span>' +
         '<div class="ri-actions">' +
           '<button class="btn btn-secondary btn-sm" style="padding:4px 8px;font-size:0.72rem;min-height:28px;" onclick="editRenoItem(\'' + cat.id + '\',' + idx + ')">编辑</button>' +
@@ -2963,14 +2993,13 @@ function renderRenoCategories() {
     }).join('') : '<p style="color:#000;font-size:0.85rem;padding:8px 0;">暂无记录</p>';
     return '<div class="reno-cat-card">' +
       '<div class="reno-cat-header">' +
-        '<div class="reno-cat-title">' + (cat.icon||'📁') + ' ' + cat.name +
-          '<div style="display:flex;gap:6px;margin-left:8px;">' +
-            '<button class="btn btn-secondary btn-sm" style="padding:3px 8px;font-size:0.7rem;min-height:26px;" onclick="editRenoCategory(\'' + cat.id + '\')">编辑类别</button>' +
-            '<button class="btn btn-danger btn-sm" style="padding:3px 8px;font-size:0.7rem;min-height:26px;" onclick="deleteRenoCategory(\'' + cat.id + '\')">删除类别</button>' +
-          '</div>' +
+        '<div class="reno-cat-title">' + (cat.icon||'📁') + ' ' + cat.name + '</div>' +
+        '<div class="reno-cat-actions">' +
+          '<button class="btn btn-secondary btn-sm" style="padding:3px 8px;font-size:0.7rem;min-height:26px;" onclick="editRenoCategory(\'' + cat.id + '\')">编辑类别</button>' +
+          '<button class="btn btn-danger btn-sm" style="padding:3px 8px;font-size:0.7rem;min-height:26px;" onclick="deleteRenoCategory(\'' + cat.id + '\')">删除类别</button>' +
         '</div>' +
-        '<div class="reno-cat-total">材料 ¥' + matTotal.toFixed(2) + ' | 人工 ¥' + labTotal.toFixed(2) + ' | 合计 ¥' + catTotal.toFixed(2) + '</div>' +
       '</div>' +
+      summaryHtml +
       itemsHtml +
     '</div>';
   }).join('');
@@ -2995,32 +3024,35 @@ function renderRenoIncomes() {
 }
 
 function renderRenoSummary() {
-  var totalMat = 0, totalLab = 0, totalIncome = 0;
+  var totalMat = 0, totalLab = 0, totalOth = 0, totalIncome = 0;
   renoCategories.forEach(function(cat) {
     cat.items.forEach(function(i) {
       if(i.type === 'material') totalMat += parseFloat(i.amount)||0;
-      else totalLab += parseFloat(i.amount)||0;
+      else if(i.type === 'labor') totalLab += parseFloat(i.amount)||0;
+      else totalOth += parseFloat(i.amount)||0;
     });
   });
   renoIncomes.forEach(function(i) { totalIncome += parseFloat(i.amount)||0; });
-  var totalExpense = totalMat + totalLab;
+  var totalExpense = totalMat + totalLab + totalOth;
   var netCost = totalExpense - totalIncome;
 
-  var html = '<div class="quick-stats" style="margin-bottom:20px;">' +
+  var html = '<div class="quick-stats" style="margin-bottom:20px;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));">' +
     '<div class="reno-summary-stat"><div class="rs-value" style="color:var(--accent-dark);">¥' + totalMat.toFixed(2) + '</div><div class="rs-label">材料总支出</div></div>' +
     '<div class="reno-summary-stat"><div class="rs-value" style="color:var(--lake-blue);">¥' + totalLab.toFixed(2) + '</div><div class="rs-label">人工总支出</div></div>' +
+    '<div class="reno-summary-stat"><div class="rs-value" style="color:#9a6b1f;">¥' + totalOth.toFixed(2) + '</div><div class="rs-label">其他支出</div></div>' +
     '<div class="reno-summary-stat"><div class="rs-value" style="color:#1e6f9c;">+¥' + totalIncome.toFixed(2) + '</div><div class="rs-label">总收入</div></div>' +
     '<div class="reno-summary-stat"><div class="rs-value" style="color:' + (netCost>0?'#d9534f':'var(--accent-dark)') + ';">¥' + netCost.toFixed(2) + '</div><div class="rs-label">净支出</div></div>' +
   '</div>';
 
-  html += '<div class="glass-card"><h4 style="margin-bottom:12px;">各工种支出明细</h4>';
-  html += '<div class="table-wrap"><table><thead><tr><th>类别</th><th>材料</th><th>人工</th><th>合计</th></tr></thead><tbody>';
+  html += '<div class="glass-card"><h4 style="margin-bottom:12px;">各类别支出明细</h4>';
+  html += '<div class="table-wrap"><table><thead><tr><th>类别</th><th>材料</th><th>人工</th><th>其他</th><th>合计</th></tr></thead><tbody>';
   renoCategories.forEach(function(cat) {
     var m = cat.items.filter(function(i){return i.type==='material';}).reduce(function(s,i){return s+(parseFloat(i.amount)||0);},0);
     var l = cat.items.filter(function(i){return i.type==='labor';}).reduce(function(s,i){return s+(parseFloat(i.amount)||0);},0);
-    html += '<tr><td>' + (cat.icon||'📁') + ' ' + cat.name + '</td><td>¥' + m.toFixed(2) + '</td><td>¥' + l.toFixed(2) + '</td><td style="font-weight:700;">¥' + (m+l).toFixed(2) + '</td></tr>';
+    var o = cat.items.filter(function(i){return i.type==='other';}).reduce(function(s,i){return s+(parseFloat(i.amount)||0);},0);
+    html += '<tr><td>' + (cat.icon||'📁') + ' ' + cat.name + '</td><td>¥' + m.toFixed(2) + '</td><td>¥' + l.toFixed(2) + '</td><td>¥' + o.toFixed(2) + '</td><td style="font-weight:700;">¥' + (m+l+o).toFixed(2) + '</td></tr>';
   });
-  html += '<tr style="background:var(--accent-light);font-weight:700;"><td>合计</td><td>¥' + totalMat.toFixed(2) + '</td><td>¥' + totalLab.toFixed(2) + '</td><td>¥' + totalExpense.toFixed(2) + '</td></tr>';
+  html += '<tr style="background:var(--accent-light);font-weight:700;"><td>合计</td><td>¥' + totalMat.toFixed(2) + '</td><td>¥' + totalLab.toFixed(2) + '</td><td>¥' + totalOth.toFixed(2) + '</td><td>¥' + totalExpense.toFixed(2) + '</td></tr>';
   html += '</tbody></table></div></div>';
 
   $('reno-summary-content').innerHTML = html;
@@ -3033,7 +3065,7 @@ function openRenoItemModal() {
   $('modal-body').innerHTML =
     '<div class="form-group"><label>类别</label><select id="m-reno-cat">' + catOptions + '</select></div>' +
     '<div class="form-row"><div class="form-group"><label>名称 *</label><input type="text" id="m-reno-name" placeholder="例如：波纹管"></div>' +
-    '<div class="form-group"><label>类型</label><select id="m-reno-type"><option value="material">材料</option><option value="labor">人工</option></select></div></div>' +
+    '<div class="form-group"><label>类型</label><select id="m-reno-type"><option value="material">材料</option><option value="labor">人工</option><option value="other">其他</option></select></div></div>' +
     '<div class="form-row"><div class="form-group"><label>金额 *</label><input type="number" id="m-reno-amount" placeholder="0.00" step="0.01"></div>' +
     '<div class="form-group"><label>备注</label><input type="text" id="m-reno-note" placeholder="选填"></div></div>';
   $('modal-confirm').onclick = function() {
@@ -3061,7 +3093,7 @@ function editRenoItem(catId, idx) {
   $('modal-body').innerHTML =
     '<div class="form-group"><label>类别：' + (cat.icon||'📁') + ' ' + cat.name + '</label></div>' +
     '<div class="form-row"><div class="form-group"><label>名称 *</label><input type="text" id="m-reno-name" value="' + item.name + '"></div>' +
-    '<div class="form-group"><label>类型</label><select id="m-reno-type"><option value="material" ' + (item.type==='material'?'selected':'') + '>材料</option><option value="labor" ' + (item.type==='labor'?'selected':'') + '>人工</option></select></div></div>' +
+    '<div class="form-group"><label>类型</label><select id="m-reno-type"><option value="material" ' + (item.type==='material'?'selected':'') + '>材料</option><option value="labor" ' + (item.type==='labor'?'selected':'') + '>人工</option><option value="other" ' + (item.type==='other'?'selected':'') + '>其他</option></select></div></div>' +
     '<div class="form-row"><div class="form-group"><label>金额 *</label><input type="number" id="m-reno-amount" value="' + item.amount + '" step="0.01"></div>' +
     '<div class="form-group"><label>备注</label><input type="text" id="m-reno-note" value="' + (item.note||'') + '"></div></div>';
   $('modal-confirm').onclick = function() {
