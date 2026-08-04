@@ -3778,6 +3778,19 @@ function renderHomeStats() {
   renderPsychology();
 }
 
+function getNewsSearchUrl(n) {
+  var sourceDomain = {
+    '人民网': 'people.com.cn',
+    '央视新闻': 'cctv.com',
+    '21世纪经济报道': '21jingji.com',
+    '中国商报': 'cnstock.com'
+  };
+  var domain = sourceDomain[n.source];
+  var kw = encodeURIComponent(n.title);
+  if(domain) return 'https://www.baidu.com/s?wd=' + kw + '+site%3A' + domain;
+  return 'https://www.baidu.com/s?wd=' + kw;
+}
+
 function renderNewsByCategory(cat) {
   var catNews = DAILY_NEWS.filter(function(n) { return n.category === cat; });
   var cards = catNews.map(function(n) {
@@ -3785,7 +3798,7 @@ function renderNewsByCategory(cat) {
       '<div><span class="news-priority ' + n.priority + '">' + (n.priority==='high'?'热门':'关注') + '</span><span class="news-title">' + n.title + '</span></div>' +
       '<div class="news-desc">' + n.desc + '</div>' +
       '<div class="news-tags">' + n.tags.map(function(t) { return '<span class="news-tag">' + t + '</span>'; }).join('') + '</div>' +
-      '<div class="news-meta"><span class="news-source">' + n.source + '</span><span>' + n.date + '</span><a class="news-link" href="' + n.url + '" target="_blank" rel="noopener noreferrer">查看原文 →</a></div>' +
+      '<div class="news-meta"><span class="news-source">' + n.source + '</span><span>' + n.date + '</span><a class="news-link" href="' + getNewsSearchUrl(n) + '" target="_blank" rel="noopener noreferrer">查看报道 →</a></div>' +
     '</div>';
   }).join('');
   $('news-cards').innerHTML = cards || '<p style="color:#000;text-align:center;padding:20px;">暂无该类别新闻</p>';
