@@ -159,8 +159,8 @@ body {
   .form-row { grid-template-columns: 1fr; }
   .btn { padding: 10px 16px; font-size: 0.92rem; min-height: 44px; }
   .btn-sm { padding: 8px 12px; min-height: 40px; }
-  .nav-item-mobile { font-size: 0.65rem; }
-  .nav-item-mobile svg { width: 20px; height: 20px; }
+  .nav-item-mobile { font-size: 0.6rem; }
+  .nav-item-mobile svg { width: 19px; height: 19px; }
   .calendar-grid { gap: 3px; }
   .calendar-day { padding: 6px 2px; font-size: 0.8rem; }
   .compare-result { grid-template-columns: 1fr; }
@@ -610,6 +610,20 @@ td .badge { display: inline-block; padding: 4px 12px; border-radius: 20px; font-
 .news-tab { padding: 7px 20px; border-radius: 22px; font-size: 0.88rem; font-weight: 600; cursor: pointer; transition: all 0.25s ease; background: transparent; color: var(--accent-dark); border: 1.5px solid var(--accent-dark); user-select: none; }
 .news-tab:hover:not(.active) { background: var(--accent-light); }
 .news-tab.active { background: var(--lake-blue); color: #feffef; border-color: transparent; box-shadow: 0 3px 12px rgba(46,139,192,0.25); }
+.news-header-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+.news-update-info { display: flex; align-items: center; gap: 8px; font-size: 0.82rem; color: var(--muted); }
+.news-update-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent2); flex-shrink: 0; transition: background 0.3s; }
+.news-update-dot.loading { background: #f59e0b; animation: newsPulse 1s infinite; }
+.news-update-dot.error { background: #ef4444; }
+.news-update-dot.success { background: var(--accent2); }
+@keyframes newsPulse { 0%,100% { opacity: 1; } 50% { opacity: 0.4; } }
+#news-refresh-btn { min-height: 32px; padding: 5px 14px; }
+#news-refresh-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+.news-loading-skeleton { background: var(--bg2); border-radius: var(--radius); padding: 20px; margin-bottom: 12px; border: 1px solid rgba(255,255,250,0.40); }
+.news-loading-skeleton .skel-line { height: 12px; background: linear-gradient(90deg, rgba(0,0,0,0.05) 25%, rgba(0,0,0,0.10) 50%, rgba(0,0,0,0.05) 75%); background-size: 200% 100%; border-radius: 6px; margin-bottom: 8px; animation: skelShimmer 1.5s infinite; }
+.news-loading-skeleton .skel-line.short { width: 60%; }
+.news-loading-skeleton .skel-line.mid { width: 80%; }
+@keyframes skelShimmer { 0% { background-position: 200% 0; } 100% { background-position: -200% 0; } }
 .news-card { background: var(--bg2); backdrop-filter: blur(12px); border: 1px solid rgba(255,255,250,0.60); border-radius: var(--radius); padding: 16px 20px; margin-bottom: 12px; box-shadow: 0 2px 12px var(--shadow); transition: transform 0.3s cubic-bezier(0.4,0,0.2,1), box-shadow 0.3s; }
 .news-card:hover { box-shadow: 0 8px 24px rgba(46,139,192,0.12); transform: translateY(-2px); }
 .news-card .news-priority { display: inline-block; padding: 2px 8px; border-radius: 10px; font-size: 0.7rem; font-weight: 700; margin-right: 8px; vertical-align: middle; }
@@ -733,6 +747,10 @@ td .badge { display: inline-block; padding: 4px 12px; border-radius: 20px; font-
       <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
       首页
     </div>
+    <div class="nav-item" data-tab="news">
+      <svg viewBox="0 0 24 24"><path d="M20 3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H4V5h16v14zM6 7h8v2H6V7zm0 4h8v2H6v-2zm0 4h5v2H6v-2zm9-3h4v6h-4v-6z"/></svg>
+      每日热点
+    </div>
     <div class="nav-item" data-tab="inspire">
       <svg viewBox="0 0 24 24"><path d="M9 21c0 .55.45 1 1 1h4c.55 0 1-.45 1-1v-1H9v1zm3-19C8.14 2 5 5.14 5 9c0 2.38 1.19 4.47 3 5.74V17c0 .55.45 1 1 1h6c.55 0 1-.45 1-1v-2.26c1.81-1.27 3-3.36 3-5.74 0-3.86-3.14-7-7-7z"/></svg>
       灵感
@@ -764,6 +782,10 @@ td .badge { display: inline-block; padding: 4px 12px; border-radius: 20px; font-
     <div class="nav-item-mobile active" data-tab="home">
       <svg viewBox="0 0 24 24"><path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z"/></svg>
       首页
+    </div>
+    <div class="nav-item-mobile" data-tab="news">
+      <svg viewBox="0 0 24 24"><path d="M20 3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H4V5h16v14zM6 7h8v2H6V7zm0 4h8v2H6v-2zm0 4h5v2H6v-2zm9-3h4v6h-4v-6z"/></svg>
+      热点
     </div>
     <div class="nav-item-mobile" data-tab="inspire">
       <svg viewBox="0 0 24 24"><path d="M9 21c0 .55.45 1 1 1h4c.55 0 1-.45 1-1v-1H9v1zm3-19C8.14 2 5 5.14 5 9c0 2.38 1.19 4.47 3 5.74V17c0 .55.45 1 1 1h6c.55 0 1-.45 1-1v-2.26c1.81-1.27 3-3.36 3-5.74 0-3.86-3.14-7-7-7z"/></svg>
@@ -820,18 +842,27 @@ td .badge { display: inline-block; padding: 4px 12px; border-radius: 20px; font-
           <div id="monthly-summary"></div>
         </div>
       </div>
-      <div class="home-grid full">
-        <div class="summary-block">
-          <h4>每日热点</h4>
-          <div class="news-tabs" id="news-tabs">
-            <div class="news-tab active" data-newscat="综合">综合</div>
-            <div class="news-tab" data-newscat="科技">科技</div>
-            <div class="news-tab" data-newscat="社会">社会</div>
-            <div class="news-tab" data-newscat="财经">财经</div>
-          </div>
-          <div id="news-cards"></div>
+    </section>
+
+    <!-- ====== DAILY NEWS SECTION ====== -->
+    <section id="news" class="section">
+      <div class="news-header-bar">
+        <div class="news-update-info">
+          <span class="news-update-dot" id="news-update-dot"></span>
+          <span id="news-last-update">正在加载热点...</span>
         </div>
+        <button class="btn btn-primary btn-sm" onclick="refreshNews(true)" id="news-refresh-btn">
+          <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="vertical-align:middle;margin-right:4px;"><path d="M21 12a9 9 0 1 1-3-6.7L21 8"/><path d="M21 3v5h-5"/></svg>
+          刷新
+        </button>
       </div>
+      <div class="news-tabs" id="news-tabs">
+        <div class="news-tab active" data-newscat="综合">综合</div>
+        <div class="news-tab" data-newscat="科技">科技</div>
+        <div class="news-tab" data-newscat="社会">社会</div>
+        <div class="news-tab" data-newscat="财经">财经</div>
+      </div>
+      <div id="news-cards"></div>
     </section>
 
     <!-- ====== DAILY INSPIRATION SECTION ====== -->
@@ -2176,9 +2207,10 @@ function switchTab(tab) {
   document.querySelectorAll('.nav-item-mobile[data-tab="' + tab + '"]').forEach(n => n.classList.add('active'));
   document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
   $(tab).classList.add('active');
-  const titles = { home:'首页', inspire:'每日灵感', knowledge:'传统知识', skills:'能力提升', health:'身材管理', media:'新媒体运营', reno:'装修记录' };
+  const titles = { home:'首页', news:'每日热点', inspire:'每日灵感', knowledge:'传统知识', skills:'能力提升', health:'身材管理', media:'新媒体运营', reno:'装修记录' };
   $('page-title').textContent = titles[tab];
   if(tab === 'home') { setTimeout(renderHomeStats, 50); }
+  if(tab === 'news') { initNewsSection(); }
   if(tab === 'knowledge') { renderPoetsByDynasty(); renderHistoryToday(); }
   if(tab === 'inspire') { renderEssays(); renderReadings(); renderFragments(); }
   if(tab === 'skills') { renderBookTagFilter(); renderBooks(); renderAITips(); }
@@ -3724,25 +3756,384 @@ function deleteItem(storeKey, id) {
   if(storeKey==='weights') { weights=weights.filter(x=>x.id!==id); saveData(STORE_KEYS.weights, weights); renderWeights(); initWeightChart(); renderCalendar(); updateCompareSelects(); }
 }
 
-/* ========================== HOMEPAGE ========================== */
-var DAILY_NEWS = [
-  // 综合
+/* ========================== DAILY NEWS (AUTO-UPDATE) ========================== */
+
+/* 静态备用新闻 —— 在网络抓取失败时展示 */
+var FALLBACK_NEWS = [
   { category:'综合', priority:'high', title:'证监会推出10项政策举措支持香港资本市场发展', desc:'中国证监会主席吴清宣布10项政策举措，包括支持境内企业赴港上市、支持港股上市公司境内上市等，深化双向务实合作。', source:'人民网', date:'2026-08-03', url:'http://www.people.com.cn/', tags:['证监会','香港','资本市场'] },
   { category:'综合', priority:'high', title:'央行明确下半年八项重点工作', desc:'中国人民银行部署下半年重点任务，涉及货币政策、金融风险防范、人民币国际化等关键领域。', source:'中国商报', date:'2026-08-03', url:'https://www.cnstock.com/', tags:['央行','货币政策','下半年'] },
   { category:'综合', priority:'medium', title:'轻工业经济运行稳中有进 上半年出口较快增长', desc:'中国轻工业联合会数据显示，上半年轻工业生产总体平稳，国内消费市场提质扩容，商品出口较快增长，结构持续优化。', source:'央视新闻', date:'2026-08-02', url:'https://news.cctv.com/', tags:['轻工业','出口','消费'] },
-  // 科技
   { category:'科技', priority:'high', title:'人工智能等新兴产业快速发展 催生大量新需求', desc:'AI等新兴产业催生全新市场需求，一批基础制造领域工业企业加快转型升级，为新兴领域供应关键材料。', source:'央视新闻', date:'2026-08-02', url:'https://news.cctv.com/', tags:['人工智能','产业升级','新材料'] },
   { category:'科技', priority:'high', title:'中微公司计划五年内覆盖60%半导体高端设备', desc:'国内半导体设备龙头企业中微公司公布战略规划，目标在五年内覆盖60%的半导体高端设备市场。', source:'21世纪经济报道', date:'2026-08-02', url:'https://www.21jingji.com/', tags:['半导体','中微公司','国产替代'] },
   { category:'科技', priority:'medium', title:'三大运营商规范互联网渠道售卡 第三方不再办理', desc:'中国电信、移动、联通联合公告，8月1日起互联网渠道号卡订购仅限官方App和网站，第三方渠道不再提供办理服务。', source:'21世纪经济报道', date:'2026-08-01', url:'https://www.21jingji.com/', tags:['运营商','号卡管理','数据安全'] },
-  // 社会
   { category:'社会', priority:'high', title:'深化扫黑除恶专项斗争 中央政法委答记者问', desc:'中央政法委负责同志就开展深化扫黑除恶专项斗争有关问题回答提问，部署下一阶段重点工作。', source:'人民网', date:'2026-08-03', url:'http://www.people.com.cn/', tags:['扫黑除恶','政法','社会治安'] },
   { category:'社会', priority:'medium', title:'房地产市场进入存量时代 新模式加速探索', desc:'多地出台房地产新政，从增量开发向存量运营转型，租赁市场、城市更新成为新方向。', source:'中国商报', date:'2026-08-03', url:'https://www.cnstock.com/', tags:['房地产','存量时代','城市更新'] },
   { category:'社会', priority:'medium', title:'多地高温预警持续 防暑降温需注意', desc:'中央气象台持续发布高温预警，多地气温突破历史极值，提醒市民做好防暑降温措施。', source:'央视新闻', date:'2026-08-02', url:'https://news.cctv.com/', tags:['高温','气象','防暑'] },
-  // 财经
   { category:'财经', priority:'high', title:'证监会10项政策举措释放重磅利好', desc:'包括继续支持境内企业赴港上市融资、支持符合条件的港股上市公司境内上市等，提振市场信心。', source:'中国商报', date:'2026-08-03', url:'https://www.cnstock.com/', tags:['证监会','利好','港股'] },
   { category:'财经', priority:'medium', title:'小米多款手机调价 消费电子市场竞争加剧', desc:'小米宣布多款手机价格调整，反映消费电子市场竞争白热化，品牌策略加速调整。', source:'21世纪经济报道', date:'2026-08-02', url:'https://www.21jingji.com/', tags:['小米','手机','消费电子'] },
   { category:'财经', priority:'medium', title:'传统工业品适配新需求 老产业跑出转型加速度', desc:'传统制造企业通过为AI等新兴产业供应关键材料实现新发展，产业转型成效显著。', source:'央视新闻', date:'2026-08-02', url:'https://news.cctv.com/', tags:['传统制造','转型','新需求'] }
 ];
+
+/* RSS 源配置 —— 权威专业媒体 */
+var NEWS_RSS_SOURCES = [
+  { name:'人民网-国内', url:'http://www.people.com.cn/rss/politics.xml', category:'综合' },
+  { name:'人民网-国际', url:'http://www.people.com.cn/rss/world.xml', category:'综合' },
+  { name:'人民网-科技', url:'http://www.people.com.cn/rss/IT.xml', category:'科技' },
+  { name:'人民网-经济', url:'http://www.people.com.cn/rss/finance.xml', category:'财经' },
+  { name:'人民网-社会', url:'http://www.people.com.cn/rss/society.xml', category:'社会' },
+  { name:'新华网-时政', url:'http://www.xinhuanet.com/rss/politics.xml', category:'综合' },
+  { name:'新华网-科技', url:'http://www.xinhuanet.com/rss/technology.xml', category:'科技' },
+  { name:'新华网-财经', url:'http://www.xinhuanet.com/rss/finance.xml', category:'财经' },
+  { name:'中国新闻网', url:'https://www.chinanews.com.cn/rss/scroll-news.xml', category:'综合' },
+  { name:'中国新闻网-社会', url:'https://www.chinanews.com.cn/rss/society.xml', category:'社会' }
+];
+
+/* 分类关键词映射 */
+var NEWS_CATEGORY_KEYWORDS = {
+  '科技': ['科技','技术','人工智能','AI','芯片','半导体','互联网','数字化','5G','6G','算法','数据','智能','量子','航天','卫星','机器人','新能源','电池','光伏','风电','自动驾驶','大模型','算力','编程','软件','网络安全','信息'],
+  '财经': ['财经','经济','金融','股市','A股','港股','基金','债券','利率','央行','货币','通胀','GDP','贸易','投资','消费','零售','物价','房价','楼市','保险','银行','证券','上市公司','财报','营收','利润','降息','加息'],
+  '社会': ['社会','民生','教育','医疗','健康','就业','养老','住房','交通','天气','高温','暴雨','地震','灾害','安全','事故','治安','法律','维权','社区','城市','乡村','人口','生育','婚育'],
+  '综合': []
+};
+
+/* 新闻缓存管理 */
+var NEWS_CACHE_KEY = 'workbench_news_cache';
+var NEWS_CACHE_MAX_AGE = 12 * 60 * 60 * 1000; /* 12小时 */
+var NEWS_MAX_PER_CATEGORY = 5; /* 每类最多展示条数 */
+var currentNewsCategory = '综合';
+var newsTabBound = false;
+
+function getNewsCache() {
+  try {
+    var raw = localStorage.getItem(NEWS_CACHE_KEY);
+    if(!raw) return null;
+    var data = JSON.parse(raw);
+    if(!data || !data.items || !data.timestamp) return null;
+    return data;
+  } catch(e) { return null; }
+}
+
+function saveNewsCache(items) {
+  try {
+    localStorage.setItem(NEWS_CACHE_KEY, JSON.stringify({
+      items: items,
+      timestamp: Date.now()
+    }));
+  } catch(e) {}
+}
+
+function isNewsCacheStale() {
+  var cache = getNewsCache();
+  if(!cache) return true;
+  return (Date.now() - cache.timestamp) > NEWS_CACHE_MAX_AGE;
+}
+
+/* 获取当前新闻列表（优先缓存，其次备用数据） */
+function getCurrentNews() {
+  var cache = getNewsCache();
+  if(cache && cache.items && cache.items.length > 0) return cache.items;
+  return FALLBACK_NEWS;
+}
+
+/* 从 RSS XML 中解析新闻条目 */
+function parseRSSXML(xmlText, sourceName, category) {
+  var items = [];
+  try {
+    var parser = new DOMParser();
+    var doc = parser.parseFromString(xmlText, 'text/xml');
+    var entries = doc.querySelectorAll('item');
+    if(entries.length === 0) {
+      /* Atom 格式 */
+      entries = doc.querySelectorAll('entry');
+    }
+    entries.forEach(function(entry, idx) {
+      if(idx >= 8) return; /* 每个源最多取8条 */
+      var titleEl = entry.querySelector('title');
+      var descEl = entry.querySelector('description') || entry.querySelector('summary');
+      var linkEl = entry.querySelector('link');
+      var dateEl = entry.querySelector('pubDate') || entry.querySelector('published') || entry.querySelector('updated');
+      var title = titleEl ? titleEl.textContent.trim() : '';
+      if(!title) return;
+      var desc = descEl ? descEl.textContent.trim() : '';
+      /* 清理 HTML 标签 */
+      desc = desc.replace(/<[^>]+>/g, '').substring(0, 200);
+      var link = '';
+      if(linkEl) {
+        link = linkEl.textContent.trim() || linkEl.getAttribute('href') || '';
+      }
+      var dateStr = dateEl ? dateEl.textContent.trim() : '';
+      var parsedDate = dateStr ? parseRSSDate(dateStr) : todayStr();
+
+      /* 自动分类 */
+      var autoCat = categorizeNews(title + ' ' + desc);
+      if(category && !autoCat) autoCat = category; /* 用源默认分类 */
+
+      items.push({
+        category: autoCat || '综合',
+        priority: idx < 2 ? 'high' : 'medium',
+        title: title,
+        desc: desc || '点击查看详情',
+        source: sourceName,
+        date: parsedDate,
+        url: link,
+        tags: extractNewsTags(title + ' ' + desc)
+      });
+    });
+  } catch(e) {
+    console.warn('RSS parse error for ' + sourceName, e);
+  }
+  return items;
+}
+
+function parseRSSDate(dateStr) {
+  try {
+    var d = new Date(dateStr);
+    if(isNaN(d.getTime())) return todayStr();
+    return d.toISOString().split('T')[0];
+  } catch(e) {
+    return todayStr();
+  }
+}
+
+function categorizeNews(text) {
+  var bestCat = '';
+  var bestScore = 0;
+  Object.keys(NEWS_CATEGORY_KEYWORDS).forEach(function(cat) {
+    if(cat === '综合') return;
+    var keywords = NEWS_CATEGORY_KEYWORDS[cat];
+    var score = 0;
+    keywords.forEach(function(kw) {
+      if(text.indexOf(kw) >= 0) score++;
+    });
+    if(score > bestScore) { bestScore = score; bestCat = cat; }
+  });
+  return bestScore > 0 ? bestCat : '综合';
+}
+
+function extractNewsTags(text) {
+  var tags = [];
+  var allKeywords = [];
+  Object.keys(NEWS_CATEGORY_KEYWORDS).forEach(function(cat) {
+    NEWS_CATEGORY_KEYWORDS[cat].forEach(function(kw) { allKeywords.push(kw); });
+  });
+  allKeywords.forEach(function(kw) {
+    if(tags.length >= 4) return;
+    if(text.indexOf(kw) >= 0 && tags.indexOf(kw) < 0) tags.push(kw);
+  });
+  return tags.length > 0 ? tags : ['资讯'];
+}
+
+/* 从多个 RSS 源并行抓取新闻 */
+async function fetchNewsFromRSS() {
+  var proxyUrl = 'https://api.allorigins.win/raw?url=';
+  var allItems = [];
+  var successCount = 0;
+  var totalSources = NEWS_RSS_SOURCES.length;
+
+  /* 并行请求所有源 */
+  var fetchPromises = NEWS_RSS_SOURCES.map(function(source) {
+    var url = proxyUrl + encodeURIComponent(source.url);
+    return fetch(url, { method: 'GET', signal: AbortSignal.timeout(15000) })
+      .then(function(res) {
+        if(!res.ok) throw new Error('HTTP ' + res.status);
+        return res.text();
+      })
+      .then(function(xml) {
+        var items = parseRSSXML(xml, source.name, source.category);
+        if(items.length > 0) successCount++;
+        allItems = allItems.concat(items);
+      })
+      .catch(function(err) {
+        console.warn('Fetch failed for ' + source.name + ':', err.message);
+      });
+  });
+
+  await Promise.allSettled(fetchPromises);
+
+  /* 如果至少一个源成功，返回结果 */
+  if(allItems.length > 0) {
+    /* 去重（按标题） */
+    var seen = {};
+    allItems = allItems.filter(function(item) {
+      if(seen[item.title]) return false;
+      seen[item.title] = true;
+      return true;
+    });
+    /* 按日期降序排序 */
+    allItems.sort(function(a, b) {
+      return b.date.localeCompare(a.date);
+    });
+    return { items: allItems, successCount: successCount, totalSources: totalSources };
+  }
+
+  return null;
+}
+
+/* 渲染新闻卡片 */
+function renderNewsByCategory(cat) {
+  var allNews = getCurrentNews();
+  var catNews = allNews.filter(function(n) { return n.category === cat; });
+  /* 每类最多展示指定条数 */
+  catNews = catNews.slice(0, NEWS_MAX_PER_CATEGORY);
+  var cards = catNews.map(function(n) {
+    return '<div class="news-card">' +
+      '<div><span class="news-priority ' + n.priority + '">' + (n.priority==='high'?'热门':'关注') + '</span><span class="news-title">' + escapeHtml(n.title) + '</span></div>' +
+      '<div class="news-desc">' + escapeHtml(n.desc) + '</div>' +
+      '<div class="news-tags">' + n.tags.map(function(t) { return '<span class="news-tag">' + escapeHtml(t) + '</span>'; }).join('') + '</div>' +
+      '<div class="news-meta"><span class="news-source">' + escapeHtml(n.source) + '</span><span>' + n.date + '</span><a class="news-link" href="' + getNewsLink(n) + '" target="_blank" rel="noopener noreferrer">查看报道 →</a></div>' +
+    '</div>';
+  }).join('');
+  $('news-cards').innerHTML = cards || '<p style="color:#000;text-align:center;padding:20px;">暂无该类别新闻</p>';
+}
+
+function escapeHtml(text) {
+  if(!text) return '';
+  var div = document.createElement('div');
+  div.textContent = text;
+  return div.innerHTML;
+}
+
+function getNewsLink(n) {
+  /* 如果有原始链接，直接使用 */
+  if(n.url && n.url.startsWith('http')) return n.url;
+  return getNewsSearchUrl(n);
+}
+
+function getNewsSearchUrl(n) {
+  var sourceDomain = {
+    '人民网': 'people.com.cn',
+    '新华网': 'xinhuanet.com',
+    '央视新闻': 'cctv.com',
+    '21世纪经济报道': '21jingji.com',
+    '中国商报': 'cnstock.com',
+    '中国新闻网': 'chinanews.com.cn',
+    '人民网-国内': 'people.com.cn',
+    '人民网-国际': 'people.com.cn',
+    '人民网-科技': 'people.com.cn',
+    '人民网-经济': 'people.com.cn',
+    '人民网-社会': 'people.com.cn',
+    '新华网-时政': 'xinhuanet.com',
+    '新华网-科技': 'xinhuanet.com',
+    '新华网-财经': 'xinhuanet.com'
+  };
+  var sourceName = n.source.split('-')[0];
+  var domain = sourceDomain[n.source] || sourceDomain[sourceName];
+  var kw = encodeURIComponent(n.title);
+  if(domain) return 'https://www.baidu.com/s?wd=' + kw + '+site%3A' + domain;
+  return 'https://www.baidu.com/s?wd=' + kw;
+}
+
+/* 显示加载骨架屏 */
+function showNewsSkeleton() {
+  var skeleton = '';
+  for(var i = 0; i < 3; i++) {
+    skeleton += '<div class="news-loading-skeleton">' +
+      '<div class="skel-line mid"></div>' +
+      '<div class="skel-line"></div>' +
+      '<div class="skel-line short"></div>' +
+    '</div>';
+  }
+  $('news-cards').innerHTML = skeleton;
+}
+
+/* 更新状态指示器 */
+function setNewsStatus(status, text) {
+  var dot = $('news-update-dot');
+  var label = $('news-last-update');
+  if(!dot || !label) return;
+  dot.className = 'news-update-dot ' + status;
+  label.textContent = text;
+}
+
+/* 绑定新闻分类标签点击 */
+function bindNewsTabs() {
+  if(newsTabBound) return;
+  newsTabBound = true;
+  document.querySelectorAll('.news-tab').forEach(function(tab) {
+    tab.addEventListener('click', function() {
+      document.querySelectorAll('.news-tab').forEach(function(t) { t.classList.remove('active'); });
+      tab.classList.add('active');
+      currentNewsCategory = tab.dataset.newscat;
+      renderNewsByCategory(currentNewsCategory);
+    });
+  });
+}
+
+/* 初始化新闻板块 */
+function initNewsSection() {
+  bindNewsTabs();
+  var cache = getNewsCache();
+
+  if(cache && cache.items && cache.items.length > 0) {
+    /* 有缓存，先展示缓存数据 */
+    var cacheDate = new Date(cache.timestamp);
+    var timeStr = cacheDate.toLocaleString('zh-CN', { month:'short', day:'numeric', hour:'2-digit', minute:'2-digit' });
+    setNewsStatus('success', '最近更新：' + timeStr);
+    renderNewsByCategory(currentNewsCategory);
+
+    /* 如果缓存过期，后台静默刷新 */
+    if(isNewsCacheStale()) {
+      refreshNews(false);
+    }
+  } else {
+    /* 无缓存，立即抓取 */
+    refreshNews(false);
+  }
+}
+
+/* 刷新新闻 */
+async function refreshNews(manual) {
+  var btn = $('news-refresh-btn');
+  if(btn) btn.disabled = true;
+
+  if(manual) {
+    showNewsSkeleton();
+    setNewsStatus('loading', '正在抓取最新热点...');
+  } else {
+    setNewsStatus('loading', '正在后台更新热点...');
+  }
+
+  try {
+    var result = await fetchNewsFromRSS();
+
+    if(result && result.items.length > 0) {
+      saveNewsCache(result.items);
+      renderNewsByCategory(currentNewsCategory);
+
+      var now = new Date();
+      var timeStr = now.toLocaleString('zh-CN', { month:'short', day:'numeric', hour:'2-digit', minute:'2-digit' });
+      var sourceInfo = result.successCount + '/' + result.totalSources + '个源';
+      setNewsStatus('success', '已更新（' + sourceInfo + '）· ' + timeStr);
+    } else {
+      /* 抓取失败，使用备用数据 */
+      if(manual) {
+        setNewsStatus('error', '网络抓取失败，已显示备用热点');
+        renderNewsByCategory(currentNewsCategory);
+      } else {
+        var cache = getNewsCache();
+        if(!cache) {
+          setNewsStatus('error', '网络抓取失败，已显示备用热点');
+          renderNewsByCategory(currentNewsCategory);
+        }
+      }
+    }
+  } catch(err) {
+    console.warn('News refresh error:', err);
+    setNewsStatus('error', '更新失败，请稍后重试');
+    renderNewsByCategory(currentNewsCategory);
+  } finally {
+    if(btn) btn.disabled = false;
+  }
+}
+
+/* 后台自动检查更新（页面加载时） */
+function autoCheckNewsUpdate() {
+  var cache = getNewsCache();
+  if(!cache || isNewsCacheStale()) {
+    /* 静默后台刷新 */
+    refreshNews(false);
+  }
+}
 
 var AI_TIPS = [
   // 提示词
@@ -3933,46 +4324,8 @@ function renderHomeStats() {
     <div class="summary-item"><span class="si-label">本月运动</span><span class="si-val">${exerciseThisMonth} 天</span></div>
   `;
 
-  // News cards - render by active category
-  renderNewsByCategory('综合');
-
-  // Bind news tab clicks
-  document.querySelectorAll('.news-tab').forEach(function(tab) {
-    tab.addEventListener('click', function() {
-      document.querySelectorAll('.news-tab').forEach(function(t) { t.classList.remove('active'); });
-      tab.classList.add('active');
-      renderNewsByCategory(tab.dataset.newscat);
-    });
-  });
-
   // Psychology card
   renderPsychology();
-}
-
-function getNewsSearchUrl(n) {
-  var sourceDomain = {
-    '人民网': 'people.com.cn',
-    '央视新闻': 'cctv.com',
-    '21世纪经济报道': '21jingji.com',
-    '中国商报': 'cnstock.com'
-  };
-  var domain = sourceDomain[n.source];
-  var kw = encodeURIComponent(n.title);
-  if(domain) return 'https://www.baidu.com/s?wd=' + kw + '+site%3A' + domain;
-  return 'https://www.baidu.com/s?wd=' + kw;
-}
-
-function renderNewsByCategory(cat) {
-  var catNews = DAILY_NEWS.filter(function(n) { return n.category === cat; });
-  var cards = catNews.map(function(n) {
-    return '<div class="news-card">' +
-      '<div><span class="news-priority ' + n.priority + '">' + (n.priority==='high'?'热门':'关注') + '</span><span class="news-title">' + n.title + '</span></div>' +
-      '<div class="news-desc">' + n.desc + '</div>' +
-      '<div class="news-tags">' + n.tags.map(function(t) { return '<span class="news-tag">' + t + '</span>'; }).join('') + '</div>' +
-      '<div class="news-meta"><span class="news-source">' + n.source + '</span><span>' + n.date + '</span><a class="news-link" href="' + getNewsSearchUrl(n) + '" target="_blank" rel="noopener noreferrer">查看报道 →</a></div>' +
-    '</div>';
-  }).join('');
-  $('news-cards').innerHTML = cards || '<p style="color:#000;text-align:center;padding:20px;">暂无该类别新闻</p>';
 }
 
 function renderPsychology() {
@@ -4179,6 +4532,10 @@ function initApp() {
   renderRenoCategories(); renderRenoIncomes(); renderRenoSummary();
   renderWeights(); initBMI(); renderStages(); renderCalendar(); updateCompareSelects();
   if (initSupabase()) showSyncButtons();
+  /* 新闻自动更新：启动时检查缓存是否过期 */
+  autoCheckNewsUpdate();
+  /* 每30分钟检查一次是否需要更新新闻 */
+  setInterval(autoCheckNewsUpdate, 30 * 60 * 1000);
 }
 
 /* ========================== INIT ========================== */
