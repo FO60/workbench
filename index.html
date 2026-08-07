@@ -1414,7 +1414,10 @@ const DEFAULT_RENO_CATEGORIES = [
     { id: 1, name: '3包水泥+一方机沙', type: 'material', amount: 301, note: '' },
     { id: 2, name: '推车', type: 'material', amount: 98, note: '' },
     { id: 3, name: '爬架', type: 'material', amount: 260, note: '' },
-    { id: 4, name: '铁网', type: 'material', amount: 22, note: '' }
+    { id: 4, name: '铁网', type: 'material', amount: 22, note: '' },
+    { id: 5, name: '地固', type: 'material', amount: 140, note: '' },
+    { id: 6, name: '机沙+5袋细沙（共1.5方）', type: 'material', amount: 0, note: '与水泥合计580' },
+    { id: 7, name: '拉法基325水泥10包+运费', type: 'material', amount: 580, note: '含机沙+细沙' }
   ]},
   { id: 'rc-carpentry', name: '木工', icon: '🪵', items: [
     { id: 1, name: '实木板4张', type: 'material', amount: 248, note: '' },
@@ -1442,7 +1445,7 @@ const DEFAULT_RENO_INCOMES = [
   { id: 2, name: '卖厕所门', amount: 100, note: '' },
   { id: 3, name: '卖剩余钢和塑料', amount: 130, note: '' }
 ];
-const RENO_SEED_VERSION = 'v3';
+const RENO_SEED_VERSION = 'v4';
 let renoCategories = loadData(STORE_KEYS.reno_categories, DEFAULT_RENO_CATEGORIES);
 let renoIncomes = loadData(STORE_KEYS.reno_incomes, DEFAULT_RENO_INCOMES);
 if(localStorage.getItem('wb_reno_seed') !== RENO_SEED_VERSION) {
@@ -1456,6 +1459,20 @@ if(localStorage.getItem('wb_reno_seed') !== RENO_SEED_VERSION) {
     var miscCat = renoCategories.find(function(c){return c.id==='rc-misc';});
     if(miscCat && !miscCat.items.find(function(i){return i.name.indexOf('建渣清运')>=0;})) {
       miscCat.items.push({ id: Date.now(), name: '建渣清运', type: 'labor', amount: 450, note: '' });
+    }
+    saveData(STORE_KEYS.reno_categories, renoCategories);
+  }
+  /* v3→v4 migration: add 地固/机沙细沙/拉法基水泥 to 建材 */
+  if(localStorage.getItem('wb_reno_seed') === 'v3') {
+    var matCat = renoCategories.find(function(c){return c.id==='rc-mat';});
+    if(matCat) {
+      if(!matCat.items.find(function(i){return i.name.indexOf('地固')>=0;})) {
+        matCat.items.push({ id: Date.now()+4, name: '地固', type: 'material', amount: 140, note: '' });
+      }
+      if(!matCat.items.find(function(i){return i.name.indexOf('拉法基')>=0;})) {
+        matCat.items.push({ id: Date.now()+5, name: '机沙+5袋细沙（共1.5方）', type: 'material', amount: 0, note: '与水泥合计580' });
+        matCat.items.push({ id: Date.now()+6, name: '拉法基325水泥10包+运费', type: 'material', amount: 580, note: '含机沙+细沙' });
+      }
     }
     saveData(STORE_KEYS.reno_categories, renoCategories);
   }
