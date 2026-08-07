@@ -1018,6 +1018,14 @@ h4 { font-family: var(--font-display); color: var(--choco); font-weight: 600; }
 .honglou-questions li { font-size: 0.88rem; color: var(--choco); line-height: 1.8; padding: 10px 16px; margin-bottom: 8px; background: rgba(168,196,240,0.06); border-radius: var(--radius-sm); border: 1px solid rgba(168,196,240,0.12); position: relative; padding-left: 36px; }
 .honglou-questions li::before { content: 'Q'; position: absolute; left: 12px; top: 10px; font-family: var(--font-mono); font-size: 0.72rem; font-weight: 700; color: var(--periwinkle); }
 @media (max-width: 600px) { .honglou-chapter-grid { grid-template-columns: 1fr; } .honglou-char-grid { grid-template-columns: repeat(2, 1fr); } }
+.honglou-quotes { display: flex; flex-direction: column; gap: 12px; }
+.honglou-quote-item { padding: 14px 18px; background: rgba(244,168,184,0.06); border-left: 3px solid var(--accent2); border-radius: 0 var(--radius-sm) var(--radius-sm) 0; }
+.honglou-quote-text { font-size: 0.9rem; color: var(--choco); line-height: 1.8; font-style: italic; }
+.honglou-quote-source { font-size: 0.74rem; color: var(--choco); opacity: 0.5; margin-top: 6px; font-family: var(--font-mono); text-align: right; }
+.honglou-analysis-list { display: flex; flex-direction: column; gap: 14px; }
+.honglou-analysis-card { padding: 14px 18px; background: rgba(184,155,224,0.06); border: 1px solid rgba(184,155,224,0.12); border-radius: var(--radius-sm); }
+.honglou-analysis-title { font-family: var(--font-display); font-size: 0.9rem; font-weight: 600; color: var(--lavender); margin-bottom: 8px; }
+.honglou-analysis-text { font-size: 0.86rem; color: var(--choco); line-height: 1.8; margin: 0; }
 
 /* ====== Reading Book Notes ====== */
 .reading-book-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 14px; }
@@ -5009,6 +5017,10 @@ function showHonglouDetail(num) {
           (ch.num < 120 ? '<button class="btn btn-secondary btn-sm" onclick="showHonglouDetail(' + (ch.num + 1) + ')">下一回 →</button>' : '') +
         '</div>' +
       '</div>' +
+      (ch.overview ? '<div class="honglou-detail-section">' +
+        '<h4>回目概览</h4>' +
+        '<p style="font-size:0.88rem;color:#5A3D5C;line-height:1.9;">' + ch.overview + '</p>' +
+      '</div>' : '') +
       '<div class="honglou-detail-section">' +
         '<h4>出场人物</h4>' +
         '<div class="honglou-char-grid">' +
@@ -5017,14 +5029,46 @@ function showHonglouDetail(num) {
           }).join('') +
         '</div>' +
       '</div>' +
+      (ch.background ? '<div class="honglou-detail-section">' +
+        '<h4>情节背景</h4>' +
+        '<p style="font-size:0.88rem;color:#5A3D5C;line-height:1.9;">' + ch.background + '</p>' +
+      '</div>' : '') +
       '<div class="honglou-detail-section">' +
         '<h4>重要情节</h4>' +
         '<p style="font-size:0.88rem;color:#5A3D5C;line-height:1.9;">' + ch.plot + '</p>' +
       '</div>' +
+      (ch.quotes && ch.quotes.length > 0 ? '<div class="honglou-detail-section">' +
+        '<h4>经典名句 / 诗句选段</h4>' +
+        '<div class="honglou-quotes">' +
+          ch.quotes.map(function(q) {
+            var parts = q.split('——');
+            var text = parts[0];
+            var source = parts.length > 1 ? parts.slice(1).join('——') : '';
+            return '<div class="honglou-quote-item">' +
+              '<div class="honglou-quote-text">"' + text + '"</div>' +
+              (source ? '<div class="honglou-quote-source">—— ' + source + '</div>' : '') +
+            '</div>';
+          }).join('') +
+        '</div>' +
+      '</div>' : '') +
       '<div class="honglou-detail-section">' +
         '<h4>意象解读</h4>' +
         '<p style="font-size:0.88rem;color:#5A3D5C;line-height:1.9;">' + ch.imagery + '</p>' +
       '</div>' +
+      (ch.analysis && ch.analysis.length > 0 ? '<div class="honglou-detail-section">' +
+        '<h4>情节分析</h4>' +
+        '<div class="honglou-analysis-list">' +
+          ch.analysis.map(function(a) {
+            var parts = a.split('：');
+            var title = parts[0];
+            var content = parts.length > 1 ? parts.slice(1).join('：') : a;
+            return '<div class="honglou-analysis-card">' +
+              '<div class="honglou-analysis-title">' + title + '</div>' +
+              '<p class="honglou-analysis-text">' + content + '</p>' +
+            '</div>';
+          }).join('') +
+        '</div>' +
+      '</div>' : '') +
       '<div class="honglou-detail-section">' +
         '<h4>思考题</h4>' +
         '<ol style="padding-left:20px;margin:0;">' +
