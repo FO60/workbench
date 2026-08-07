@@ -493,6 +493,17 @@ td .badge { display: inline-block; padding: 4px 12px; border-radius: 20px; font-
 .book-card-detail .detail-actions { display: flex; gap: 8px; margin-top: 10px; }
 @media (max-width: 480px) { .book-grid-2 { gap: 10px; } .book-card-header { padding: 10px 12px; } .book-card-header h4 { font-size: 0.82rem; } }
 .book-card .book-type { font-size: 0.68rem; padding: 2px 6px; border-radius: 6px; background: var(--accent2-light); color: var(--accent2); font-weight: 600; display: inline-block; width: fit-content; }
+/* Book tag filters */
+.book-tag-filter { margin-bottom: 14px; }
+.book-tag-group { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-bottom: 6px; }
+.book-tag-group-label { font-size: 0.78rem; font-weight: 700; color: var(--accent-dark); min-width: 48px; }
+.book-tag-chip { padding: 4px 12px; border-radius: 16px; font-size: 0.78rem; font-weight: 500; cursor: pointer; transition: all 0.2s; border: 1.5px solid var(--rule); background: transparent; color: #000; user-select: none; }
+.book-tag-chip:hover { background: var(--accent-light); border-color: var(--accent); }
+.book-tag-chip.active { background: var(--lake-blue); color: #feffef; border-color: transparent; box-shadow: 0 2px 8px rgba(46,139,192,0.20); }
+.book-tag-clear { font-size: 0.72rem; color: var(--muted); cursor: pointer; text-decoration: underline; margin-left: 4px; }
+.book-card-tags { display: flex; gap: 4px; flex-wrap: wrap; padding: 0 14px 6px; }
+.book-card-tags .bct { font-size: 0.62rem; padding: 1px 6px; border-radius: 5px; background: var(--accent-light); color: var(--accent-dark); font-weight: 600; }
+.book-card-tags .bct.award { background: rgba(180,140,60,0.12); color: #9a6b1f; }
 .book-progress { display: flex; align-items: center; gap: 10px; }
 .book-progress-bar { flex: 1; height: 6px; background: var(--accent-light); border-radius: 3px; overflow: hidden; }
 .book-progress-bar > div { height: 100%; background: linear-gradient(90deg, var(--tender-green), var(--lake-blue)); border-radius: 3px; transition: width 0.4s; }
@@ -933,6 +944,7 @@ td .badge { display: inline-block; padding: 4px 12px; border-radius: 20px; font-
           <h3>我的阅读计划</h3>
           <button class="btn btn-primary btn-sm" onclick="openModal('book')">+ 添加书籍</button>
         </div>
+        <div class="book-tag-filter" id="book-tag-filter"></div>
         <div class="book-grid-2 mb-3" id="book-grid"></div>
         <div class="glass-card">
           <h3 style="margin-bottom:12px;">推荐文学读本</h3>
@@ -1199,44 +1211,44 @@ const DEFAULT_CLIENTS = [];
 const DEFAULT_CHAINS = [];
 const DEFAULT_BOOKS = [
   // 首批推荐
-  { id: 9001, title: '夜晚的潜水艇', author: '陈春成', total: 280, current: 0, type: '文学' },
-  { id: 9002, title: '台北人', author: '白先勇', total: 320, current: 0, type: '文学' },
-  { id: 9003, title: '万物有灵且美', author: '吉米·哈利', total: 300, current: 0, type: '文学' },
-  { id: 9004, title: '俗女养成记', author: '江鹅', total: 200, current: 0, type: '文学' },
-  { id: 9005, title: '蛇结', author: '弗朗索瓦·莫里亚克', total: 240, current: 0, type: '文学' },
+  { id: 9001, title: '夜晚的潜水艇', author: '陈春成', total: 280, current: 0, type: '文学', tags: ['短篇','国内','豆瓣年度'] },
+  { id: 9002, title: '台北人', author: '白先勇', total: 320, current: 0, type: '文学', tags: ['短篇','国内'] },
+  { id: 9003, title: '万物有灵且美', author: '吉米·哈利', total: 300, current: 0, type: '文学', tags: ['散文','国外'] },
+  { id: 9004, title: '俗女养成记', author: '江鹅', total: 200, current: 0, type: '文学', tags: ['散文','国内'] },
+  { id: 9005, title: '蛇结', author: '弗朗索瓦·莫里亚克', total: 240, current: 0, type: '文学', tags: ['长篇','国外','诺贝尔文学奖'] },
   // 短篇 / 散文类
-  { id: 9006, title: '人间草木', author: '汪曾祺', total: 260, current: 0, type: '文学' },
-  { id: 9007, title: '受戒', author: '汪曾祺', total: 180, current: 0, type: '文学' },
-  { id: 9008, title: '我的阿勒泰', author: '李娟', total: 260, current: 0, type: '文学' },
-  { id: 9009, title: '记一忘三二', author: '李娟', total: 240, current: 0, type: '文学' },
-  { id: 9010, title: '命若琴弦', author: '史铁生', total: 200, current: 0, type: '文学' },
-  { id: 9011, title: '病隙碎笔', author: '史铁生', total: 220, current: 0, type: '文学' },
-  { id: 9012, title: '山茶文具店', author: '小川糸', total: 280, current: 0, type: '文学' },
-  { id: 9013, title: '一直游到海水变蓝', author: '余华', total: 300, current: 0, type: '文学' },
-  { id: 9014, title: '小径分岔的花园', author: '博尔赫斯', total: 220, current: 0, type: '文学' },
-  { id: 9015, title: '寂寞的游戏', author: '袁哲生', total: 200, current: 0, type: '文学' },
-  { id: 9016, title: '绝世荒唐', author: '欧·亨利', total: 320, current: 0, type: '文学' },
+  { id: 9006, title: '人间草木', author: '汪曾祺', total: 260, current: 0, type: '文学', tags: ['散文','国内'] },
+  { id: 9007, title: '受戒', author: '汪曾祺', total: 180, current: 0, type: '文学', tags: ['短篇','国内'] },
+  { id: 9008, title: '我的阿勒泰', author: '李娟', total: 260, current: 0, type: '文学', tags: ['散文','国内','鲁迅文学奖'] },
+  { id: 9009, title: '记一忘三二', author: '李娟', total: 240, current: 0, type: '文学', tags: ['随笔','国内'] },
+  { id: 9010, title: '命若琴弦', author: '史铁生', total: 200, current: 0, type: '文学', tags: ['短篇','国内'] },
+  { id: 9011, title: '病隙碎笔', author: '史铁生', total: 220, current: 0, type: '文学', tags: ['随笔','国内','鲁迅文学奖'] },
+  { id: 9012, title: '山茶文具店', author: '小川糸', total: 280, current: 0, type: '文学', tags: ['长篇','国外'] },
+  { id: 9013, title: '一直游到海水变蓝', author: '余华', total: 300, current: 0, type: '文学', tags: ['散文','国内'] },
+  { id: 9014, title: '小径分岔的花园', author: '博尔赫斯', total: 220, current: 0, type: '文学', tags: ['短篇','国外'] },
+  { id: 9015, title: '寂寞的游戏', author: '袁哲生', total: 200, current: 0, type: '文学', tags: ['短篇','国内'] },
+  { id: 9016, title: '绝世荒唐', author: '欧·亨利', total: 320, current: 0, type: '文学', tags: ['短篇','国外'] },
   // 治愈 / 轻松类
-  { id: 9017, title: '东京八平米', author: '吉井忍', total: 260, current: 0, type: '文学' },
-  { id: 9018, title: '明亮夜晚', author: '崔恩荣', total: 280, current: 0, type: '文学' },
-  { id: 9019, title: '去有花的地方', author: '安宁', total: 240, current: 0, type: '文学' },
-  { id: 9020, title: '幸得诸君慰平生', author: '故园风雨前', total: 280, current: 0, type: '文学' },
-  { id: 9021, title: '有花生的寻常一天', author: '宫本辉', total: 240, current: 0, type: '文学' },
-  { id: 9022, title: '我们仨', author: '杨绛', total: 200, current: 0, type: '文学' },
+  { id: 9017, title: '东京八平米', author: '吉井忍', total: 260, current: 0, type: '文学', tags: ['散文','国外'] },
+  { id: 9018, title: '明亮夜晚', author: '崔恩荣', total: 280, current: 0, type: '文学', tags: ['长篇','国外','布克奖'] },
+  { id: 9019, title: '去有花的地方', author: '安宁', total: 240, current: 0, type: '文学', tags: ['散文','国内'] },
+  { id: 9020, title: '幸得诸君慰平生', author: '故园风雨前', total: 280, current: 0, type: '文学', tags: ['散文','国内'] },
+  { id: 9021, title: '有花生的寻常一天', author: '宫本辉', total: 240, current: 0, type: '文学', tags: ['短篇','国外'] },
+  { id: 9022, title: '我们仨', author: '杨绛', total: 200, current: 0, type: '文学', tags: ['散文','国内'] },
   // 其他
-  { id: 9023, title: '此生未完成', author: '于娟', total: 260, current: 0, type: '文学' },
-  { id: 9024, title: '三毛系列', author: '三毛', total: 300, current: 0, type: '文学' },
-  { id: 9025, title: '白雪猪头', author: '苏童', total: 200, current: 0, type: '文学' },
-  { id: 9026, title: '西瓜船', author: '苏童', total: 220, current: 0, type: '文学' },
-  { id: 9027, title: '夜间故事', author: '苏童', total: 240, current: 0, type: '文学' },
-  { id: 9028, title: '红尘万丈', author: '海元帅', total: 280, current: 0, type: '其他' },
-  { id: 9029, title: '山河遗爱', author: '简媜', total: 300, current: 0, type: '其他' },
-  { id: 9030, title: '道德经', author: '老子', total: 200, current: 0, type: '其他' },
-  { id: 9031, title: '北京法源寺', author: '李敖', total: 360, current: 0, type: '历史' },
-  { id: 9032, title: '福尔摩斯探案集', author: '柯南·道尔', total: 400, current: 0, type: '其他' },
-  { id: 9033, title: '黑暗中我们能走多高', author: '赵瑜', total: 260, current: 0, type: '其他' },
-  { id: 9034, title: '时间之书', author: '余世存', total: 320, current: 0, type: '其他' },
-  { id: 9035, title: '守夜', author: '史蒂芬·金', total: 340, current: 0, type: '其他' }
+  { id: 9023, title: '此生未完成', author: '于娟', total: 260, current: 0, type: '文学', tags: ['随笔','国内'] },
+  { id: 9024, title: '三毛系列', author: '三毛', total: 300, current: 0, type: '文学', tags: ['散文','国内'] },
+  { id: 9025, title: '白雪猪头', author: '苏童', total: 200, current: 0, type: '文学', tags: ['短篇','国内'] },
+  { id: 9026, title: '西瓜船', author: '苏童', total: 220, current: 0, type: '文学', tags: ['短篇','国内'] },
+  { id: 9027, title: '夜间故事', author: '苏童', total: 240, current: 0, type: '文学', tags: ['短篇','国内'] },
+  { id: 9028, title: '红尘万丈', author: '海元帅', total: 280, current: 0, type: '其他', tags: ['散文','国内'] },
+  { id: 9029, title: '山河遗爱', author: '简媜', total: 300, current: 0, type: '其他', tags: ['散文','国内'] },
+  { id: 9030, title: '道德经', author: '老子', total: 200, current: 0, type: '其他', tags: ['哲学','国内'] },
+  { id: 9031, title: '北京法源寺', author: '李敖', total: 360, current: 0, type: '历史', tags: ['长篇','国内','历史'] },
+  { id: 9032, title: '福尔摩斯探案集', author: '柯南·道尔', total: 400, current: 0, type: '其他', tags: ['推理','国外'] },
+  { id: 9033, title: '黑暗中我们能走多高', author: '赵瑜', total: 260, current: 0, type: '其他', tags: ['随笔','国内'] },
+  { id: 9034, title: '时间之书', author: '余世存', total: 320, current: 0, type: '其他', tags: ['散文','国内'] },
+  { id: 9035, title: '守夜', author: '史蒂芬·金', total: 340, current: 0, type: '其他', tags: ['短篇','国外','恐怖'] }
 ];
 const DEFAULT_WEIGHTS = [];
 const DEFAULT_STAGES = [
@@ -1248,19 +1260,29 @@ const DEFAULT_STAGES = [
 let clients = loadData(STORE_KEYS.clients, DEFAULT_CLIENTS);
 let chains = loadData(STORE_KEYS.chains, DEFAULT_CHAINS);
 /* Force re-seed books if the seeding version hasn't been recorded yet */
-const BOOK_SEED_VERSION = 'v2';
+const BOOK_SEED_VERSION = 'v3';
 let books = loadData(STORE_KEYS.books, DEFAULT_BOOKS);
 if(books.length === 0 && DEFAULT_BOOKS.length > 0) {
   books = DEFAULT_BOOKS.slice(); saveData(STORE_KEYS.books, books);
 }
 /* Merge any new default books that aren't already in the user's list */
 if(localStorage.getItem('wb_book_seed') !== BOOK_SEED_VERSION && DEFAULT_BOOKS.length > 0) {
+  var prevVersion = localStorage.getItem('wb_book_seed');
   const existingTitles = books.map(b => b.title);
   DEFAULT_BOOKS.forEach(db => {
     if(!existingTitles.includes(db.title)) {
       books.push(Object.assign({}, db));
     }
   });
+  /* v2→v3 migration: backfill tags for existing books */
+  if(prevVersion === 'v2') {
+    books.forEach(function(b) {
+      if(!b.tags || !b.tags.length) {
+        var db = DEFAULT_BOOKS.find(function(d){return d.title === b.title;});
+        b.tags = db ? db.tags.slice() : [];
+      }
+    });
+  }
   saveData(STORE_KEYS.books, books);
   localStorage.setItem('wb_book_seed', BOOK_SEED_VERSION);
 }
@@ -2077,7 +2099,7 @@ function switchTab(tab) {
   if(tab === 'home') { setTimeout(renderHomeStats, 50); }
   if(tab === 'knowledge') { renderPoetsByDynasty(); renderHistoryToday(); }
   if(tab === 'inspire') { renderEssays(); renderReadings(); renderFragments(); }
-  if(tab === 'skills') { renderBooks(); renderAITips(); }
+  if(tab === 'skills') { renderBookTagFilter(); renderBooks(); renderAITips(); }
   if(tab === 'media') { renderMediaInspires(); renderMediaAccounts(); renderMediaTools(); }
   if(tab === 'reno') { renderRenoCategories(); renderRenoIncomes(); renderRenoSummary(); }
   if(tab === 'health') { setTimeout(initWeightChart, 50); renderStages(); renderCalendar(); updateCompareSelects(); }
@@ -2922,8 +2944,13 @@ function toggleDeepDetail(idx) {
 }
 
 /* ========================== BOOKS MODULE ========================== */
+var BOOK_TAG_GROUPS = [
+  { label: '体裁', tags: ['短篇','散文','长篇','随笔','哲学','历史','推理','恐怖'] },
+  { label: '区域', tags: ['国内','国外'] },
+  { label: '奖项', tags: ['鲁迅文学奖','诺贝尔文学奖','布克奖','豆瓣年度'] }
+];
+var bookTagFilters = {};
 function getBookCardStyle(pct) {
-  /* Color changes based on reading progress */
   if(pct === 0) return { bg: 'rgba(255,255,250,0.50)', bar: '#ccc', pctColor: '#999' };
   if(pct < 25) return { bg: 'rgba(189,221,34,0.08)', bar: '#bddd22', pctColor: '#5a6e1a' };
   if(pct < 50) return { bg: 'rgba(189,221,34,0.15)', bar: '#bddd22', pctColor: '#5a6e1a' };
@@ -2931,15 +2958,60 @@ function getBookCardStyle(pct) {
   if(pct < 100) return { bg: 'rgba(189,221,34,0.30)', bar: '#5a6e1a', pctColor: '#5a6e1a' };
   return { bg: 'rgba(90,110,26,0.15)', bar: '#5a6e1a', pctColor: '#5a6e1a' };
 }
+var AWARD_TAGS = ['鲁迅文学奖','诺贝尔文学奖','布克奖','豆瓣年度'];
+function renderBookTagFilter() {
+  var html = '';
+  BOOK_TAG_GROUPS.forEach(function(g) {
+    html += '<div class="book-tag-group"><span class="book-tag-group-label">' + g.label + '</span>';
+    g.tags.forEach(function(t) {
+      var active = bookTagFilters[g.label] && bookTagFilters[g.label].indexOf(t) >= 0;
+      html += '<span class="book-tag-chip' + (active?' active':'') + '" onclick="toggleBookTagFilter(\'' + g.label + '\',\'' + t + '\')">' + t + '</span>';
+    });
+    html += '</div>';
+  });
+  html += '<span class="book-tag-clear" onclick="clearBookTagFilters()">清除筛选</span>';
+  $('book-tag-filter').innerHTML = html;
+}
+function toggleBookTagFilter(group, tag) {
+  if(!bookTagFilters[group]) bookTagFilters[group] = [];
+  var idx = bookTagFilters[group].indexOf(tag);
+  if(idx >= 0) bookTagFilters[group].splice(idx, 1);
+  else bookTagFilters[group].push(tag);
+  if(bookTagFilters[group].length === 0) delete bookTagFilters[group];
+  renderBookTagFilter();
+  renderBooks();
+}
+function clearBookTagFilters() {
+  bookTagFilters = {};
+  renderBookTagFilter();
+  renderBooks();
+}
+function filterBooksByTags(list) {
+  var groups = Object.keys(bookTagFilters);
+  if(groups.length === 0) return list;
+  return list.filter(function(b) {
+    var bt = b.tags || [];
+    return groups.every(function(g) {
+      var selected = bookTagFilters[g];
+      return selected.some(function(t) { return bt.indexOf(t) >= 0; });
+    });
+  });
+}
 function renderBooks() {
-  $('book-grid').innerHTML = books.map((b, idx) => {
+  var filtered = filterBooksByTags(books);
+  $('book-grid').innerHTML = filtered.map((b) => {
+    var idx = books.indexOf(b);
     const pct = Math.round((b.current/b.total)*100);
     const s = getBookCardStyle(pct);
+    var tagsHtml = (b.tags && b.tags.length) ? '<div class="book-card-tags">' + b.tags.map(function(t) {
+      return '<span class="bct' + (AWARD_TAGS.indexOf(t)>=0?' award':'') + '">' + t + '</span>';
+    }).join('') + '</div>' : '';
     return `<div class="book-card" style="background:${s.bg};" onclick="toggleBookDetail(${idx})">
       <div class="book-card-header">
         <h4>${b.title}${pct>=100?' ✅':''}</h4>
         <div class="author">${b.author}${b.type ? ' · ' + b.type : ''}</div>
       </div>
+      ${tagsHtml}
       <div class="book-card-bar"><div style="width:${pct}%;background:${s.bar};"></div></div>
       <div class="book-card-pct" style="color:${s.pctColor};">${pct}%</div>
       <div class="book-card-detail" id="book-detail-${idx}" onclick="event.stopPropagation();">
@@ -2978,10 +3050,20 @@ function updateBookProgress(id) {
 function openBookEditModal(id) {
   const b = books.find(x=>x.id===id); if(!b) return;
   $('modal-title').textContent = `编辑书籍`;
-  $('modal-body').innerHTML = `<div class="form-group"><label>书名</label><input type="text" id="m-book-title" value="${b.title}"></div><div class="form-row"><div class="form-group"><label>作者</label><input type="text" id="m-book-author" value="${b.author}"></div><div class="form-group"><label>类型</label><input type="text" id="m-book-type" value="${b.type||''}"></div></div><div class="form-row"><div class="form-group"><label>总页数</label><input type="number" id="m-book-total" value="${b.total}"></div><div class="form-group"><label>已读页数</label><input type="number" id="m-book-current" value="${b.current}"></div></div><div style="margin-top:12px;text-align:right;"><button class="btn btn-danger btn-sm" onclick="deleteBook(${b.id})">删除此书</button></div>`;
+  var allTags = [];
+  BOOK_TAG_GROUPS.forEach(function(g){ g.tags.forEach(function(t){ if(allTags.indexOf(t)<0) allTags.push(t); }); });
+  var bookTagsHtml = allTags.map(function(t) {
+    var has = (b.tags||[]).indexOf(t) >= 0;
+    return '<span class="book-tag-chip' + (has?' active':'') + '" onclick="this.classList.toggle(\'active\')">' + t + '</span>';
+  }).join(' ');
+  $('modal-body').innerHTML = `<div class="form-group"><label>书名</label><input type="text" id="m-book-title" value="${b.title}"></div><div class="form-row"><div class="form-group"><label>作者</label><input type="text" id="m-book-author" value="${b.author}"></div><div class="form-group"><label>类型</label><input type="text" id="m-book-type" value="${b.type||''}"></div></div><div class="form-row"><div class="form-group"><label>总页数</label><input type="number" id="m-book-total" value="${b.total}"></div><div class="form-group"><label>已读页数</label><input type="number" id="m-book-current" value="${b.current}"></div></div><div class="form-group"><label>标签（点击选择）</label><div style="display:flex;flex-wrap:wrap;gap:6px;">${bookTagsHtml}</div></div><div style="margin-top:12px;text-align:right;"><button class="btn btn-danger btn-sm" onclick="deleteBook(${b.id})">删除此书</button></div>`;
   $('modal-confirm').onclick = () => {
     const title=$('m-book-title').value.trim(); if(!title) return alert('请填写书名');
     b.title=title; b.author=$('m-book-author').value||'未知'; b.total=parseInt($('m-book-total').value)||1; b.current=parseInt($('m-book-current').value)||0; b.type=$('m-book-type').value;
+    var newTags = [];
+    var chips = document.querySelectorAll('#modal-body .book-tag-chip.active');
+    chips.forEach(function(c){ newTags.push(c.textContent.trim()); });
+    b.tags = newTags;
     saveData(STORE_KEYS.books, books); renderBooks(); closeModal();
   };
   $('modal-overlay').classList.add('show');
@@ -3535,10 +3617,17 @@ function openModal(type) {
   }
   if(type === 'book') {
     $('modal-title').textContent = '添加书籍';
-    $('modal-body').innerHTML = `<div class="form-row"><div class="form-group"><label>书名</label><input type="text" id="m-book-title" placeholder="书名"></div><div class="form-group"><label>作者</label><input type="text" id="m-book-author" placeholder="作者"></div></div><div class="form-row"><div class="form-group"><label>总页数</label><input type="number" id="m-book-total" min="1" value="300"></div><div class="form-group"><label>已读页数</label><input type="number" id="m-book-current" min="0" value="0"></div><div class="form-group"><label>类型</label><select id="m-book-type"><option>专业</option><option>文学</option><option>成长</option><option>历史</option><option>其他</option></select></div></div>`;
+    var allTags2 = [];
+    BOOK_TAG_GROUPS.forEach(function(g){ g.tags.forEach(function(t){ if(allTags2.indexOf(t)<0) allTags2.push(t); }); });
+    var newBookTagsHtml = allTags2.map(function(t) {
+      return '<span class="book-tag-chip" onclick="this.classList.toggle(\'active\')">' + t + '</span>';
+    }).join(' ');
+    $('modal-body').innerHTML = `<div class="form-row"><div class="form-group"><label>书名</label><input type="text" id="m-book-title" placeholder="书名"></div><div class="form-group"><label>作者</label><input type="text" id="m-book-author" placeholder="作者"></div></div><div class="form-row"><div class="form-group"><label>总页数</label><input type="number" id="m-book-total" min="1" value="300"></div><div class="form-group"><label>已读页数</label><input type="number" id="m-book-current" min="0" value="0"></div><div class="form-group"><label>类型</label><select id="m-book-type"><option>专业</option><option>文学</option><option>成长</option><option>历史</option><option>其他</option></select></div></div><div class="form-group"><label>标签（点击选择）</label><div style="display:flex;flex-wrap:wrap;gap:6px;">${newBookTagsHtml}</div></div>`;
     $('modal-confirm').onclick = () => {
       const title=$('m-book-title').value.trim(); if(!title) return alert('请填写书名');
-      books.push({id:Date.now(),title,author:$('m-book-author').value||'未知',total:parseInt($('m-book-total').value)||1,current:parseInt($('m-book-current').value)||0,type:$('m-book-type').value});
+      var newTags = [];
+      document.querySelectorAll('#modal-body .book-tag-chip.active').forEach(function(c){ newTags.push(c.textContent.trim()); });
+      books.push({id:Date.now(),title,author:$('m-book-author').value||'未知',total:parseInt($('m-book-total').value)||1,current:parseInt($('m-book-current').value)||0,type:$('m-book-type').value,tags:newTags});
       saveData(STORE_KEYS.books, books); renderBooks(); closeModal();
     };
   }
