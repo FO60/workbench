@@ -794,6 +794,9 @@ td .badge { display: inline-block; padding: 4px 12px; border-radius: var(--radiu
 .news-card .news-link { color: var(--choco); text-decoration: none; font-weight: 700; font-size: 0.74rem; border-bottom: 1px solid transparent; transition: border-color 0.2s; font-family: var(--font-mono); text-transform: uppercase; letter-spacing: 0.04em; }
 .news-card .news-link:hover { border-bottom-color: var(--choco); }
 .news-card .news-tags { display: flex; gap: 6px; flex-wrap: wrap; margin-top: 6px; }
+.news-bookmark-btn { background: none; border: none; cursor: pointer; font-size: 1.1rem; color: var(--choco); opacity: 0.4; transition: opacity 0.2s, transform 0.2s; padding: 0; line-height: 1; }
+.news-bookmark-btn:hover { opacity: 1; transform: scale(1.2); }
+.news-bookmark-btn.active { opacity: 1; color: #FFC107; }
 
 /* ====== Psychology Card ====== */
 .psychology-card { cursor: pointer; transition: transform 0.35s var(--ease-out), box-shadow 0.35s; }
@@ -1081,6 +1084,11 @@ h4 { font-family: var(--font-display); color: var(--choco); font-weight: 600; }
       <svg viewBox="0 0 24 24"><path d="M22 7H2V5h20v2zm-1 2v11c0 .55-.45 1-1 1h-3v-7H7v7H4c-.55 0-1-.45-1-1V9h18zM9 17v3h6v-3H9z"/></svg>
       装修记录
     </div>
+    <div style="margin-top:auto;padding-top:16px;border-top:1px solid var(--rule);">
+      <button class="btn btn-secondary btn-sm" style="width:100%;margin-bottom:8px;" onclick="exportAllData()">导出数据</button>
+      <button class="btn btn-secondary btn-sm" style="width:100%;" onclick="document.getElementById('import-data-input').click()">导入数据</button>
+      <input type="file" id="import-data-input" accept=".json" style="display:none;" onchange="importAllData(event)">
+    </div>
   </aside>
 
   <!-- Mobile Bottom Nav -->
@@ -1122,7 +1130,12 @@ h4 { font-family: var(--font-display); color: var(--choco); font-weight: 600; }
   <main class="main">
     <div class="main-header">
       <h1 id="page-title">首页</h1>
-      <span class="date-badge" id="today-date"></span>
+      <div style="display:flex;align-items:center;gap:12px;">
+        <span class="date-badge" id="today-date"></span>
+        <button onclick="exportAllData()" title="导出数据" style="background:none;border:none;cursor:pointer;padding:4px;color:var(--choco);opacity:0.5;font-size:1rem;">⬇</button>
+        <button onclick="document.getElementById('import-data-input-mobile').click()" title="导入数据" style="background:none;border:none;cursor:pointer;padding:4px;color:var(--choco);opacity:0.5;font-size:1rem;">⬆</button>
+        <input type="file" id="import-data-input-mobile" accept=".json" style="display:none;" onchange="importAllData(event)">
+      </div>
     </div>
 
     <!-- ====== HOME SECTION ====== -->
@@ -1154,11 +1167,11 @@ h4 { font-family: var(--font-display); color: var(--choco); font-weight: 600; }
       </div>
       <div class="home-grid">
         <div class="summary-block">
-          <h4>本周工作计划</h4>
+          <h4>近期待办</h4>
           <div id="weekly-plan"></div>
         </div>
         <div class="summary-block">
-          <h4>月度总结</h4>
+          <h4>月度概况</h4>
           <div id="monthly-summary"></div>
         </div>
       </div>
@@ -1181,12 +1194,18 @@ h4 { font-family: var(--font-display); color: var(--choco); font-weight: 600; }
         <div class="news-tab" data-newscat="科技">科技</div>
         <div class="news-tab" data-newscat="社会">社会</div>
         <div class="news-tab" data-newscat="财经">财经</div>
+        <div class="news-tab" data-newscat="收藏">★ 收藏</div>
       </div>
       <div id="news-cards"></div>
     </section>
 
     <!-- ====== DAILY INSPIRATION SECTION ====== -->
     <section id="inspire" class="section">
+      <div class="inspire-search-bar" style="margin-bottom:16px;position:relative;">
+        <input type="text" id="inspire-search-input" placeholder="搜索随笔、读书笔记、知识碎片..." style="width:100%;padding:10px 16px 10px 40px;border:1px solid var(--rule);border-radius:var(--radius);font-size:0.9rem;background:#FFFFFF;color:#2D2D2D;outline:none;transition:border-color 0.2s;" oninput="filterInspireSearch(this.value)">
+        <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="position:absolute;left:12px;top:50%;transform:translateY(-50%);color:#2D2D2D;opacity:0.4;"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
+      </div>
+      <div id="inspire-search-results" style="display:none;"></div>
       <div class="sub-tabs">
         <div class="sub-tab active" data-subtab="essay">随笔</div>
         <div class="sub-tab" data-subtab="reading">读书笔记</div>
@@ -1312,6 +1331,10 @@ h4 { font-family: var(--font-display); color: var(--choco); font-weight: 600; }
         <div style="margin-bottom:16px;">
           <h3 style="margin-bottom:6px;">AI技巧库</h3>
           <p style="color:#2D2D2D;font-size:0.85rem;margin:0;">点击顶部类别切换，每类按入门→进阶→精通排列，点击卡片展开查看详情和原文链接</p>
+        </div>
+        <div style="position:relative;margin-bottom:12px;">
+          <input type="text" id="aitips-search-input" placeholder="搜索技巧标题、简介、详情..." style="width:100%;padding:10px 16px 10px 40px;border:1px solid var(--rule);border-radius:var(--radius);font-size:0.9rem;background:#FFFFFF;color:#2D2D2D;outline:none;transition:border-color 0.2s;" oninput="filterAITips(this.value)">
+          <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="position:absolute;left:12px;top:50%;transform:translateY(-50%);color:#2D2D2D;opacity:0.4;"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
         </div>
         <div class="news-tabs" id="aitips-cat-tabs"></div>
         <div id="aitips-list"></div>
@@ -1466,6 +1489,7 @@ h4 { font-family: var(--font-display); color: var(--choco); font-weight: 600; }
           <button class="btn btn-primary btn-sm" onclick="openMediaModal('account')">+ 记录数据</button>
         </div>
         <p style="color:#2D2D2D;font-size:0.85rem;margin-bottom:16px;">记录各平台账号数据变化，追踪运营效果</p>
+        <div id="media-growth-chart" style="display:none;margin-bottom:20px;"></div>
         <div id="media-account-list"></div>
       </div>
 
@@ -1574,7 +1598,7 @@ Resources:`;for(let t of c){if(!t||typeof t!=`string`)throw Error(`@supabase/aut
 <script src="honglou_chars.js"></script>
 <script>
 /* ========================== DATA STORE ========================== */
-const STORE_KEYS = { clients:'wb_clients_v3', chains:'wb_chains_v3', books:'wb_books_v2', weights:'wb_weights_v2', height:'wb_height', exercise:'wb_exercise', history:'wb_history_progress', stages:'wb_stages', inspire_essays:'wb_essays', inspire_readings:'wb_readings', inspire_fragments:'wb_fragments', media_inspires:'wb_media_inspires', media_accounts:'wb_media_accounts', reno_categories:'wb_reno_categories', reno_incomes:'wb_reno_incomes', reading_books:'wb_reading_books_v1' };
+const STORE_KEYS = { clients:'wb_clients_v3', chains:'wb_chains_v3', books:'wb_books_v2', weights:'wb_weights_v2', height:'wb_height', exercise:'wb_exercise', history:'wb_history_progress', stages:'wb_stages', inspire_essays:'wb_essays', inspire_readings:'wb_readings', inspire_fragments:'wb_fragments', media_inspires:'wb_media_inspires', media_accounts:'wb_media_accounts', reno_categories:'wb_reno_categories', reno_incomes:'wb_reno_incomes', reading_books:'wb_reading_books_v1', news_bookmarks:'wb_news_bookmarks' };
 function loadData(k, f) { try { return JSON.parse(localStorage.getItem(k)) || f; } catch { return f; } }
 let _isLoadingFromCloud = false;
 let _syncTimer = null;
@@ -1743,6 +1767,7 @@ let readingBooks = loadData(STORE_KEYS.reading_books, []);
 let fragments = loadData(STORE_KEYS.inspire_fragments, []);
 let mediaInspires = loadData(STORE_KEYS.media_inspires, []);
 let mediaAccounts = loadData(STORE_KEYS.media_accounts, []);
+let newsBookmarks = loadData(STORE_KEYS.news_bookmarks, []);
 
 /* ========================== RENOVATION DEFAULT DATA ========================== */
 const DEFAULT_RENO_CATEGORIES = [
@@ -3029,6 +3054,47 @@ function openVideo(url) {
 
 /* ========================== INSPIRATION MODULE ========================== */
 var essayFilterTag = '';
+
+function filterInspireSearch(query) {
+  var resultsEl = $('inspire-search-results');
+  var inspireSection = document.getElementById('inspire');
+  var subTabs = inspireSection.querySelector('.sub-tabs');
+  var subContents = inspireSection.querySelectorAll('.sub-content');
+  if(!query || !query.trim()) {
+    resultsEl.style.display = 'none';
+    resultsEl.innerHTML = '';
+    if(subTabs) subTabs.style.display = '';
+    subContents.forEach(function(c) { c.style.display = ''; });
+    return;
+  }
+  if(subTabs) subTabs.style.display = 'none';
+  subContents.forEach(function(c) { c.style.display = 'none'; });
+  var q = query.trim().toLowerCase();
+  var results = [];
+
+  essays.forEach(function(e) {
+    if(((e.title||'') + (e.content||'') + (e.tag||'')).toLowerCase().indexOf(q) >= 0)
+      results.push({ type: '随笔', title: e.title || '无标题', content: (e.content||'').slice(0,100), date: e.date || '', tag: e.tag || '' });
+  });
+  readings.forEach(function(r) {
+    if(((r.title||'') + (r.content||'') + (r.note||'')).toLowerCase().indexOf(q) >= 0)
+      results.push({ type: '读书笔记', title: r.title || '无标题', content: (r.content||r.note||'').slice(0,100), date: r.date || '', tag: r.book || '' });
+  });
+  fragments.forEach(function(f) {
+    if(((f.title||'') + (f.content||'') + (f.tag||'')).toLowerCase().indexOf(q) >= 0)
+      results.push({ type: '知识碎片', title: f.title || '无标题', content: (f.content||'').slice(0,100), date: f.date || '', tag: f.tag || '' });
+  });
+
+  resultsEl.style.display = 'block';
+  resultsEl.innerHTML = results.length ? '<p style="font-size:0.82rem;color:#2D2D2D;opacity:0.6;margin-bottom:12px;">找到 ' + results.length + ' 条匹配结果</p>' + results.map(function(r) {
+    return '<div class="inspire-card" style="margin-bottom:10px;">' +
+      '<div class="inspire-meta"><span class="inspire-tag essay">' + r.type + '</span><span>' + r.date + '</span>' + (r.tag ? '<span style="font-size:0.72rem;color:#2D2D2D;opacity:0.5;">#' + r.tag + '</span>' : '') + '</div>' +
+      '<div class="inspire-title">' + escapeHtml(r.title) + '</div>' +
+      '<div class="inspire-content">' + escapeHtml(r.content) + (r.content.length >= 100 ? '...' : '') + '</div>' +
+    '</div>';
+  }).join('') : '<p style="color:#2D2D2D;text-align:center;padding:20px;">没有找到匹配的内容</p>';
+}
+
 function renderEssays() {
   // Collect all tags
   var allTags = [];
@@ -3178,8 +3244,10 @@ function renderMediaInspires() {
 }
 
 function renderMediaAccounts() {
-  var sorted = mediaAccounts.slice().sort(function(a,b) { return (b.date||'').localeCompare(a.date||''); });
-  $('media-account-list').innerHTML = sorted.length ? sorted.map(function(e) {
+  var sorted = mediaAccounts.slice().sort(function(a,b) { return (a.date||'').localeCompare(b.date||''); });
+  renderMediaGrowthChart(sorted);
+  var reversed = sorted.slice().reverse();
+  $('media-account-list').innerHTML = reversed.length ? reversed.map(function(e) {
     return '<div class="inspire-card">' +
       '<div class="inspire-meta"><span class="inspire-tag essay">' + (e.platform||'') + '</span><span>' + (e.date||'') + '</span></div>' +
       '<div class="inspire-title">' + (e.note||'账号数据记录') + '</div>' +
@@ -3192,6 +3260,53 @@ function renderMediaAccounts() {
       '<div class="inspire-actions"><button class="btn btn-secondary btn-sm" onclick="editMediaItem(\'account\',' + e.id + ')">编辑</button><button class="btn btn-danger btn-sm" onclick="deleteMediaItem(\'account\',' + e.id + ')">删除</button></div>' +
     '</div>';
   }).join('') : '<p style="color:#2D2D2D;text-align:center;padding:20px;">还没有数据记录，开始追踪你的账号成长吧</p>';
+}
+
+function renderMediaGrowthChart(sortedAccounts) {
+  var chartEl = $('media-growth-chart');
+  if(!chartEl || sortedAccounts.length < 2) { if(chartEl) chartEl.style.display = 'none'; return; }
+  chartEl.style.display = 'block';
+  chartEl.style.height = '280px';
+  chartEl.style.borderRadius = 'var(--radius)';
+  chartEl.style.border = '1px solid var(--rule)';
+  chartEl.style.background = '#FFFFFF';
+  chartEl.style.padding = '12px';
+
+  if(typeof echarts === 'undefined') {
+    chartEl.innerHTML = '<p style="text-align:center;padding:40px 0;color:#2D2D2D;font-size:0.85rem;">图表加载中，请稍候...</p>';
+    return;
+  }
+
+  var chart = echarts.init(chartEl);
+  var dates = sortedAccounts.map(function(e) { return (e.date||'').slice(5) || '未知'; });
+  var platforms = {};
+  sortedAccounts.forEach(function(e) {
+    var p = e.platform || '未知';
+    if(!platforms[p]) platforms[p] = { followers: [], likes: [], views: [] };
+    platforms[p].followers.push(parseInt(e.followers) || 0);
+    platforms[p].likes.push(parseInt(e.likes) || 0);
+    platforms[p].views.push(parseInt(e.views) || 0);
+  });
+
+  var series = [];
+  var colors = ['#C49CF8', '#6AE240', '#B8C9F2', '#FCC8D5', '#FFC107'];
+  var colorIdx = 0;
+  Object.keys(platforms).forEach(function(p) {
+    var color = colors[colorIdx % colors.length];
+    series.push({ name: p+'-粉丝', type: 'line', data: platforms[p].followers, smooth: true, symbol: 'circle', symbolSize: 6, lineStyle: { width: 2, color: color }, itemStyle: { color: color } });
+    series.push({ name: p+'-获赞', type: 'line', data: platforms[p].likes, smooth: true, symbol: 'diamond', symbolSize: 5, lineStyle: { width: 1.5, color: color, type: 'dashed' }, itemStyle: { color: color } });
+    colorIdx++;
+  });
+
+  chart.setOption({
+    title: { text: '账号增长趋势', left: 'center', textStyle: { fontSize: 14, fontWeight: 600, color: '#2D2D2D', fontFamily: 'var(--font-display)' } },
+    tooltip: { trigger: 'axis' },
+    legend: { bottom: 0, textStyle: { fontSize: 11, color: '#2D2D2D' }, type: 'scroll' },
+    grid: { left: '8%', right: '5%', bottom: '18%', top: '15%' },
+    xAxis: { type: 'category', data: dates, axisLabel: { fontSize: 11, color: '#2D2D2D' } },
+    yAxis: { type: 'value', axisLabel: { fontSize: 11, color: '#2D2D2D' }, splitLine: { lineStyle: { color: 'rgba(45,45,45,0.05)' } } },
+    series: series
+  });
 }
 
 function renderMediaTools() {
@@ -3566,8 +3681,9 @@ function renderRenoCategories() {
     '</div>';
     var itemsHtml = cat.items.length ? cat.items.map(function(item, idx) {
       var typeLabel = item.type==='material'?'材料':(item.type==='labor'?'人工':'其他');
+      var photoHtml = item.photo ? ' <a href="' + item.photo + '" target="_blank" rel="noopener noreferrer" style="display:inline-block;margin-left:6px;vertical-align:middle;"><img src="' + item.photo + '" alt="照片" style="width:32px;height:32px;object-fit:cover;border-radius:var(--radius-sm);border:1px solid var(--rule);cursor:pointer;" onerror="this.style.display=\'none\'"></a>' : '';
       return '<div class="reno-item">' +
-        '<span class="ri-name">' + item.name + (item.note ? ' <span style="font-size:0.75rem;color:#2D2D2D;">(' + item.note + ')</span>' : '') + '</span>' +
+        '<span class="ri-name">' + item.name + (item.note ? ' <span style="font-size:0.75rem;color:#2D2D2D;">(' + item.note + ')</span>' : '') + photoHtml + '</span>' +
         '<span class="ri-type ' + item.type + '">' + typeLabel + '</span>' +
         '<span class="ri-amount">¥' + (parseFloat(item.amount)||0).toFixed(2) + '</span>' +
         '<div class="ri-actions">' +
@@ -3652,18 +3768,20 @@ function openRenoItemModal() {
     '<div class="form-row"><div class="form-group"><label>名称 *</label><input type="text" id="m-reno-name" placeholder="例如：波纹管"></div>' +
     '<div class="form-group"><label>类型</label><select id="m-reno-type"><option value="material">材料</option><option value="labor">人工</option><option value="other">其他</option></select></div></div>' +
     '<div class="form-row"><div class="form-group"><label>金额 *</label><input type="number" id="m-reno-amount" placeholder="0.00" step="0.01"></div>' +
-    '<div class="form-group"><label>备注</label><input type="text" id="m-reno-note" placeholder="选填"></div></div>';
+    '<div class="form-group"><label>备注</label><input type="text" id="m-reno-note" placeholder="选填"></div></div>' +
+    '<div class="form-group"><label>照片URL</label><input type="text" id="m-reno-photo" placeholder="选填，粘贴图片链接"></div>';
   $('modal-confirm').onclick = function() {
     var catId = $('m-reno-cat').value;
     var name = $('m-reno-name').value.trim();
     var type = $('m-reno-type').value;
     var amount = parseFloat($('m-reno-amount').value);
     var note = $('m-reno-note').value.trim();
+    var photo = $('m-reno-photo').value.trim();
     if(!name) return alert('请填写名称');
     if(!amount || amount <= 0) return alert('请填写有效金额');
     var cat = renoCategories.find(function(c){return c.id===catId;});
     if(!cat) return;
-    cat.items.push({ id: Date.now(), name: name, type: type, amount: amount, note: note });
+    cat.items.push({ id: Date.now(), name: name, type: type, amount: amount, note: note, photo: photo });
     saveData(STORE_KEYS.reno_categories, renoCategories);
     renderRenoCategories(); renderRenoSummary(); closeModal();
   };
@@ -3680,15 +3798,17 @@ function editRenoItem(catId, idx) {
     '<div class="form-row"><div class="form-group"><label>名称 *</label><input type="text" id="m-reno-name" value="' + item.name + '"></div>' +
     '<div class="form-group"><label>类型</label><select id="m-reno-type"><option value="material" ' + (item.type==='material'?'selected':'') + '>材料</option><option value="labor" ' + (item.type==='labor'?'selected':'') + '>人工</option><option value="other" ' + (item.type==='other'?'selected':'') + '>其他</option></select></div></div>' +
     '<div class="form-row"><div class="form-group"><label>金额 *</label><input type="number" id="m-reno-amount" value="' + item.amount + '" step="0.01"></div>' +
-    '<div class="form-group"><label>备注</label><input type="text" id="m-reno-note" value="' + (item.note||'') + '"></div></div>';
+    '<div class="form-group"><label>备注</label><input type="text" id="m-reno-note" value="' + (item.note||'') + '"></div></div>' +
+    '<div class="form-group"><label>照片URL</label><input type="text" id="m-reno-photo" value="' + (item.photo||'') + '" placeholder="选填，粘贴图片链接"></div>';
   $('modal-confirm').onclick = function() {
     var name = $('m-reno-name').value.trim();
     var type = $('m-reno-type').value;
     var amount = parseFloat($('m-reno-amount').value);
     var note = $('m-reno-note').value.trim();
+    var photo = $('m-reno-photo').value.trim();
     if(!name) return alert('请填写名称');
     if(!amount || amount <= 0) return alert('请填写有效金额');
-    cat.items[idx] = { id: item.id, name: name, type: type, amount: amount, note: note };
+    cat.items[idx] = { id: item.id, name: name, type: type, amount: amount, note: note, photo: photo };
     saveData(STORE_KEYS.reno_categories, renoCategories);
     renderRenoCategories(); renderRenoSummary(); closeModal();
   };
@@ -4335,19 +4455,57 @@ async function fetchNewsFromRSS() {
 
 /* 渲染新闻卡片 */
 function renderNewsByCategory(cat) {
+  if(cat === '收藏') { renderNewsBookmarks(); return; }
   var allNews = getCurrentNews();
   var catNews = allNews.filter(function(n) { return n.category === cat; });
   /* 每类最多展示指定条数 */
   catNews = catNews.slice(0, NEWS_MAX_PER_CATEGORY);
   var cards = catNews.map(function(n) {
+    var bmId = getNewsBookmarkId(n);
+    var isBookmarked = newsBookmarks.some(function(b) { return b.id === bmId; });
     return '<div class="news-card">' +
       '<div><span class="news-priority ' + n.priority + '">' + (n.priority==='high'?'热门':'关注') + '</span><span class="news-title">' + escapeHtml(n.title) + '</span></div>' +
       '<div class="news-desc">' + escapeHtml(n.desc) + '</div>' +
       '<div class="news-tags">' + n.tags.map(function(t) { return '<span class="news-tag">' + escapeHtml(t) + '</span>'; }).join('') + '</div>' +
-      '<div class="news-meta"><span class="news-source">' + escapeHtml(n.source) + '</span><span>' + n.date + '</span><a class="news-link" href="' + getNewsLink(n) + '" target="_blank" rel="noopener noreferrer">查看报道 →</a></div>' +
+      '<div class="news-meta"><span class="news-source">' + escapeHtml(n.source) + '</span><span>' + n.date + '</span><div style="display:flex;gap:12px;align-items:center;"><button class="news-bookmark-btn' + (isBookmarked?' active':'') + '" onclick="toggleNewsBookmark(' + JSON.stringify(n).replace(/"/g, '&quot;') + ')" title="收藏/取消">' + (isBookmarked?'★':'☆') + '</button><a class="news-link" href="' + getNewsLink(n) + '" target="_blank" rel="noopener noreferrer">查看报道 →</a></div></div>' +
     '</div>';
   }).join('');
   $('news-cards').innerHTML = cards || '<p style="color:#2D2D2D;text-align:center;padding:20px;">暂无该类别新闻</p>';
+}
+
+function getNewsBookmarkId(n) {
+  return (n.source || '') + '|' + (n.title || '');
+}
+
+function toggleNewsBookmark(n) {
+  var bmId = getNewsBookmarkId(n);
+  var idx = newsBookmarks.findIndex(function(b) { return b.id === bmId; });
+  if(idx >= 0) {
+    newsBookmarks.splice(idx, 1);
+  } else {
+    newsBookmarks.push({ id: bmId, title: n.title, desc: n.desc, source: n.source, date: n.date, tags: n.tags, url: getNewsLink(n), category: n.category, savedAt: new Date().toISOString().slice(0,10) });
+  }
+  saveData(STORE_KEYS.news_bookmarks, newsBookmarks);
+  var activeTab = document.querySelector('.news-tab.active');
+  if(activeTab) renderNewsByCategory(activeTab.dataset.newscat);
+}
+
+function renderNewsBookmarks() {
+  var cards = newsBookmarks.slice().sort(function(a,b) { return (b.savedAt||'').localeCompare(a.savedAt||''); }).map(function(b) {
+    return '<div class="news-card">' +
+      '<div><span class="news-priority medium">收藏</span><span class="news-title">' + escapeHtml(b.title) + '</span></div>' +
+      '<div class="news-desc">' + escapeHtml(b.desc) + '</div>' +
+      '<div class="news-tags">' + (b.tags||[]).map(function(t) { return '<span class="news-tag">' + escapeHtml(t) + '</span>'; }).join('') + '</div>' +
+      '<div class="news-meta"><span class="news-source">' + escapeHtml(b.source) + '</span><span>' + (b.savedAt||'') + '</span><div style="display:flex;gap:12px;align-items:center;"><button class="news-bookmark-btn active" onclick="removeNewsBookmark(\'' + b.id.replace(/'/g, "\\'") + '\')" title="取消收藏">★</button><a class="news-link" href="' + (b.url||'') + '" target="_blank" rel="noopener noreferrer">查看报道 →</a></div></div>' +
+    '</div>';
+  }).join('');
+  $('news-cards').innerHTML = cards || '<p style="color:#2D2D2D;text-align:center;padding:20px;">还没有收藏的新闻，点击 ☆ 收藏感兴趣的文章吧</p>';
+}
+
+function removeNewsBookmark(id) {
+  var idx = newsBookmarks.findIndex(function(b) { return b.id === id; });
+  if(idx >= 0) { newsBookmarks.splice(idx, 1); saveData(STORE_KEYS.news_bookmarks, newsBookmarks); }
+  renderNewsBookmarks();
 }
 
 function escapeHtml(text) {
@@ -4575,23 +4733,50 @@ var currentAiTipCat = '提示词';
 var AI_TIP_CATS = ['提示词', '图片生成', 'Skill生成', '视频生成', 'PPT生成'];
 var AI_TIP_LEVEL_ORDER = { '入门': 0, '进阶': 1, '精通': 2 };
 
-function renderAITips() {
-  // Render category tabs
-  var catHtml = AI_TIP_CATS.map(function(c) {
-    return '<div class="news-tab' + (c === currentAiTipCat ? ' active' : '') + '" onclick="switchAiTipCat(\'' + c + '\')">' + c + '</div>';
-  }).join('');
-  if($('aitips-cat-tabs')) $('aitips-cat-tabs').innerHTML = catHtml;
+var aiTipSearchQuery = '';
 
-  // Filter and sort by level
-  var tips = AI_TIPS.filter(function(t) { return t.cat === currentAiTipCat; });
+function filterAITips(query) {
+  aiTipSearchQuery = (query || '').trim().toLowerCase();
+  renderAITips();
+}
+
+function renderAITips() {
+  var searchInput = $('aitips-search-input');
+  if(searchInput && searchInput.value.trim()) aiTipSearchQuery = searchInput.value.trim().toLowerCase();
+
+  // Filter by search query or by category
+  var tips;
+  if(aiTipSearchQuery) {
+    tips = AI_TIPS.filter(function(t) {
+      return ((t.title||'') + (t.brief||'') + (t.detail||'') + (t.cat||'')).toLowerCase().indexOf(aiTipSearchQuery) >= 0;
+    });
+  } else {
+    tips = AI_TIPS.filter(function(t) { return t.cat === currentAiTipCat; });
+  }
   tips.sort(function(a, b) { return (AI_TIP_LEVEL_ORDER[a.level] || 0) - (AI_TIP_LEVEL_ORDER[b.level] || 0); });
 
-  $('aitips-list').innerHTML = '<div class="history-card-grid">' + tips.map(function(t, i) {
+  // Render category tabs (hide when searching)
+  var catTabsEl = $('aitips-cat-tabs');
+  if(catTabsEl) {
+    if(aiTipSearchQuery) {
+      catTabsEl.style.display = 'none';
+    } else {
+      catTabsEl.style.display = '';
+      var catHtml = AI_TIP_CATS.map(function(c) {
+        return '<div class="news-tab' + (c === currentAiTipCat ? ' active' : '') + '" onclick="switchAiTipCat(\'' + c + '\')">' + c + '</div>';
+      }).join('');
+      catTabsEl.innerHTML = catHtml;
+    }
+  }
+
+  var headerHtml = aiTipSearchQuery ? '<p style="font-size:0.82rem;color:#2D2D2D;opacity:0.6;margin-bottom:12px;">找到 ' + tips.length + ' 条匹配结果</p>' : '';
+
+  $('aitips-list').innerHTML = headerHtml + '<div class="history-card-grid">' + tips.map(function(t, i) {
     var levelColor = t.level === '入门' ? 'rgba(196,156,248,0.12)' : t.level === '进阶' ? 'rgba(196,156,248,0.12)' : 'rgba(45,45,45,0.12)';
     var levelText = t.level === '入门' ? 'var(--accent-dark)' : t.level === '进阶' ? '#C49CF8' : '#2D2D2D';
     return '<div class="history-card" onclick="toggleAITipDetail(' + i + ')">' +
       '<div class="history-card-header">' +
-        '<div class="history-card-num" style="background:' + levelColor + ';color:' + levelText + ';">' + t.level + '</div>' +
+        '<div class="history-card-num" style="background:' + levelColor + ';color:' + levelText + ';">' + (aiTipSearchQuery ? t.cat : t.level) + '</div>' +
         '<h4 class="history-card-title">' + t.title + '</h4>' +
       '</div>' +
       '<p class="history-card-desc">' + t.brief + '</p>' +
@@ -4607,6 +4792,9 @@ function renderAITips() {
 
 function switchAiTipCat(cat) {
   currentAiTipCat = cat;
+  aiTipSearchQuery = '';
+  var searchInput = $('aitips-search-input');
+  if(searchInput) searchInput.value = '';
   renderAITips();
 }
 
@@ -4614,6 +4802,47 @@ function toggleAITipDetail(idx) {
   var detail = $('aitip-detail-' + idx);
   if(!detail) return;
   detail.classList.toggle('show');
+}
+
+/* ========================== DATA EXPORT / IMPORT ========================== */
+function exportAllData() {
+  var allData = {};
+  Object.keys(STORE_KEYS).forEach(function(key) {
+    var val = localStorage.getItem(STORE_KEYS[key]);
+    if(val) {
+      try { allData[STORE_KEYS[key]] = JSON.parse(val); } catch(e) { allData[STORE_KEYS[key]] = val; }
+    }
+  });
+  var blob = new Blob([JSON.stringify(allData, null, 2)], { type: 'application/json' });
+  var url = URL.createObjectURL(blob);
+  var a = document.createElement('a');
+  a.href = url;
+  a.download = 'workbench-backup-' + new Date().toISOString().slice(0,10) + '.json';
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+function importAllData(event) {
+  var file = event.target.files[0];
+  if(!file) return;
+  var reader = new FileReader();
+  reader.onload = function(e) {
+    try {
+      var data = JSON.parse(e.target.result);
+      if(!confirm('导入数据将覆盖当前所有数据，确定继续吗？')) return;
+      Object.keys(STORE_KEYS).forEach(function(key) {
+        if(data[STORE_KEYS[key]] !== undefined) {
+          localStorage.setItem(STORE_KEYS[key], JSON.stringify(data[STORE_KEYS[key]]));
+        }
+      });
+      alert('数据导入成功！页面将刷新以加载新数据。');
+      location.reload();
+    } catch(err) {
+      alert('导入失败：文件格式不正确。');
+    }
+  };
+  reader.readAsText(file);
+  event.target.value = '';
 }
 
 function renderHomeStats() {
@@ -4647,43 +4876,52 @@ function renderHomeStats() {
     <div class="quick-stat" style="${weightLoss==='--'?'opacity:0.5':''}"><div class="qs-icon">🍅</div><div class="qs-value ${weightLossClass}">${weightLoss}kg</div><div class="qs-label">累计体重变化</div></div>
   `;
 
-  // Weekly plan
+  // 近期待办 — 基于实际模块数据生成
   const reminders = [];
-  clients.forEach(c => {
-    const info = genNextVisitInfo(c);
-    const ds = c.lastVisitDate ? daysBetween(c.lastVisitDate, today) : 999;
-    const iv = getCategoryInterval(c.category);
-    if(ds >= iv-2) reminders.push({ title:`拜访 ${c.client}（${c.category}类）`, desc:info.focus, priority:c.category==='A'?1:c.category==='B'?2:3 });
+  readingBooks.forEach(b => {
+    if(b.status === 'reading') reminders.push({ title:`继续阅读《${b.title}》`, desc: b.author || '保持每日阅读', priority: 1 });
   });
-  chains.forEach(ch => {
-    const ld = ch.visitHistory[ch.visitHistory.length-1]?.date || '';
-    const ds = ld ? daysBetween(ld, today) : 999;
-    if(ds >= 7) reminders.push({ title:`跟进 ${ch.name}`, desc:genSmartChainNext(ch), priority:ch.stage==='待签约'?1:ch.stage==='方案洽谈'?2:3 });
+  books.filter(b => b.current > 0 && b.current < b.total).forEach(b => {
+    const pct = Math.round(b.current / b.total * 100);
+    reminders.push({ title:`《${b.title}》进度 ${pct}%`, desc: `已读 ${b.current}/${b.total}`, priority: 2 });
   });
+  mediaAccounts.slice().sort((a,b)=>(b.date||'').localeCompare(a.date||'')).slice(0,2).forEach(a => {
+    reminders.push({ title:`更新${a.platform||''}账号数据`, desc: a.note || '记录最新粉丝/获赞数据', priority: 3 });
+  });
+  const recentEssays = essays.filter(e => { var d = e.date||''; return d.startsWith(monthStr); });
+  if(recentEssays.length < 2) reminders.push({ title:'写一篇灵感随笔', desc:'记录近期所思所想', priority: 3 });
+  const unfinishedBooks = readingBooks.filter(b => b.status === 'reading');
+  if(unfinishedBooks.length === 0 && readingBooks.length > 0) {
+    reminders.push({ title:'开始阅读一本新书', desc:'从书架中挑一本开始吧', priority: 3 });
+  }
   reminders.sort((a,b)=>a.priority-b.priority);
   const weekPlanItems = reminders.slice(0, 6);
   $('weekly-plan').innerHTML = weekPlanItems.length ? weekPlanItems.map((r,i) => `
     <div class="summary-item">
       <span class="si-label">${i+1}. ${r.title}</span>
-      <span class="si-val" style="font-size:0.8rem;color:#2D2D2D;">${r.desc.slice(0,30)}...</span>
+      <span class="si-val" style="font-size:0.8rem;color:#2D2D2D;">${r.desc.slice(0,30)}${r.desc.length>30?'...':''}</span>
     </div>
-  `).join('') : '<p style="color:#2D2D2D;font-size:0.85rem;text-align:center;padding:12px;">本周暂无紧急待办，保持节奏！</p>';
+  `).join('') : '<p style="color:#2D2D2D;font-size:0.85rem;text-align:center;padding:12px;">暂无待办，保持节奏！</p>';
 
-  // Monthly summary
-  const totalClients = clients.length;
-  const totalChains = chains.length;
-  const signedChains = chains.filter(c => c.stage === '已合作').length;
+  // 月度概况 — 清除CRM引用，聚焦实际模块
   const recentWeights = weights.filter(w => w.date.startsWith(monthStr));
   const latestW = recentWeights.length ? recentWeights.sort((a,b)=>b.date.localeCompare(a.date))[0] : null;
   const totalBooks = books.length;
   const booksInProgress = books.filter(b => b.current > 0 && b.current < b.total).length;
+  const readingInProgress = readingBooks.filter(b => b.status === 'reading').length;
+  const readingFinished = readingBooks.filter(b => b.status === 'finished').length;
+  const recentEssaysCount = essays.filter(e => (e.date||'').startsWith(monthStr)).length;
+  const recentFragmentsCount = fragments.filter(f => (f.date||'').startsWith(monthStr)).length;
+  const recentMediaCount = mediaAccounts.filter(m => (m.date||'').startsWith(monthStr)).length;
+  const renoTotalExpense = renoCategories.reduce((s,cat) => s + cat.items.reduce((ss,i) => ss + (parseFloat(i.amount)||0), 0), 0);
+  const renoTotalIncome = renoIncomes.reduce((s,i) => s + (parseFloat(i.amount)||0), 0);
 
   $('monthly-summary').innerHTML = `
-    <div class="summary-item"><span class="si-label">灵感随笔</span><span class="si-val">${essays.length} 篇</span></div>
-    <div class="summary-item"><span class="si-label">读书笔记</span><span class="si-val">${readings.length} 条</span></div>
-    <div class="summary-item"><span class="si-label">知识碎片</span><span class="si-val">${fragments.length} 条</span></div>
+    <div class="summary-item"><span class="si-label">本月灵感</span><span class="si-val">${recentEssaysCount} 篇随笔 · ${recentFragmentsCount} 条碎片</span></div>
+    <div class="summary-item"><span class="si-label">阅读进度</span><span class="si-val">${totalBooks} 本书目 · ${readingInProgress} 本在读 · ${readingFinished} 本读完</span></div>
     <div class="summary-item"><span class="si-label">通史章节</span><span class="si-val">${HISTORY_SCHEDULE.length}个章节可自由学习</span></div>
-    <div class="summary-item"><span class="si-label">阅读进度</span><span class="si-val">${totalBooks} 本书，${booksInProgress} 本在读，${booksRead} 本读完</span></div>
+    <div class="summary-item"><span class="si-label">新媒体数据</span><span class="si-val">本月记录 ${recentMediaCount} 次</span></div>
+    <div class="summary-item"><span class="si-label">装修净支出</span><span class="si-val">¥${(renoTotalExpense - renoTotalIncome).toFixed(2)}</span></div>
     <div class="summary-item"><span class="si-label">本月体重记录</span><span class="si-val">${recentWeights.length} 次${latestW ? '，最新 '+getWeightVal(latestW)+'kg' : ''}</span></div>
     <div class="summary-item"><span class="si-label">本月运动</span><span class="si-val">${exerciseThisMonth} 天</span></div>
   `;
@@ -5054,12 +5292,15 @@ function renderReadingBookGrid() {
       var statusClass = b.status || 'unread';
       var statusText = { unread: '未读', reading: '在读', finished: '已读' }[statusClass] || '未读';
       var nodeCount = countReadingNodes(b.framework || []);
+      var sessions = b.readingSessions || [];
+      var totalMins = sessions.reduce(function(s, sess) { return s + (parseInt(sess.minutes) || 0); }, 0);
+      var timeStr = totalMins >= 60 ? Math.floor(totalMins/60) + 'h' + (totalMins%60) + 'm' : (totalMins > 0 ? totalMins + 'm' : '');
       return '<div class="reading-book-card" onclick="showReadingBookDetail(' + b.id + ')">' +
         '<div class="reading-book-cover ' + statusClass + '"></div>' +
         '<div class="reading-book-title">' + (b.title || '未命名') + '</div>' +
         '<div class="reading-book-author">' + (b.author || '') + '</div>' +
         '<span class="reading-book-status ' + statusClass + '">' + statusText + '</span>' +
-        '<div class="reading-book-meta">' + nodeCount + ' 条笔记</div>' +
+        '<div class="reading-book-meta">' + nodeCount + ' 条笔记' + (timeStr ? ' · ' + timeStr : '') + '</div>' +
       '</div>';
     }).join('');
   }
@@ -5127,6 +5368,22 @@ function showReadingBookDetail(id) {
 
 function renderReadingBookDetail(book) {
   var statusText = { unread: '未读', reading: '在读', finished: '已读' }[book.status] || '未读';
+  var sessions = book.readingSessions || [];
+  var totalMinutes = sessions.reduce(function(s, sess) { return s + (parseInt(sess.minutes) || 0); }, 0);
+  var totalHours = Math.floor(totalMinutes / 60);
+  var remainMins = totalMinutes % 60;
+  var totalTimeStr = totalHours > 0 ? totalHours + '小时' + remainMins + '分钟' : totalMinutes + '分钟';
+  var sessionCount = sessions.length;
+  var avgMinutes = sessionCount > 0 ? Math.round(totalMinutes / sessionCount) : 0;
+
+  var recentSessions = sessions.slice(-5).reverse();
+  var sessionsHtml = recentSessions.length ? recentSessions.map(function(s) {
+    return '<div style="display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px dashed var(--rule);font-size:0.82rem;">' +
+      '<span style="color:#2D2D2D;">' + (s.date || '') + '</span>' +
+      '<span style="color:var(--accent-dark);font-weight:600;">' + (s.minutes || 0) + ' 分钟</span>' +
+    '</div>';
+  }).join('') : '<p style="color:#2D2D2D;font-size:0.82rem;padding:8px 0;">还没有阅读记录</p>';
+
   var html = '' +
     '<button class="btn btn-secondary btn-sm back-btn" onclick="showReadingBookList()">← 返回书籍列表</button>' +
     '<div style="display:flex;justify-content:space-between;align-items:flex-start;margin-top:16px;margin-bottom:20px;flex-wrap:wrap;gap:12px;">' +
@@ -5144,6 +5401,23 @@ function renderReadingBookDetail(book) {
         '<button class="btn btn-secondary btn-sm" onclick="deleteReadingBook(' + book.id + ')" style="color:#c44;">删除</button>' +
       '</div>' +
     '</div>' +
+    '<div class="glass-card" style="margin-bottom:20px;padding:16px;">' +
+      '<div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;flex-wrap:wrap;gap:8px;">' +
+        '<h4 style="margin:0;color:#2D2D2D;">阅读时长统计</h4>' +
+        '<div id="reading-timer-display" style="font-family:var(--font-mono);font-size:1.1rem;font-weight:600;color:var(--accent-dark);">00:00:00</div>' +
+      '</div>' +
+      '<div class="quick-stats" style="grid-template-columns:repeat(auto-fit,minmax(100px,1fr));margin-bottom:12px;">' +
+        '<div class="quick-stat"><div class="qs-value" style="font-size:1.1rem;color:var(--accent-dark);">' + totalTimeStr + '</div><div class="qs-label">累计时长</div></div>' +
+        '<div class="quick-stat"><div class="qs-value" style="font-size:1.1rem;">' + sessionCount + '</div><div class="qs-label">阅读次数</div></div>' +
+        '<div class="quick-stat"><div class="qs-value" style="font-size:1.1rem;">' + avgMinutes + '分</div><div class="qs-label">平均每次</div></div>' +
+      '</div>' +
+      '<div style="display:flex;gap:8px;margin-bottom:12px;">' +
+        '<button class="btn btn-primary btn-sm" id="reading-timer-btn" onclick="toggleReadingTimer(' + book.id + ')">开始阅读</button>' +
+        '<input type="number" id="manual-reading-minutes" placeholder="手动记录分钟数" min="1" style="width:120px;padding:8px 10px;border:1px solid var(--rule-strong);border-radius:var(--radius-sm);font-size:0.82rem;color:#2D2D2D;outline:none;">' +
+        '<button class="btn btn-secondary btn-sm" onclick="addManualReadingSession(' + book.id + ')">记录</button>' +
+      '</div>' +
+      '<div><h5 style="margin-bottom:8px;color:#2D2D2D;font-size:0.85rem;">最近阅读记录</h5>' + sessionsHtml + '</div>' +
+    '</div>' +
     '<div class="rn-framework" id="rn-framework-' + book.id + '">' +
       (book.framework || []).map(function(node, idx) {
         return renderReadingNode(book.id, node, idx, []);
@@ -5154,6 +5428,56 @@ function renderReadingBookDetail(book) {
       '<button class="btn btn-primary btn-sm" onclick="addReadingNode(' + book.id + ')">+ 添加节点</button>' +
     '</div>';
   $('reading-book-detail-view').innerHTML = html;
+}
+
+var _readingTimerInterval = null;
+var _readingTimerStart = null;
+var _readingTimerBookId = null;
+
+function toggleReadingTimer(bookId) {
+  var btn = document.getElementById('reading-timer-btn');
+  if(_readingTimerInterval) {
+    clearInterval(_readingTimerInterval);
+    var elapsed = Math.floor((Date.now() - _readingTimerStart) / 1000);
+    var minutes = Math.max(1, Math.round(elapsed / 60));
+    var book = readingBooks.find(function(b) { return b.id === bookId; });
+    if(book) {
+      if(!book.readingSessions) book.readingSessions = [];
+      book.readingSessions.push({ date: new Date().toISOString().slice(0,10), minutes: minutes });
+      saveData(STORE_KEYS.reading_books, readingBooks);
+    }
+    _readingTimerInterval = null;
+    _readingTimerStart = null;
+    _readingTimerBookId = null;
+    renderReadingBookDetail(book);
+  } else {
+    _readingTimerStart = Date.now();
+    _readingTimerBookId = bookId;
+    btn.textContent = '结束阅读';
+    btn.classList.add('btn-danger');
+    _readingTimerInterval = setInterval(function() {
+      var elapsed = Math.floor((Date.now() - _readingTimerStart) / 1000);
+      var h = String(Math.floor(elapsed / 3600)).padStart(2, '0');
+      var m = String(Math.floor((elapsed % 3600) / 60)).padStart(2, '0');
+      var s = String(elapsed % 60).padStart(2, '0');
+      var display = document.getElementById('reading-timer-display');
+      if(display) display.textContent = h + ':' + m + ':' + s;
+    }, 1000);
+  }
+}
+
+function addManualReadingSession(bookId) {
+  var input = document.getElementById('manual-reading-minutes');
+  if(!input) return;
+  var minutes = parseInt(input.value);
+  if(!minutes || minutes <= 0) { alert('请输入有效的分钟数'); return; }
+  var book = readingBooks.find(function(b) { return b.id === bookId; });
+  if(!book) return;
+  if(!book.readingSessions) book.readingSessions = [];
+  book.readingSessions.push({ date: new Date().toISOString().slice(0,10), minutes: minutes });
+  saveData(STORE_KEYS.reading_books, readingBooks);
+  input.value = '';
+  renderReadingBookDetail(book);
 }
 
 function renderReadingNode(bookId, node, idx, path) {
