@@ -3230,14 +3230,25 @@ var MEDIA_TOOLS = [
   { title:'巨量算数', desc:'抖音官方趋势分析工具，查看关键词热度、用户画像、内容趋势', url:'https://trendinsight.oceanengine.com/', tag:'数据' }
 ];
 
+function normalizeUrl(url) {
+  if(!url) return '';
+  url = url.trim();
+  if(!url) return '';
+  if(!/^https?:\/\//i.test(url)) {
+    url = 'https://' + url;
+  }
+  return url;
+}
+
 function renderMediaInspires() {
   var sorted = mediaInspires.slice().sort(function(a,b) { return (b.date||'').localeCompare(a.date||''); });
   $('media-inspire-list').innerHTML = sorted.length ? sorted.map(function(e) {
+    var safeLink = normalizeUrl(e.link);
     return '<div class="inspire-card">' +
       '<div class="inspire-meta"><span class="inspire-tag reading">' + (e.category||'其他') + '</span><span>' + (e.platform||'') + ' · ' + (e.date||'') + '</span></div>' +
       (e.title ? '<div class="inspire-title">' + e.title + '</div>' : '') +
       '<div class="inspire-content">' + (e.content||'') + '</div>' +
-      (e.link ? '<div style="margin-top:8px;"><a href="' + e.link + '" target="_blank" rel="noopener noreferrer" style="color:var(--accent-dark);font-size:0.8rem;font-weight:600;">查看原文 →</a></div>' : '') +
+      (safeLink ? '<div style="margin-top:8px;"><a href="' + safeLink + '" target="_blank" rel="noopener" style="color:var(--accent-dark);font-size:0.8rem;font-weight:600;">查看原文 →</a></div>' : '') +
       '<div class="inspire-actions"><button class="btn btn-secondary btn-sm" onclick="editMediaItem(\'inspire\',' + e.id + ')">编辑</button><button class="btn btn-danger btn-sm" onclick="deleteMediaItem(\'inspire\',' + e.id + ')">删除</button></div>' +
     '</div>';
   }).join('') : '<p style="color:#2D2D2D;text-align:center;padding:20px;">还没有灵感记录，点击右上角开始收集吧</p>';
@@ -3341,7 +3352,7 @@ function openMediaModal(type) {
         category: $('m-media-cat').value,
         platform: $('m-media-platform').value,
         content: $('m-media-content').value.trim(),
-        link: $('m-media-link').value.trim(),
+        link: normalizeUrl($('m-media-link').value),
         date: $('m-media-date').value || todayStr()
       };
       if(!item.content) { alert('请填写内容'); return; }
@@ -3400,7 +3411,7 @@ function editMediaItem(type, id) {
       item.category = $('m-media-cat').value;
       item.platform = $('m-media-platform').value;
       item.content = $('m-media-content').value.trim();
-      item.link = $('m-media-link').value.trim();
+      item.link = normalizeUrl($('m-media-link').value);
       item.date = $('m-media-date').value || todayStr();
       saveData(STORE_KEYS.media_inspires, mediaInspires);
       renderMediaInspires();
@@ -4467,7 +4478,7 @@ function renderNewsByCategory(cat) {
       '<div><span class="news-priority ' + n.priority + '">' + (n.priority==='high'?'热门':'关注') + '</span><span class="news-title">' + escapeHtml(n.title) + '</span></div>' +
       '<div class="news-desc">' + escapeHtml(n.desc) + '</div>' +
       '<div class="news-tags">' + n.tags.map(function(t) { return '<span class="news-tag">' + escapeHtml(t) + '</span>'; }).join('') + '</div>' +
-      '<div class="news-meta"><span class="news-source">' + escapeHtml(n.source) + '</span><span>' + n.date + '</span><div style="display:flex;gap:12px;align-items:center;"><button class="news-bookmark-btn' + (isBookmarked?' active':'') + '" onclick="toggleNewsBookmark(' + JSON.stringify(n).replace(/"/g, '&quot;') + ')" title="收藏/取消">' + (isBookmarked?'★':'☆') + '</button><a class="news-link" href="' + getNewsLink(n) + '" target="_blank" rel="noopener noreferrer">查看报道 →</a></div></div>' +
+      '<div class="news-meta"><span class="news-source">' + escapeHtml(n.source) + '</span><span>' + n.date + '</span><div style="display:flex;gap:12px;align-items:center;"><button class="news-bookmark-btn' + (isBookmarked?' active':'') + '" onclick="toggleNewsBookmark(' + JSON.stringify(n).replace(/"/g, '&quot;') + ')" title="收藏/取消">' + (isBookmarked?'★':'☆') + '</button><a class="news-link" href="' + normalizeUrl(getNewsLink(n)) + '" target="_blank" rel="noopener">查看报道 →</a></div></div>' +
     '</div>';
   }).join('');
   $('news-cards').innerHTML = cards || '<p style="color:#2D2D2D;text-align:center;padding:20px;">暂无该类别新闻</p>';
@@ -4496,7 +4507,7 @@ function renderNewsBookmarks() {
       '<div><span class="news-priority medium">收藏</span><span class="news-title">' + escapeHtml(b.title) + '</span></div>' +
       '<div class="news-desc">' + escapeHtml(b.desc) + '</div>' +
       '<div class="news-tags">' + (b.tags||[]).map(function(t) { return '<span class="news-tag">' + escapeHtml(t) + '</span>'; }).join('') + '</div>' +
-      '<div class="news-meta"><span class="news-source">' + escapeHtml(b.source) + '</span><span>' + (b.savedAt||'') + '</span><div style="display:flex;gap:12px;align-items:center;"><button class="news-bookmark-btn active" onclick="removeNewsBookmark(\'' + b.id.replace(/'/g, "\\'") + '\')" title="取消收藏">★</button><a class="news-link" href="' + (b.url||'') + '" target="_blank" rel="noopener noreferrer">查看报道 →</a></div></div>' +
+      '<div class="news-meta"><span class="news-source">' + escapeHtml(b.source) + '</span><span>' + (b.savedAt||'') + '</span><div style="display:flex;gap:12px;align-items:center;"><button class="news-bookmark-btn active" onclick="removeNewsBookmark(\'' + b.id.replace(/'/g, "\\'") + '\')" title="取消收藏">★</button><a class="news-link" href="' + normalizeUrl(b.url) + '" target="_blank" rel="noopener">查看报道 →</a></div></div>' +
     '</div>';
   }).join('');
   $('news-cards').innerHTML = cards || '<p style="color:#2D2D2D;text-align:center;padding:20px;">还没有收藏的新闻，点击 ☆ 收藏感兴趣的文章吧</p>';
@@ -4517,7 +4528,7 @@ function escapeHtml(text) {
 
 function getNewsLink(n) {
   /* 如果有原始链接，直接使用 */
-  if(n.url && n.url.startsWith('http')) return n.url;
+  if(n.url && /^https?:\/\//i.test(n.url)) return n.url;
   return getNewsSearchUrl(n);
 }
 
@@ -4784,7 +4795,7 @@ function renderAITips() {
         '<div class="history-detail-content">' + t.detail + '</div>' +
         '<h5 style="margin:14px 0 10px;color:var(--accent-dark);">示例提示词</h5>' +
         '<div style="background:rgba(45,45,45,0.03);border-radius:var(--radius-sm);padding:12px;font-size:0.82rem;line-height:1.7;color:var(--ink);border:1px solid var(--rule);white-space:pre-wrap;">' + t.prompt + '</div>' +
-        (t.url ? '<div style="margin-top:12px;"><a href="' + t.url + '" target="_blank" rel="noopener noreferrer" style="color:var(--accent-dark);font-size:0.8rem;font-weight:600;">查看原文 →</a></div>' : '') +
+        (t.url ? '<div style="margin-top:12px;"><a href="' + normalizeUrl(t.url) + '" target="_blank" rel="noopener" style="color:var(--accent-dark);font-size:0.8rem;font-weight:600;">查看原文 →</a></div>' : '') +
       '</div>' +
     '</div>';
   }).join('') + '</div>';
