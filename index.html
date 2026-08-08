@@ -1085,7 +1085,14 @@ h4 { font-family: var(--font-display); color: var(--choco); font-weight: 600; }
       装修记录
     </div>
     <div style="margin-top:auto;padding-top:16px;border-top:1px solid var(--rule);">
-      <button class="btn btn-secondary btn-sm" style="width:100%;margin-bottom:8px;" onclick="exportAllData()">导出数据</button>
+      <div style="position:relative;">
+        <button class="btn btn-secondary btn-sm" style="width:100%;margin-bottom:8px;" onclick="toggleExportMenu()">导出数据 ▾</button>
+        <div id="export-dropdown" style="display:none;position:absolute;bottom:100%;left:0;right:0;background:#FFFFFF;border:1px solid var(--rule);border-radius:var(--radius);box-shadow:0 4px 16px var(--shadow);padding:4px;z-index:100;margin-bottom:4px;">
+          <button class="btn btn-secondary btn-sm" style="width:100%;margin-bottom:4px;text-align:left;" onclick="exportAllData('json')">JSON 备份（含导入）</button>
+          <button class="btn btn-secondary btn-sm" style="width:100%;margin-bottom:4px;text-align:left;" onclick="exportAllData('csv')">CSV 表格</button>
+          <button class="btn btn-secondary btn-sm" style="width:100%;text-align:left;" onclick="exportAllData('excel')">Excel 表格</button>
+        </div>
+      </div>
       <button class="btn btn-secondary btn-sm" style="width:100%;" onclick="document.getElementById('import-data-input').click()">导入数据</button>
       <input type="file" id="import-data-input" accept=".json" style="display:none;" onchange="importAllData(event)">
     </div>
@@ -1132,9 +1139,14 @@ h4 { font-family: var(--font-display); color: var(--choco); font-weight: 600; }
       <h1 id="page-title">首页</h1>
       <div style="display:flex;align-items:center;gap:12px;">
         <span class="date-badge" id="today-date"></span>
-        <button onclick="exportAllData()" title="导出数据" style="background:none;border:none;cursor:pointer;padding:4px;color:var(--choco);opacity:0.5;font-size:1rem;">⬇</button>
+        <button onclick="toggleExportMenuMobile()" title="导出数据" style="background:none;border:none;cursor:pointer;padding:4px;color:var(--choco);opacity:0.5;font-size:1rem;">⬇</button>
         <button onclick="document.getElementById('import-data-input-mobile').click()" title="导入数据" style="background:none;border:none;cursor:pointer;padding:4px;color:var(--choco);opacity:0.5;font-size:1rem;">⬆</button>
         <input type="file" id="import-data-input-mobile" accept=".json" style="display:none;" onchange="importAllData(event)">
+      </div>
+      <div id="export-dropdown-mobile" style="display:none;position:absolute;top:60px;right:16px;background:#FFFFFF;border:1px solid var(--rule);border-radius:var(--radius);box-shadow:0 4px 16px var(--shadow);padding:6px;z-index:200;min-width:180px;">
+        <button class="btn btn-secondary btn-sm" style="width:100%;margin-bottom:4px;text-align:left;" onclick="exportAllData('json');closeExportMenuMobile()">JSON 备份</button>
+        <button class="btn btn-secondary btn-sm" style="width:100%;margin-bottom:4px;text-align:left;" onclick="exportAllData('csv');closeExportMenuMobile()">CSV 表格</button>
+        <button class="btn btn-secondary btn-sm" style="width:100%;text-align:left;" onclick="exportAllData('excel');closeExportMenuMobile()">Excel 表格</button>
       </div>
     </div>
 
@@ -4832,21 +4844,195 @@ function toggleAITipDetail(idx) {
 }
 
 /* ========================== DATA EXPORT / IMPORT ========================== */
-function exportAllData() {
+function toggleExportMenu() {
+  var dd = $('export-dropdown');
+  if(dd) dd.style.display = dd.style.display === 'none' ? 'block' : 'none';
+}
+function toggleExportMenuMobile() {
+  var dd = $('export-dropdown-mobile');
+  if(dd) dd.style.display = dd.style.display === 'none' ? 'block' : 'none';
+}
+function closeExportMenuMobile() {
+  var dd = $('export-dropdown-mobile');
+  if(dd) dd.style.display = 'none';
+  var dd2 = $('export-dropdown');
+  if(dd2) dd2.style.display = 'none';
+}
+
+var EXPORT_MODULE_LABELS = {
+  inspire_essays: '灵感随笔',
+  inspire_readings: '读书笔记',
+  inspire_fragments: '知识碎片',
+  media_inspires: '新媒体灵感',
+  media_accounts: '账号数据',
+  reading_books: '阅读书籍',
+  reno_categories: '装修支出',
+  reno_incomes: '装修收入',
+  news_bookmarks: '新闻收藏',
+  books: '阅读计划',
+  weights: '体重记录',
+  exercise: '运动记录',
+  news_bookmarks: '新闻收藏'
+};
+
+var EXPORT_COLUMN_MAP = {
+  inspire_essays: ['title', 'category', 'platform', 'content', 'tag', 'link', 'date'],
+  inspire_readings: ['title', 'content', 'note', 'book', 'tag', 'date'],
+  inspire_fragments: ['title', 'content', 'tag', 'date'],
+  media_inspires: ['title', 'category', 'platform', 'content', 'link', 'date'],
+  media_accounts: ['platform', 'note', 'followers', 'likes', 'views', 'remark', 'date'],
+  reading_books: ['title', 'author', 'status', 'note', 'createdAt'],
+  books: ['title', 'author', 'total', 'current', 'type', 'tags'],
+  reno_categories: null, /* 嵌套结构单独处理 */
+  reno_incomes: ['name', 'amount', 'note'],
+  news_bookmarks: ['title', 'desc', 'source', 'date', 'url', 'savedAt']
+};
+
+function getAllExportData() {
   var allData = {};
   Object.keys(STORE_KEYS).forEach(function(key) {
     var val = localStorage.getItem(STORE_KEYS[key]);
     if(val) {
-      try { allData[STORE_KEYS[key]] = JSON.parse(val); } catch(e) { allData[STORE_KEYS[key]] = val; }
+      try { allData[key] = { storeKey: STORE_KEYS[key], label: EXPORT_MODULE_LABELS[key] || key, data: JSON.parse(val) }; } catch(e) { allData[key] = { storeKey: STORE_KEYS[key], label: EXPORT_MODULE_LABELS[key] || key, data: val }; }
     }
   });
-  var blob = new Blob([JSON.stringify(allData, null, 2)], { type: 'application/json' });
+  return allData;
+}
+
+function exportAllData(format) {
+  closeExportMenuMobile();
+  format = format || 'json';
+  var allData = getAllExportData();
+  var dateStr = new Date().toISOString().slice(0,10);
+
+  if(format === 'json') {
+    var jsonData = {};
+    Object.keys(allData).forEach(function(key) {
+      jsonData[allData[key].storeKey] = allData[key].data;
+    });
+    downloadBlob(new Blob([JSON.stringify(jsonData, null, 2)], { type: 'application/json' }), 'workbench-backup-' + dateStr + '.json');
+  } else if(format === 'csv') {
+    exportCSV(allData, dateStr);
+  } else if(format === 'excel') {
+    exportExcel(allData, dateStr);
+  }
+}
+
+function downloadBlob(blob, filename) {
   var url = URL.createObjectURL(blob);
   var a = document.createElement('a');
   a.href = url;
-  a.download = 'workbench-backup-' + new Date().toISOString().slice(0,10) + '.json';
+  a.download = filename;
   a.click();
   URL.revokeObjectURL(url);
+}
+
+function flattenData(moduleKey, data) {
+  var result = [];
+  if(!Array.isArray(data)) {
+    /* 非数组数据（如 height 是数字，exercise 是对象） */
+    if(typeof data === 'object' && data !== null) {
+      Object.keys(data).forEach(function(k) {
+        var row = {};
+        row['key'] = k;
+        row['value'] = typeof data[k] === 'object' ? JSON.stringify(data[k]) : data[k];
+        result.push(row);
+      });
+    }
+    return result;
+  }
+
+  if(moduleKey === 'reno_categories') {
+    /* 装修支出：嵌套类别+明细 */
+    data.forEach(function(cat) {
+      (cat.items || []).forEach(function(item) {
+        result.push({ 类别: cat.name, 名称: item.name, 类型: item.type, 金额: item.amount, 备注: item.note || '', 照片: item.photo || '' });
+      });
+    });
+  } else {
+    /* 普通数组：展平嵌套字段 */
+    data.forEach(function(row) {
+      var flatRow = {};
+      Object.keys(row).forEach(function(k) {
+        if(k === 'framework' || k === 'readingSessions' || k === 'tags' || k === 'visitHistory' || k === 'items' || k === 'children') {
+          flatRow[k] = JSON.stringify(row[k]).substring(0, 500);
+        } else if(typeof row[k] === 'object' && row[k] !== null) {
+          flatRow[k] = JSON.stringify(row[k]).substring(0, 500);
+        } else {
+          flatRow[k] = row[k];
+        }
+      });
+      result.push(flatRow);
+    });
+  }
+  return result;
+}
+
+function exportCSV(allData, dateStr) {
+  var csvParts = [];
+  Object.keys(allData).forEach(function(key) {
+    var mod = allData[key];
+    var rows = flattenData(key, mod.data);
+    if(rows.length === 0) return;
+    csvParts.push('### ' + mod.label + ' ###');
+    var headers = Object.keys(rows[0]);
+    csvParts.push(headers.map(function(h) { return escapeCSVCell(h); }).join(','));
+    rows.forEach(function(row) {
+      csvParts.push(headers.map(function(h) { return escapeCSVCell(row[h]); }).join(','));
+    });
+    csvParts.push('');
+  });
+  /* 加 BOM 让 Excel 正确识别 UTF-8 */
+  downloadBlob(new Blob(['\uFEFF' + csvParts.join('\n')], { type: 'text/csv;charset=utf-8' }), 'workbench-export-' + dateStr + '.csv');
+}
+
+function escapeCSVCell(val) {
+  if(val === null || val === undefined) return '';
+  var s = String(val).replace(/"/g, '""');
+  if(/[",\n\r]/.test(s)) s = '"' + s + '"';
+  return s;
+}
+
+function exportExcel(allData, dateStr) {
+  /* 生成 Excel 2003 XML 格式（.xls），可被 Excel/WPS/Numbers 正常打开 */
+  var sheets = [];
+  Object.keys(allData).forEach(function(key) {
+    var mod = allData[key];
+    var rows = flattenData(key, mod.data);
+    if(rows.length === 0) return;
+    var headers = Object.keys(rows[0]);
+    var sheetName = mod.label.replace(/[\\/?*\[\]:]/g, '_').substring(0, 31);
+
+    var rowsXml = '<ss:Row>' + headers.map(function(h) {
+      return '<ss:Cell><ss:Data ss:Type="String">' + escapeXml(h) + '</ss:Data></ss:Cell>';
+    }).join('') + '</ss:Row>';
+    rowsXml += rows.map(function(row) {
+      return '<ss:Row>' + headers.map(function(h) {
+        var val = row[h];
+        var type = 'String';
+        if(typeof val === 'number' && !isNaN(val)) type = 'Number';
+        if(val === null || val === undefined) val = '';
+        return '<ss:Cell><ss:Data ss:Type="' + type + '">' + escapeXml(String(val)) + '</ss:Data></ss:Cell>';
+      }).join('') + '</ss:Row>';
+    }).join('');
+
+    sheets.push('<ss:Worksheet ss:Name="' + escapeXml(sheetName) + '"><ss:Table>' + rowsXml + '</ss:Table></ss:Worksheet>');
+  });
+
+  var xml = '<?xml version="1.0" encoding="UTF-8"?>\n' +
+    '<?mso-application progid="Excel.Sheet"?>\n' +
+    '<ss:Workbook xmlns:ss="urn:schemas-microsoft-com:office:spreadsheet" ' +
+    'xmlns:o="urn:schemas-microsoft-com:office:office" ' +
+    'xmlns:x="urn:schemas-microsoft-com:office:excel" ' +
+    'xmlns:html="http://www.w3.org/TR/REC-html40">' +
+    sheets.join('') +
+    '</ss:Workbook>';
+
+  downloadBlob(new Blob([xml], { type: 'application/vnd.ms-excel;charset=utf-8' }), 'workbench-export-' + dateStr + '.xls');
+}
+
+function escapeXml(s) {
+  return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&apos;');
 }
 
 function importAllData(event) {
