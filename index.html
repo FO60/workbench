@@ -3234,9 +3234,25 @@ function normalizeUrl(url) {
   if(!url) return '';
   url = url.trim();
   if(!url) return '';
-  if(!/^https?:\/\//i.test(url)) {
-    url = 'https://' + url;
+  /* 从粘贴的分享文本中提取真正的URL */
+  var urlMatch = url.match(/https?:\/\/[^\s`'""<>\]]+/i);
+  if(urlMatch) {
+    url = urlMatch[0];
+  } else {
+    /* 处理没有协议前缀的域名链接 */
+    var domainMatch = url.match(/(www\.|xhslink\.|xiaohongshu\.|douyin\.|b23\.tv|bilibili\.)[^\s`'""<>\]]+/i);
+    if(domainMatch) {
+      url = domainMatch[0];
+    } else {
+      /* 整段都是纯文本，不是链接 */
+      if(/\s/.test(url) || /[\u4e00-\u9fff]/.test(url)) return '';
+    }
+    if(!/^https?:\/\//i.test(url)) {
+      url = 'https://' + url;
+    }
   }
+  /* 统一 http://xhslink.cn 为 https:// */
+  url = url.replace(/^http:\/\//i, 'https://');
   return url;
 }
 
@@ -3343,7 +3359,7 @@ function openMediaModal(type) {
       '<div class="form-row"><div class="form-group"><label>分类</label><select id="m-media-cat" style="width:100%;padding:10px;border:1px solid var(--rule);border-radius:var(--radius-sm);">' + catOptions + '</select></div>' +
       '<div class="form-group"><label>平台</label><select id="m-media-platform" style="width:100%;padding:10px;border:1px solid var(--rule);border-radius:var(--radius-sm);">' + platOptions + '</select></div></div>' +
       '<div class="form-group"><label>内容</label><textarea id="m-media-content" rows="6" style="width:100%;padding:12px;border:1px solid var(--rule);border-radius:var(--radius-sm);font-size:0.9rem;resize:vertical;" placeholder="记录灵感内容、爆款拆解、拍摄思路..."></textarea></div>' +
-      '<div class="form-group"><label>原文链接</label><input type="text" id="m-media-link" placeholder="选填，粘贴原文链接"></div>' +
+      '<div class="form-group"><label>原文链接</label><input type="text" id="m-media-link" placeholder="选填，粘贴原文链接或分享文本" onpaste="setTimeout(function(){var el=document.getElementById(\'m-media-link\');el.value=normalizeUrl(el.value);},0)"></div>' +
       '<div class="form-group"><label>日期</label><input type="date" id="m-media-date" value="' + todayStr() + '"></div>';
     $('modal-confirm').onclick = function() {
       var item = {
@@ -3404,7 +3420,7 @@ function editMediaItem(type, id) {
       '<div class="form-row"><div class="form-group"><label>分类</label><select id="m-media-cat" style="width:100%;padding:10px;border:1px solid var(--rule);border-radius:var(--radius-sm);">' + catOptions + '</select></div>' +
       '<div class="form-group"><label>平台</label><select id="m-media-platform" style="width:100%;padding:10px;border:1px solid var(--rule);border-radius:var(--radius-sm);">' + platOptions + '</select></div></div>' +
       '<div class="form-group"><label>内容</label><textarea id="m-media-content" rows="6" style="width:100%;padding:12px;border:1px solid var(--rule);border-radius:var(--radius-sm);font-size:0.9rem;resize:vertical;">' + (item.content||'') + '</textarea></div>' +
-      '<div class="form-group"><label>原文链接</label><input type="text" id="m-media-link" value="' + (item.link||'') + '"></div>' +
+      '<div class="form-group"><label>原文链接</label><input type="text" id="m-media-link" value="' + (item.link||'') + '" onpaste="setTimeout(function(){var el=document.getElementById(\'m-media-link\');el.value=normalizeUrl(el.value);},0)"></div>' +
       '<div class="form-group"><label>日期</label><input type="date" id="m-media-date" value="' + (item.date||todayStr()) + '"></div>';
     $('modal-confirm').onclick = function() {
       item.title = $('m-media-title').value.trim();
