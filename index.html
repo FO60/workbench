@@ -3631,6 +3631,21 @@ function filterBooksByTags(list) {
 }
 function renderBooks() {
   var filtered = filterBooksByTags(books);
+  /* 排序：正在读(0<pct<100) → 已完成(100%) → 未开始(0%)，组内按进度降序 */
+  filtered.sort(function(a, b) {
+    var pa = a.total > 0 ? a.current / a.total : 0;
+    var pb = b.total > 0 ? b.current / b.total : 0;
+    var aReading = pa > 0 && pa < 1 ? 1 : 0;
+    var bReading = pb > 0 && pb < 1 ? 1 : 0;
+    var aDone = pa >= 1 ? 1 : 0;
+    var bDone = pb >= 1 ? 1 : 0;
+    /* 正在读的排最前 */
+    if(aReading !== bReading) return bReading - aReading;
+    /* 其次已完成的 */
+    if(aDone !== bDone) return bDone - aDone;
+    /* 同组内按进度降序 */
+    return pb - pa;
+  });
   $('book-grid').innerHTML = filtered.map((b) => {
     var idx = books.indexOf(b);
     const pct = Math.round((b.current/b.total)*100);
