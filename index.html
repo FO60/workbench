@@ -913,9 +913,12 @@ h4 { font-family: var(--font-display); color: var(--choco); font-weight: 600; }
 /* ====== HELLO Banner ====== */
 .hello-banner {
   display: flex; align-items: center; justify-content: space-between;
+  background-color: #f7f3ec;
   background-image: url('assets/hello-bg.jpg');
   background-size: cover;
-  background-position: right center;
+  background-position: 80% 0%;
+  background-repeat: no-repeat;
+  min-height: 140px;
   border: 1px solid var(--rule);
   border-radius: var(--radius); padding: 28px 32px;
   margin-bottom: 20px; position: relative; overflow: hidden;
@@ -925,7 +928,7 @@ h4 { font-family: var(--font-display); color: var(--choco); font-weight: 600; }
 .hello-banner::before {
   content: '';
   position: absolute; inset: 0;
-  background: linear-gradient(90deg, rgba(255,255,255,0.9) 0%, rgba(255,255,255,0.6) 45%, rgba(255,255,255,0.1) 75%, rgba(255,255,255,0) 100%);
+  background: linear-gradient(90deg, rgba(255,255,255,0.92) 0%, rgba(255,255,255,0.65) 40%, rgba(255,255,255,0.15) 65%, rgba(255,255,255,0) 85%, rgba(255,255,255,0) 100%);
   z-index: 0;
 }
 @keyframes helloIn { from { opacity: 0; transform: translateY(-12px); } to { opacity: 1; transform: translateY(0); } }
@@ -935,7 +938,7 @@ h4 { font-family: var(--font-display); color: var(--choco); font-weight: 600; }
 .hello-subtitle { font-size: 0.92rem; color: var(--choco); opacity: 0.7; }
 .hello-decor { color: var(--lavender); opacity: 0.4; flex-shrink: 0; z-index: 1; }
 @media (max-width: 480px) {
-  .hello-banner { padding: 18px 16px; }
+  .hello-banner { padding: 18px 16px; min-height: 110px; background-position: 85% 0%; }
   .hello-title { font-size: 1.4rem; }
   .hello-subtitle { font-size: 0.82rem; }
   .hello-decor svg { width: 40px; height: 40px; }
