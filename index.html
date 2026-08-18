@@ -1178,8 +1178,8 @@ h4 { font-family: var(--font-display); color: var(--choco); font-weight: 600; }
     <section id="home" class="section active">
       <div class="hello-banner" id="hello-banner">
         <div class="hello-text">
-          <span class="hello-title">HELLO！</span>
-          <span class="hello-subtitle">快去成为自己羡慕的人吧！</span>
+          <span class="hello-title" id="greeting-text">你好！</span>
+          <span class="hello-subtitle">与其心生羡慕，不如成为那样的人</span>
         </div>
         <div class="hello-decor">
           <svg viewBox="0 0 100 100" width="60" height="60" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" opacity="0.3">
@@ -5366,7 +5366,21 @@ function showSyncButtons() {
   document.body.appendChild(el);
 }
 
+function updateGreeting() {
+  var el = document.getElementById('greeting-text');
+  if (!el) return;
+  var h = new Date().getHours();
+  var greeting;
+  if (h >= 5 && h < 11) greeting = '早上好！';
+  else if (h >= 11 && h < 13) greeting = '中午好！';
+  else if (h >= 13 && h < 18) greeting = '下午好！';
+  else greeting = '晚上好！';
+  el.textContent = greeting;
+}
+
 function initApp() {
+  updateGreeting();
+  setInterval(updateGreeting, 60 * 1000);
   // Seed default books if reading plan is empty, and merge any missing defaults
   if(books.length === 0 && DEFAULT_BOOKS.length > 0) {
     books = DEFAULT_BOOKS.slice();
