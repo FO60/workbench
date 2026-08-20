@@ -1860,7 +1860,8 @@ const DEFAULT_RENO_CATEGORIES = [
     { id: 4, name: '铁网', type: 'material', amount: 22, note: '' },
     { id: 5, name: '地固', type: 'material', amount: 140, note: '' },
     { id: 6, name: '机沙+5袋细沙（共1.5方）', type: 'material', amount: 0, note: '与水泥合计580' },
-    { id: 7, name: '拉法基325水泥10包+运费', type: 'material', amount: 580, note: '含机沙+细沙' }
+    { id: 7, name: '拉法基325水泥10包+运费', type: 'material', amount: 580, note: '含机沙+细沙' },
+    { id: 8, name: '瓷砖胶+运费', type: 'material', amount: 676, note: '631+45运费' }
   ]},
   { id: 'rc-carpentry', name: '木工', icon: '🪵', items: [
     { id: 1, name: '实木板4张', type: 'material', amount: 248, note: '' },
@@ -1888,7 +1889,7 @@ const DEFAULT_RENO_INCOMES = [
   { id: 2, name: '卖厕所门', amount: 100, note: '' },
   { id: 3, name: '卖剩余钢和塑料', amount: 130, note: '' }
 ];
-const RENO_SEED_VERSION = 'v4';
+const RENO_SEED_VERSION = 'v5';
 let renoCategories = loadData(STORE_KEYS.reno_categories, DEFAULT_RENO_CATEGORIES);
 let renoIncomes = loadData(STORE_KEYS.reno_incomes, DEFAULT_RENO_INCOMES);
 if(localStorage.getItem('wb_reno_seed') !== RENO_SEED_VERSION) {
@@ -1935,6 +1936,14 @@ if(localStorage.getItem('wb_reno_seed') !== RENO_SEED_VERSION) {
         { id: Date.now()+2, name: '搭建', type: 'labor', amount: 14900, note: '' },
         { id: Date.now()+3, name: '返工', type: 'labor', amount: 200, note: '' }
       ]});
+    }
+    saveData(STORE_KEYS.reno_categories, renoCategories);
+  }
+  /* v4→v5 migration: add 瓷砖胶+运费 to 建材 */
+  if(localStorage.getItem('wb_reno_seed') === 'v4') {
+    var matCatV5 = renoCategories.find(function(c){return c.id==='rc-mat';});
+    if(matCatV5 && !matCatV5.items.find(function(i){return i.name.indexOf('瓷砖胶')>=0;})) {
+      matCatV5.items.push({ id: Date.now()+7, name: '瓷砖胶+运费', type: 'material', amount: 676, note: '631+45运费' });
     }
     saveData(STORE_KEYS.reno_categories, renoCategories);
   }
